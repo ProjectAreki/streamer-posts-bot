@@ -38,8 +38,8 @@ class StreamerPostsBot:
         
         # Инициализация Telethon клиента
         self.chat_scanner = ChatScanner(
-            api_id=self.config.telegram.api_id,
-            api_hash=self.config.telegram.api_hash,
+            api_id=self.config.bot.api_id,
+            api_hash=self.config.bot.api_hash,
             logger=self.logger
         )
         
