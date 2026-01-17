@@ -42,12 +42,15 @@ class TelethonClientManager:
     def _select_session_name(self) -> str:
         """Выбирает наиболее подходящее имя Telethon-сессии.
         Приоритет:
-        1) chat_scanner_session
-        2) content_extractor_session
-        3) working_bot_session
-        4) ninja_shared_session (по умолчанию)
+        1) data/streamer_bot (новый бот)
+        2) chat_scanner_session
+        3) content_extractor_session
+        4) working_bot_session
+        5) ninja_shared_session (по умолчанию)
         """
         candidates = []
+        # Проверяем сессию нового бота
+        candidates.append("data/streamer_bot")
         # Из известных ранее
         candidates.extend([
             "chat_scanner_session",
@@ -60,7 +63,7 @@ class TelethonClientManager:
                 self.logger.info("Используем существующую Telethon сессию", session=str(session_file))
                 return name
         # Фолбэк
-        return "ninja_shared_session"
+        return "data/streamer_bot"
 
     @classmethod
     def get_instance(cls, config_manager: ConfigManager) -> "TelethonClientManager":
@@ -116,7 +119,19 @@ class TelethonClientManager:
                         timeout=30,
                         request_retries=3,
                     )
-                    await client.start()
+                    
+                    # Подключаемся без интерактивной авторизации
+                    await client.connect()
+                    
+                    # Проверяем авторизацию
+                    if not await client.is_user_authorized():
+                        self.logger.warning(
+                            f"Telethon аккаунт #{idx} не авторизован", 
+                            session=session_name
+                        )
+                        await client.disconnect()
+                        continue
+                    
                     # Собираем метаданные аккаунта
                     try:
                         me = await client.get_me()
