@@ -20,17 +20,29 @@ class ChatScanner:
         self.api_hash = api_hash
         self.logger = logger
         self.client: Optional[TelegramClient] = None
-        self.session_file = "streamer_bot_session"
+        # Используем путь к сессии в data/
+        self.session_file = "data/streamer_bot"
     
     async def start(self):
         """Запуск Telethon клиента"""
         try:
+            # Создаём директорию для сессий
+            Path("data").mkdir(exist_ok=True)
+            
             self.client = TelegramClient(
                 self.session_file,
                 self.api_id,
                 self.api_hash
             )
-            await self.client.start()
+            
+            # Подключаемся без интерактивной авторизации
+            # Сессия должна быть уже создана заранее
+            await self.client.connect()
+            
+            if not await self.client.is_user_authorized():
+                if self.logger:
+                    self.logger.warning("Telethon сессия не авторизована! Работа в ограниченном режиме.")
+                return False
             
             if self.logger:
                 self.logger.info("Telethon клиент запущен")
