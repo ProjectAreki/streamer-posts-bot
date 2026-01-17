@@ -1440,8 +1440,8 @@ def register_streamer_handlers(bot_instance):
         from dotenv import load_dotenv
         load_dotenv()  # Загружаем переменные из .env
     
-        openai_key = config_manager.config.openai.api_key
-        openrouter_key = os.getenv("OPENROUTER_API_KEY")
+        openai_key = config_manager.openai_api_key
+        openrouter_key = config_manager.openrouter_api_key
     
         # Проверяем наличие ключей для ротации
         if is_rotation and not openrouter_key:
@@ -2405,8 +2405,8 @@ def register_streamer_handlers(bot_instance):
     
         from src.ai_post_generator import AIPostGenerator, VideoData
     
-        api_key = config_manager.config.openai.api_key
-        model = data.get('ai_model_used') or config_manager.config.openai.model or "gpt-4o-mini"
+        api_key = config_manager.openai_api_key
+        model = data.get('ai_model_used') or config_manager.default_model or "gpt-4o-mini"
     
         generator = AIPostGenerator(api_key=api_key, model=model)
         generator.set_bonus_data(
