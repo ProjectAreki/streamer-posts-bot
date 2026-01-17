@@ -14,7 +14,7 @@ import os
 
 from telethon import TelegramClient
 
-from src.config import ConfigManager
+from src.config_manager import ConfigManager
 from src.logger import BotLogger
 
 
