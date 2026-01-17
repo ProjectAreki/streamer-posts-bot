@@ -64,6 +64,38 @@ class StreamerPostsBot:
         # В этом боте все сценарии доступны всем
         return True
     
+    async def get_user_channels(self, user_id: int):
+        """Получить список каналов пользователя через TelethonClientManager"""
+        try:
+            from src.telethon_manager import TelethonClientManager
+            
+            manager = TelethonClientManager.get_instance(self.config_manager)
+            await manager.ensure_initialized()
+            
+            if not manager._clients:
+                return []
+            
+            # Используем первый доступный клиент
+            client = manager._clients[0]
+            dialogs = await client.get_dialogs()
+            channels = []
+            
+            for dialog in dialogs:
+                if hasattr(dialog.entity, 'broadcast') and dialog.entity.broadcast:
+                    if (hasattr(dialog.entity, 'creator') and dialog.entity.creator) or \
+                       (hasattr(dialog.entity, 'admin_rights') and dialog.entity.admin_rights and 
+                        dialog.entity.admin_rights.post_messages):
+                        channels.append({
+                            'id': dialog.entity.id,
+                            'title': dialog.entity.title,
+                            'username': getattr(dialog.entity, 'username', None)
+                        })
+            
+            return channels
+        except Exception as e:
+            self.logger.error(f"Ошибка получения каналов: {e}")
+            return []
+    
     async def show_user_channels(self, message: types.Message, state):
         """Показать каналы пользователя - использует TelethonClientManager"""
         try:
