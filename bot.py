@@ -14,7 +14,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from src.config import Config
 from src.config_manager import ConfigManager
 from src.logger import BotLogger
-from src.chat_scanner import ChatScanner
+# ChatScanner удален - используем TelethonClientManager
 from src.handlers.streamer_posts_handlers import register_streamer_handlers
 
 
@@ -36,12 +36,8 @@ class StreamerPostsBot:
         self.bot = Bot(token=self.config.bot.bot_token)
         self.dp = Dispatcher(storage=MemoryStorage())
         
-        # Инициализация Telethon клиента
-        self.chat_scanner = ChatScanner(
-            api_id=self.config.bot.api_id,
-            api_hash=self.config.bot.api_hash,
-            logger=self.logger
-        )
+        # Chat scanner убран - используем TelethonClientManager в handlers
+        self.chat_scanner = None
         
         # DB Manager (заглушка - не используется в этом боте)
         self.db_manager = None
@@ -69,13 +65,31 @@ class StreamerPostsBot:
         return True
     
     async def show_user_channels(self, message: types.Message, state):
-        """Показать каналы пользователя"""
+        """Показать каналы пользователя - использует TelethonClientManager"""
         try:
-            # Запускаем Telethon клиент если не запущен
-            if not self.chat_scanner.client or not self.chat_scanner.client.is_connected():
-                await self.chat_scanner.start()
+            from src.telethon_manager import TelethonClientManager
             
-            channels = await self.chat_scanner.get_user_channels()
+            manager = TelethonClientManager.get_instance(self.config_manager)
+            await manager.ensure_initialized()
+            
+            if not manager._clients:
+                await message.answer("❌ Telethon клиент не инициализирован")
+                return
+            
+            # Используем первый доступный клиент
+            client = manager._clients[0]
+            dialogs = await client.get_dialogs()
+            channels = []
+            
+            for dialog in dialogs:
+                if hasattr(dialog.entity, 'broadcast') and dialog.entity.broadcast:
+                    if (hasattr(dialog.entity, 'creator') and dialog.entity.creator) or \
+                       (hasattr(dialog.entity, 'admin_rights') and dialog.entity.admin_rights and dialog.entity.admin_rights.post_messages):
+                        channels.append({
+                            'id': dialog.entity.id,
+                            'title': dialog.entity.title,
+                            'username': getattr(dialog.entity, 'username', None)
+                        })
             
             if not channels:
                 await message.answer(
@@ -190,8 +204,7 @@ class StreamerPostsBot:
         try:
             self.logger.info("🚀 Запуск бота...")
             
-            # Запускаем Telethon клиент
-            await self.chat_scanner.start()
+            # Chat scanner удален - Telethon инициализируется в handlers при первом использовании
             
             # Запускаем polling
             await self.dp.start_polling(self.bot)
@@ -201,8 +214,8 @@ class StreamerPostsBot:
         except Exception as e:
             self.logger.error(f"❌ Ошибка: {e}")
         finally:
-            # Останавливаем Telethon клиент
-            await self.chat_scanner.stop()
+            # Cleanup если нужен
+            pass
             await self.bot.session.close()
     
     def run(self):
