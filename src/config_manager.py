@@ -34,11 +34,11 @@ class ConfigManager:
     def from_config(cls, config: Any) -> "ConfigManager":
         """Создает ConfigManager из объекта Config"""
         return cls(
-            openrouter_api_key=config.openrouter_api_key,
-            openai_api_key=config.openai_api_key,
-            bot_token=config.bot_token,
-            api_id=config.api_id,
-            api_hash=config.api_hash,
+            openrouter_api_key=config.openrouter.api_key,
+            openai_api_key=config.openai.api_key or "",
+            bot_token=config.bot.bot_token,
+            api_id=config.bot.api_id,
+            api_hash=config.bot.api_hash,
         )
     
     def get(self, key: str, default: Any = None) -> Any:
