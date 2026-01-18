@@ -1647,14 +1647,34 @@ def register_streamer_handlers(bot_instance):
     
         for post in ai_posts:
             if post.media_type == "video" and video_idx < len(videos):
-                video_data = videos[video_idx]
+                # КРИТИЧНО: Находим правильное видео по streamer+slot из поста!
+                # Посты могут быть перемешаны после shuffle, поэтому не можем брать просто videos[video_idx]
+                matching_video = None
+                
+                # Ищем видео которое соответствует этому посту
+                for v in videos:
+                    v_streamer = v.get('streamer', '').strip().lower()
+                    v_slot = v.get('slot', '').strip().lower()
+                    post_streamer = post.streamer.strip().lower()
+                    post_slot = post.slot.strip().lower()
+                    
+                    # Сравниваем и стример и слот
+                    if v_streamer == post_streamer and v_slot == post_slot:
+                        matching_video = v
+                        break
+                
+                # Если не нашли точное совпадение - берем по индексу (fallback)
+                if not matching_video:
+                    matching_video = videos[video_idx]
+                    print(f"⚠️ Не найдено точное совпадение для поста #{post.index} ({post.streamer}, {post.slot}), используем video_idx={video_idx}")
+                
                 video_idx += 1
             
                 generated_posts.append({
                     'index': post.index,
-                    'media_path': video_data.get('file_id'),  # Может быть None если из канала
-                    'source_channel_id': video_data.get('source_channel_id'),  # Для копирования
-                    'message_id': video_data.get('message_id'),  # Для копирования
+                    'media_path': matching_video.get('file_id'),  # ✅ Правильное видео!
+                    'source_channel_id': matching_video.get('source_channel_id'),
+                    'message_id': matching_video.get('message_id'),
                     'media_type': post.media_type,
                     'text': post.text,
                     'streamer': post.streamer,
@@ -2492,14 +2512,30 @@ def register_streamer_handlers(bot_instance):
     
         for post in ai_posts:
             if post.media_type == "video" and video_idx < len(videos):
-                video_data = videos[video_idx]
+                # КРИТИЧНО: Находим правильное видео по streamer+slot из поста!
+                matching_video = None
+                
+                for v in videos:
+                    v_streamer = v.get('streamer', '').strip().lower()
+                    v_slot = v.get('slot', '').strip().lower()
+                    post_streamer = post.streamer.strip().lower()
+                    post_slot = post.slot.strip().lower()
+                    
+                    if v_streamer == post_streamer and v_slot == post_slot:
+                        matching_video = v
+                        break
+                
+                if not matching_video:
+                    matching_video = videos[video_idx]
+                    print(f"⚠️ Перегенерация: не найдено точное совпадение для поста #{post.index}")
+                
                 video_idx += 1
             
                 generated_posts.append({
                     'index': post.index,
-                    'media_path': video_data.get('file_id'),
-                    'source_channel_id': video_data.get('source_channel_id'),
-                    'message_id': video_data.get('message_id'),
+                    'media_path': matching_video.get('file_id'),
+                    'source_channel_id': matching_video.get('source_channel_id'),
+                    'message_id': matching_video.get('message_id'),
                     'media_type': post.media_type,
                     'text': post.text,
                     'streamer': post.streamer,
