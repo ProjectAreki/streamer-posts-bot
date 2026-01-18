@@ -1,0 +1,34 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "Сохранение контекста проекта между сессиями"
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upaya07/mcp-server-context7"
+      ],
+      "description": "Получение актуальной документации и примеров кода для библиотек"
+    },
+    "cursor-browser-extension": {
+      "command": "node",
+      "args": [
+        "path/to/cursor-browser-extension/server.js"
+      ],
+      "description": "Навигация по веб-страницам и взаимодействие с ними"
+    },
+    "cursor-ide-browser": {
+      "command": "node",
+      "args": [
+        "path/to/cursor-ide-browser/server.js"
+      ],
+      "description": "Встроенный браузер для тестирования веб-приложений"
+    }
+  }
+}
