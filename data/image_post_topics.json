@@ -1,0 +1,755 @@
+{
+  "version": "1.0",
+  "description": "База данных тем для постов с картинками",
+  "categories": [
+    {
+      "id": "psychology",
+      "name": "🧠 Психология и мышление",
+      "emoji": "🧠"
+    },
+    {
+      "id": "mechanics",
+      "name": "⚙️ Техническая часть и механики",
+      "emoji": "⚙️"
+    },
+    {
+      "id": "strategy",
+      "name": "📊 Стратегии и банкролл",
+      "emoji": "📊"
+    },
+    {
+      "id": "industry",
+      "name": "🎰 Индустрия и мифы",
+      "emoji": "🎰"
+    },
+    {
+      "id": "custom",
+      "name": "✏️ Пользовательские темы",
+      "emoji": "✏️"
+    }
+  ],
+  "topics": [
+    {
+      "id": 1,
+      "category": "psychology",
+      "title": "Ошибка игрока (Gambler's fallacy)",
+      "description": "\"долго не давало — сейчас даст\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 2,
+      "category": "psychology",
+      "title": "Эффект \"почти выиграл\" (Near miss)",
+      "description": "2 из 3 скаттеров и т.п.",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 3,
+      "category": "psychology",
+      "title": "FOMO",
+      "description": "чужие заносы → импульсивные решения",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 4,
+      "category": "psychology",
+      "title": "Тильт",
+      "description": "красные флаги + протокол анти-тильта",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 5,
+      "category": "psychology",
+      "title": "Миф \"новичкам везёт\"",
+      "description": "психология + математика",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 6,
+      "category": "psychology",
+      "title": "Цена развлечения",
+      "description": "проигрыш как плата за досуг",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 7,
+      "category": "psychology",
+      "title": "Ловушка \"отыграться\"",
+      "description": "chasing losses",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 8,
+      "category": "psychology",
+      "title": "\"Магия звука\"",
+      "description": "как аудио влияет на решения",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 9,
+      "category": "psychology",
+      "title": "Иллюзия контроля",
+      "description": "стоп-кнопка/выбор ящика/ритуалы",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 10,
+      "category": "psychology",
+      "title": "\"Игра на последние\"",
+      "description": "деньги нужды",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 11,
+      "category": "psychology",
+      "title": "Стоп-вин",
+      "description": "как фиксировать плюс и не разгоняться",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 12,
+      "category": "psychology",
+      "title": "Стоп-лосс",
+      "description": "жёсткие лимиты на сессию",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 13,
+      "category": "psychology",
+      "title": "Время игры",
+      "description": "мифы про часы/ночь и ГСЧ",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 14,
+      "category": "psychology",
+      "title": "Миф \"горячие/холодные слоты\"",
+      "description": "память автомата",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 15,
+      "category": "psychology",
+      "title": "Демо-режим",
+      "description": "когда помогает, а когда искажает восприятие денег",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 16,
+      "category": "psychology",
+      "title": "Стратегия ставок",
+      "description": "флэт vs хаотичные скачки",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 17,
+      "category": "psychology",
+      "title": "Hit & Run",
+      "description": "забрал быстрый профит и ушёл",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 18,
+      "category": "psychology",
+      "title": "Правило \"вывод x2\"",
+      "description": "удвоил — зафиксировал часть",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 19,
+      "category": "psychology",
+      "title": "Якорь выигрыша",
+      "description": "после x50 \"меньше уже неинтересно\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 20,
+      "category": "psychology",
+      "title": "Эскалация обязательств",
+      "description": "\"я уже вложил — нельзя уходить\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 21,
+      "category": "psychology",
+      "title": "Эффект доступности",
+      "description": "один яркий кейс в ленте = \"так часто бывает\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 22,
+      "category": "psychology",
+      "title": "Decision fatigue",
+      "description": "усталость → хаос, прыжки, импульсивные решения",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 23,
+      "category": "psychology",
+      "title": "Пост-вин тильт",
+      "description": "как эйфория после плюса приводит к сливу",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 24,
+      "category": "psychology",
+      "title": "Ритуалы и суеверия",
+      "description": "почему мозг связывает случайное с результатом",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 25,
+      "category": "mechanics",
+      "title": "Терминология: RTP",
+      "description": "RTP простыми словами",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 26,
+      "category": "mechanics",
+      "title": "RTP ranges / переменный RTP",
+      "description": "конфиги 96%/94% и т.д.",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 27,
+      "category": "mechanics",
+      "title": "Hit rate vs RTP",
+      "description": "частота попаданий vs отдача",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 28,
+      "category": "mechanics",
+      "title": "Symbol hierarchy",
+      "description": "премиум vs low-paying (карточные)",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 29,
+      "category": "mechanics",
+      "title": "Hold & Win / Hold & Spin",
+      "description": "респины с обновлением счетчика",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 30,
+      "category": "mechanics",
+      "title": "Ante Bet",
+      "description": "доплата за повышенный шанс событий",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 31,
+      "category": "mechanics",
+      "title": "Cascades / Tumbles",
+      "description": "каскады/лавина",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 32,
+      "category": "mechanics",
+      "title": "Nudge",
+      "description": "сдвиг/докрутка барабана",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 33,
+      "category": "mechanics",
+      "title": "Sticky wilds vs roaming wilds",
+      "description": "типы вайлдов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 34,
+      "category": "mechanics",
+      "title": "Expanding symbols",
+      "description": "расширяющиеся символы",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 35,
+      "category": "mechanics",
+      "title": "Stacked symbols",
+      "description": "стэки/\"стены\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 36,
+      "category": "mechanics",
+      "title": "Locked reels",
+      "description": "фиксированные барабаны",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 37,
+      "category": "mechanics",
+      "title": "Both ways pays",
+      "description": "выплаты в обе стороны",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 38,
+      "category": "mechanics",
+      "title": "Cluster pays",
+      "description": "кластерная оплата",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 39,
+      "category": "mechanics",
+      "title": "Megaways",
+      "description": "переменное число способов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 40,
+      "category": "mechanics",
+      "title": "Grid slots",
+      "description": "сеточные игры (Reactoonz-тип)",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 41,
+      "category": "mechanics",
+      "title": "Mystery symbols",
+      "description": "\"мистери\" превращения",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 42,
+      "category": "mechanics",
+      "title": "Collector symbols",
+      "description": "\"сборщики\" значений",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 43,
+      "category": "mechanics",
+      "title": "Retrigger",
+      "description": "добавочные фриспины/перезапуск бонуса",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 44,
+      "category": "mechanics",
+      "title": "Накопительные мультипликаторы",
+      "description": "не сбрасываются/живут в режиме",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 45,
+      "category": "mechanics",
+      "title": "Мультипликаторы: глобальные vs позиционные",
+      "description": "типы множителей",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 46,
+      "category": "mechanics",
+      "title": "Super / Enhanced spins",
+      "description": "усиленные спины",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 47,
+      "category": "mechanics",
+      "title": "Level Up бонусы",
+      "description": "прокачка бонус-раунда",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 48,
+      "category": "mechanics",
+      "title": "Bonus Buy / Feature Buy",
+      "description": "базовый разбор",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 49,
+      "category": "mechanics",
+      "title": "Bonus Buy vs Feature Drop",
+      "description": "покупка vs ускоренный шанс",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 50,
+      "category": "mechanics",
+      "title": "Дешёвые vs дорогие Feature Buy",
+      "description": "x10/x20/x50",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 51,
+      "category": "mechanics",
+      "title": "Scatter pays",
+      "description": "скаттеры, которые ещё и платят",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 52,
+      "category": "mechanics",
+      "title": "Max win cap / max win",
+      "description": "потолок x… + вероятность",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 53,
+      "category": "strategy",
+      "title": "Управление банком",
+      "description": "модель распределения депозита (например 50/30/20)",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 54,
+      "category": "strategy",
+      "title": "Сессионный банк vs общий банк",
+      "description": "как разделять деньги",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 55,
+      "category": "strategy",
+      "title": "Лимит по времени",
+      "description": "таймер 20–30 минут vs лимит по деньгам",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 56,
+      "category": "strategy",
+      "title": "Стратегия \"пул слотов\"",
+      "description": "3 игры на вечер без добавления новых",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 57,
+      "category": "strategy",
+      "title": "Учет реальной цены покупки",
+      "description": "% от сессионного банка",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 58,
+      "category": "strategy",
+      "title": "Управление ставкой по фазам",
+      "description": "база → тест → риск (короткий отрезок)",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 59,
+      "category": "strategy",
+      "title": "Что делать при серии заносов",
+      "description": "вывод части + снижение ставки",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 60,
+      "category": "strategy",
+      "title": "Влияние ставки на отдачу",
+      "description": "миф или нет",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 61,
+      "category": "strategy",
+      "title": "Глюк/обрыв интернета в бонус-раунде",
+      "description": "что происходит с результатом",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 62,
+      "category": "strategy",
+      "title": "Provably Fair",
+      "description": "\"доказуемая честность\" и отличие от обычной RNG",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 63,
+      "category": "strategy",
+      "title": "Вейджер простыми словами",
+      "description": "как читать условия отыгрыша",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 64,
+      "category": "strategy",
+      "title": "Мартингейл в слотах",
+      "description": "почему опасен",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 65,
+      "category": "strategy",
+      "title": "Стратегия одной линии",
+      "description": "если есть настройка линий",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 66,
+      "category": "strategy",
+      "title": "Турниры/лидерборды",
+      "description": "стоит ли участвовать",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 67,
+      "category": "strategy",
+      "title": "Бонус-хантинг в 2026",
+      "description": "жив ли формат и как меняется",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 68,
+      "category": "industry",
+      "title": "Скрипты vs лицензия",
+      "description": "как отличить фейк от оригинала",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 69,
+      "category": "industry",
+      "title": "Брендовые слоты (фильмы/группы)",
+      "description": "почему RTP часто ниже",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 70,
+      "category": "industry",
+      "title": "Джекпоты: фиксированные vs прогрессивные",
+      "description": "типы джекпотов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 71,
+      "category": "industry",
+      "title": "Стримеры: как устроено",
+      "description": "играют ли \"на свои\"",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 72,
+      "category": "industry",
+      "title": "KYC: зачем проверка",
+      "description": "как подготовиться",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 73,
+      "category": "industry",
+      "title": "Провайдерский \"почерк\"",
+      "description": "как отличать студии по стилю",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 74,
+      "category": "industry",
+      "title": "Топ-3 провайдера рынка",
+      "description": "Pragmatic / Nolimit / Hacksaw",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 75,
+      "category": "industry",
+      "title": "Миф \"после заноса слот холодный\"",
+      "description": "разбор мифа",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 76,
+      "category": "industry",
+      "title": "Миф \"ночью платит лучше\"",
+      "description": "разбор мифа",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 77,
+      "category": "industry",
+      "title": "Миф \"есть схема, гарантирующая плюс\"",
+      "description": "разбор мифа",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 78,
+      "category": "industry",
+      "title": "Миф \"в турнирах подкручивают\"",
+      "description": "разбор мифа",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 79,
+      "category": "industry",
+      "title": "Пулы/кластеры RTP по регионам",
+      "description": "почему версии отличаются по юрисдикциям",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    },
+    {
+      "id": 80,
+      "category": "industry",
+      "title": "Сертификация RNG",
+      "description": "кто и как проверяет генератор (в общих чертах)",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": false
+    }
+  ],
+  "usage_history": [],
+  "next_custom_id": 1000
+}

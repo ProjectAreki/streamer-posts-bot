@@ -206,6 +206,36 @@ class ContentWithAdsStates(StatesGroup):
     processing = State()  # Обработка
 
 
+class ImagePostsStates(StatesGroup):
+    """Состояния для сценария '🖼 Посты с картинками' (20 постов на основе тем)"""
+    # 1. Ввод ссылок и бонусов
+    waiting_for_url1 = State()  # Ввод URL первого бонуса
+    waiting_for_bonus1 = State()  # Описание первого бонуса
+    waiting_for_url2 = State()  # Ввод URL второго бонуса
+    waiting_for_bonus2 = State()  # Описание второго бонуса
+    # 2. Управление темами
+    topics_menu = State()  # Меню управления темами
+    viewing_topics = State()  # Просмотр доступных тем
+    adding_custom_topic = State()  # Добавление своей темы
+    generating_new_topics = State()  # Генерация новых тем AI
+    selecting_topics = State()  # Выбор тем для генерации
+    # 3. Выбор модели и настроек
+    choosing_text_model = State()  # Выбор модели для текста
+    choosing_image_model = State()  # Выбор модели для картинок (Nano Banana)
+    # 4. Генерация
+    generating_posts = State()  # Генерация постов
+    generating_images = State()  # Генерация картинок
+    # 5. Превью и публикация
+    preview_posts = State()  # Превью сгенерированных постов
+    viewing_single_post = State()  # Просмотр одного поста
+    regenerating_image = State()  # Перегенерация картинки
+    regenerating_text = State()  # Перегенерация текста
+    # 6. Выбор канала и публикация
+    waiting_for_target_channel = State()  # Выбор канала
+    confirming_publish = State()  # Подтверждение публикации
+    publishing = State()  # Процесс публикации
+
+
 # Экспортируем все классы
 __all__ = [
     'GenerateLinksStates',
@@ -222,4 +252,5 @@ __all__ = [
     'NewContentStates',
     'StreamerPostsStates',
     'ContentWithAdsStates',
+    'ImagePostsStates',
 ]

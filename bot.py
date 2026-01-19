@@ -16,6 +16,7 @@ from src.config_manager import ConfigManager
 from src.logger import BotLogger
 # ChatScanner удален - используем TelethonClientManager
 from src.handlers.streamer_posts_handlers import register_streamer_handlers
+from src.handlers.image_posts_handlers import register_image_posts_handlers
 
 
 class StreamerPostsBot:
@@ -45,15 +46,17 @@ class StreamerPostsBot:
         # Регистрация обработчиков
         self._register_base_handlers()
         register_streamer_handlers(self)
+        register_image_posts_handlers(self)
         
         self.logger.info("✅ Бот инициализирован")
     
     def get_allowed_scenarios_keyboard(self, user_id: int):
         """Получить клавиатуру сценариев (упрощенная версия)"""
-        # В этом боте только один сценарий, всегда доступен
+        # В этом боте два сценария, всегда доступны
         return ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text="📹 100 постов стримеров")],
+                [KeyboardButton(text="🖼 Посты с картинками")],
                 [KeyboardButton(text="❓ Помощь")]
             ],
             resize_keyboard=True
