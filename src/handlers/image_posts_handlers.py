@@ -190,38 +190,52 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.waiting_for_bonus2)
     async def bonus2_received(message: types.Message, state: FSMContext):
         """Получено описание второго бонуса - переход к темам"""
-        if message.text == "❌ Отмена":
-            await state.clear()
-            await message.answer("❌ Отменено", reply_markup=get_scenarios_kb(message.from_user.id))
-            return
-        
-        await state.update_data(bonus2=message.text.strip())
-        await state.set_state(ImagePostsStates.topics_menu)
-        
-        # Показываем меню управления темами
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="📝 Выбрать 20 тем автоматически")],
-                [KeyboardButton(text="👀 Посмотреть все темы")],
-                [KeyboardButton(text="✏️ Добавить свою тему")],
-                [KeyboardButton(text="🤖 Сгенерировать новые темы")],
-                [KeyboardButton(text="❌ Отмена")]
-            ],
-            resize_keyboard=True
-        )
-        
-        from src.topic_manager import TopicManager
-        tm = TopicManager()
-        stats = tm.get_usage_stats()
-        
-        await message.answer(
-            f"📚 <b>Шаг 3/4: Темы для постов</b>\n\n"
-            f"Доступно тем: {stats['total_topics']}\n"
-            f"Неиспользованных: {stats['unused']}\n\n"
-            f"Выберите действие:",
-            parse_mode="HTML",
-            reply_markup=keyboard
-        )
+        try:
+            logger.info(f"[ImagePosts] bonus2_received triggered, text: {message.text[:50]}")
+            
+            if message.text == "❌ Отмена":
+                await state.clear()
+                await message.answer("❌ Отменено", reply_markup=get_scenarios_kb(message.from_user.id))
+                return
+            
+            await state.update_data(bonus2=message.text.strip())
+            await state.set_state(ImagePostsStates.topics_menu)
+            
+            logger.info("[ImagePosts] State set to topics_menu")
+            
+            # Показываем меню управления темами
+            keyboard = ReplyKeyboardMarkup(
+                keyboard=[
+                    [KeyboardButton(text="📝 Выбрать 20 тем автоматически")],
+                    [KeyboardButton(text="👀 Посмотреть все темы")],
+                    [KeyboardButton(text="✏️ Добавить свою тему")],
+                    [KeyboardButton(text="🤖 Сгенерировать новые темы")],
+                    [KeyboardButton(text="❌ Отмена")]
+                ],
+                resize_keyboard=True
+            )
+            
+            logger.info("[ImagePosts] Loading TopicManager...")
+            from src.topic_manager import TopicManager
+            tm = TopicManager()
+            stats = tm.get_usage_stats()
+            logger.info(f"[ImagePosts] Stats loaded: {stats}")
+            
+            await message.answer(
+                f"📚 <b>Шаг 3/4: Темы для постов</b>\n\n"
+                f"Доступно тем: {stats['total_topics']}\n"
+                f"Неиспользованных: {stats['unused']}\n\n"
+                f"Выберите действие:",
+                parse_mode="HTML",
+                reply_markup=keyboard
+            )
+            logger.info("[ImagePosts] Menu sent successfully")
+            
+        except Exception as e:
+            logger.error(f"[ImagePosts] Error in bonus2_received: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            await message.answer(f"❌ Ошибка: {e}")
     
     # ============================================
     # УПРАВЛЕНИЕ ТЕМАМИ
