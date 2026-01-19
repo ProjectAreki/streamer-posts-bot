@@ -255,22 +255,40 @@ def register_image_posts_handlers(bot_instance):
         # Формируем список тем
         topics_text = tm.format_topics_list(topics)
         
-        await state.set_state(ImagePostsStates.choosing_image_model)
-        
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="🍌 Nano Banana (быстро)")],
-                [KeyboardButton(text="🍌 Nano Banana Pro (качество)")],
-                [KeyboardButton(text="⏭ Без картинок")],
-                [KeyboardButton(text="❌ Отмена")]
-            ],
-            resize_keyboard=True
+        await message.answer(
+            f"✅ <b>Выбрано 20 тем:</b>\n\n{topics_text}",
+            parse_mode="HTML"
         )
         
+        # Переходим к выбору модели для текста
+        await state.set_state(ImagePostsStates.choosing_text_model)
+        
+        from src.ai_post_generator import OPENROUTER_MODELS
+        
+        # Формируем кнопки из доступных моделей
+        keyboard_buttons = []
+        
+        # Топ-3 популярные модели
+        popular_models = [
+            ("gemini-3-flash", "⚡ Gemini 3 Flash (быстро)"),
+            ("gpt-4o-mini", "💰 GPT-4o Mini (баланс)"),
+            ("gemini-3-pro", "💎 Gemini 3 Pro (качество)"),
+        ]
+        
+        for model_key, label in popular_models:
+            keyboard_buttons.append([KeyboardButton(text=label)])
+        
+        keyboard_buttons.append([KeyboardButton(text="📋 Показать все модели")])
+        keyboard_buttons.append([KeyboardButton(text="❌ Отмена")])
+        
+        keyboard = ReplyKeyboardMarkup(keyboard=keyboard_buttons, resize_keyboard=True)
+        
         await message.answer(
-            f"✅ <b>Выбрано 20 тем:</b>\n\n{topics_text}\n\n"
-            f"📸 <b>Шаг 4/4: Генерация картинок</b>\n\n"
-            f"Выберите модель для генерации картинок:",
+            f"🤖 <b>Шаг 3/4: Модель для генерации текста</b>\n\n"
+            f"Выберите AI модель для создания постов:\n\n"
+            f"⚡ Gemini 3 Flash - быстро и дёшево\n"
+            f"💰 GPT-4o Mini - баланс цены и качества\n"
+            f"💎 Gemini 3 Pro - лучшее качество",
             parse_mode="HTML",
             reply_markup=keyboard
         )
@@ -405,6 +423,124 @@ def register_image_posts_handlers(bot_instance):
         await state.set_state(ImagePostsStates.topics_menu)
     
     # ============================================
+    # ВЫБОР МОДЕЛИ ДЛЯ ТЕКСТА
+    # ============================================
+    
+    @dp.message(ImagePostsStates.choosing_text_model, lambda m: m.text == "📋 Показать все модели")
+    async def show_all_text_models(message: types.Message, state: FSMContext):
+        """Показать все доступные модели для текста"""
+        from src.ai_post_generator import OPENROUTER_MODELS
+        
+        models_text = "🤖 <b>Все доступные модели:</b>\n\n"
+        
+        for key, model_info in OPENROUTER_MODELS.items():
+            emoji = model_info.get('emoji', '🔹')
+            name = model_info['name']
+            provider = model_info.get('provider', 'Unknown')
+            price_in = model_info.get('price_input', 0)
+            
+            models_text += f"{emoji} <b>{name}</b>\n"
+            models_text += f"   Провайдер: {provider}\n"
+            models_text += f"   Цена: ~${price_in}/M токенов\n\n"
+        
+        # Кнопки для всех моделей
+        keyboard_buttons = []
+        for key, model_info in OPENROUTER_MODELS.items():
+            emoji = model_info.get('emoji', '🔹')
+            name = model_info['name']
+            keyboard_buttons.append([KeyboardButton(text=f"{emoji} {name}")])
+        
+        keyboard_buttons.append([KeyboardButton(text="⬅️ Назад")])
+        
+        keyboard = ReplyKeyboardMarkup(keyboard=keyboard_buttons, resize_keyboard=True)
+        
+        await message.answer(models_text, parse_mode="HTML", reply_markup=keyboard)
+    
+    @dp.message(ImagePostsStates.choosing_text_model, lambda m: m.text == "⬅️ Назад")
+    async def back_to_text_model_choice(message: types.Message, state: FSMContext):
+        """Вернуться к выбору популярных моделей"""
+        keyboard_buttons = [
+            [KeyboardButton(text="⚡ Gemini 3 Flash (быстро)")],
+            [KeyboardButton(text="💰 GPT-4o Mini (баланс)")],
+            [KeyboardButton(text="💎 Gemini 3 Pro (качество)")],
+            [KeyboardButton(text="📋 Показать все модели")],
+            [KeyboardButton(text="❌ Отмена")]
+        ]
+        
+        keyboard = ReplyKeyboardMarkup(keyboard=keyboard_buttons, resize_keyboard=True)
+        
+        await message.answer(
+            "Выберите модель для генерации текста:",
+            reply_markup=keyboard
+        )
+    
+    @dp.message(ImagePostsStates.choosing_text_model)
+    async def text_model_selected(message: types.Message, state: FSMContext):
+        """Модель для текста выбрана"""
+        if message.text == "❌ Отмена":
+            await state.clear()
+            await message.answer("❌ Отменено", reply_markup=get_scenarios_kb(message.from_user.id))
+            return
+        
+        from src.ai_post_generator import OPENROUTER_MODELS
+        
+        # Определяем выбранную модель
+        selected_model_key = None
+        selected_model_name = None
+        
+        # Маппинг популярных моделей
+        popular_mapping = {
+            "⚡ Gemini 3 Flash (быстро)": "gemini-3-flash",
+            "💰 GPT-4o Mini (баланс)": "gpt-4o-mini",
+            "💎 Gemini 3 Pro (качество)": "gemini-3-pro"
+        }
+        
+        if message.text in popular_mapping:
+            selected_model_key = popular_mapping[message.text]
+        else:
+            # Ищем модель по полному названию
+            for key, model_info in OPENROUTER_MODELS.items():
+                emoji = model_info.get('emoji', '🔹')
+                name = model_info['name']
+                if f"{emoji} {name}" == message.text:
+                    selected_model_key = key
+                    break
+        
+        if not selected_model_key or selected_model_key not in OPENROUTER_MODELS:
+            await message.answer("❌ Модель не найдена. Выберите из списка.")
+            return
+        
+        model_info = OPENROUTER_MODELS[selected_model_key]
+        selected_model_name = model_info['name']
+        
+        # Сохраняем выбор
+        await state.update_data(
+            text_model_key=selected_model_key,
+            text_model_id=model_info['id']
+        )
+        
+        # Переходим к выбору модели для картинок
+        await state.set_state(ImagePostsStates.choosing_image_model)
+        
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="🍌 Nano Banana (быстро)")],
+                [KeyboardButton(text="🍌 Nano Banana Pro (качество)")],
+                [KeyboardButton(text="⏭ Без картинок")],
+                [KeyboardButton(text="❌ Отмена")]
+            ],
+            resize_keyboard=True
+        )
+        
+        await message.answer(
+            f"✅ Модель текста: <b>{selected_model_name}</b>\n\n"
+            f"📸 <b>Шаг 4/4: Генерация картинок</b>\n\n"
+            f"Выберите модель для генерации картинок:",
+            parse_mode="HTML",
+            reply_markup=keyboard
+        )
+    
+    # ============================================
     # ВЫБОР МОДЕЛИ ДЛЯ КАРТИНОК
     # ============================================
     
@@ -454,7 +590,13 @@ def register_image_posts_handlers(bot_instance):
             from src.ai_image_post_generator import AIImagePostGenerator
             from src.topic_manager import Topic
             
-            generator = AIImagePostGenerator(image_model=image_model or "nano_banana")
+            # Получаем модель для текста
+            text_model_id = data.get('text_model_id', 'google/gemini-3-flash-preview')
+            
+            generator = AIImagePostGenerator(
+                model=text_model_id,
+                image_model=image_model or "nano_banana"
+            )
             generator.set_bonus_data(
                 url1=data['url1'],
                 bonus1=data['bonus1'],
@@ -657,7 +799,10 @@ def register_image_posts_handlers(bot_instance):
             
             post = posts[index]
             
-            generator = AIImagePostGenerator()
+            # Получаем модель для текста
+            text_model_id = data.get('text_model_id', 'google/gemini-3-flash-preview')
+            
+            generator = AIImagePostGenerator(model=text_model_id)
             generator.set_bonus_data(
                 url1=data['url1'],
                 bonus1=data['bonus1'],
