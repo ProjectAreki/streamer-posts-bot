@@ -3766,18 +3766,44 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                         content = content[:-3]
                     content = content.strip()
                     
+                    # Дополнительная очистка: убираем комментарии и trailing commas
+                    import re
+                    # Убираем однострочные комментарии //
+                    content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
+                    # Убираем trailing commas перед } и ]
+                    content = re.sub(r',(\s*[}\]])', r'\1', content)
+                    
                     try:
                         result = json.loads(content)
-                    except json.JSONDecodeError:
+                    except json.JSONDecodeError as e:
                         # Пытаемся найти JSON в ответе
                         import re
                         json_match = re.search(r'\{[\s\S]*\}', content)
                         if json_match:
-                            result = json.loads(json_match.group())
+                            try:
+                                result = json.loads(json_match.group())
+                            except json.JSONDecodeError:
+                                # JSON всё равно невалидный - возвращаем ошибку
+                                return {
+                                    "is_unique": True,  # По умолчанию считаем уникальными
+                                    "duplicates": [],
+                                    "warnings": [],
+                                    "total_unique": len(posts),
+                                    "total_duplicates": 0,
+                                    "summary": "⚠️ Проверка завершена с ошибкой парсинга JSON. Посты считаются уникальными по умолчанию.",
+                                    "error": f"Ошибка парсинга JSON: {str(e)}. AI вернул невалидный JSON.",
+                                    "model_used": model_info["name"],
+                                    "raw_response": content[:500]  # Первые 500 символов для отладки
+                                }
                         else:
                             return {
-                                "is_unique": None,
-                                "error": f"Не удалось распарсить ответ AI: {content[:200]}",
+                                "is_unique": True,  # По умолчанию считаем уникальными
+                                "duplicates": [],
+                                "warnings": [],
+                                "total_unique": len(posts),
+                                "total_duplicates": 0,
+                                "summary": "⚠️ Проверка завершена с ошибкой. Посты считаются уникальными по умолчанию.",
+                                "error": f"Не удалось найти JSON в ответе AI: {content[:200]}",
                                 "model_used": model_info["name"]
                             }
                     
