@@ -210,6 +210,7 @@ def register_image_posts_handlers(bot_instance):
                     [KeyboardButton(text="👀 Посмотреть все темы")],
                     [KeyboardButton(text="✏️ Добавить свою тему")],
                     [KeyboardButton(text="🤖 Сгенерировать новые темы")],
+                    [KeyboardButton(text="🔄 Сбросить статистику тем")],
                     [KeyboardButton(text="❌ Отмена")]
                 ],
                 resize_keyboard=True
@@ -223,8 +224,11 @@ def register_image_posts_handlers(bot_instance):
             
             await message.answer(
                 f"📚 <b>Шаг 3/4: Темы для постов</b>\n\n"
-                f"Доступно тем: {stats['total_topics']}\n"
-                f"Неиспользованных: {stats['unused']}\n\n"
+                f"📊 Статистика:\n"
+                f"   • Всего тем: {stats['total_topics']}\n"
+                f"   • ✅ Неиспользованных: {stats['unused']}\n"
+                f"   • 🔄 Использованных: {stats['used']}\n\n"
+                f"{'⚠️ Мало неиспользованных тем! Рекомендую сбросить статистику.' if stats['unused'] < 20 else ''}\n\n"
                 f"Выберите действие:",
                 parse_mode="HTML",
                 reply_markup=keyboard
@@ -240,6 +244,79 @@ def register_image_posts_handlers(bot_instance):
     # ============================================
     # УПРАВЛЕНИЕ ТЕМАМИ
     # ============================================
+    
+    @dp.message(ImagePostsStates.topics_menu, lambda m: m.text == "🔄 Сбросить статистику тем")
+    async def reset_topics_stats(message: types.Message, state: FSMContext):
+        """Сброс статистики использования тем"""
+        from src.topic_manager import TopicManager
+        
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="✅ Да, сбросить статистику")],
+                [KeyboardButton(text="❌ Отмена")]
+            ],
+            resize_keyboard=True
+        )
+        
+        await message.answer(
+            "⚠️ <b>Подтверждение</b>\n\n"
+            "Вы действительно хотите сбросить статистику использования тем?\n\n"
+            "После сброса все темы станут \"неиспользованными\" и их можно будет выбрать заново.",
+            parse_mode="HTML",
+            reply_markup=keyboard
+        )
+        await state.set_state(ImagePostsStates.confirming_reset_topics)
+    
+    @dp.message(ImagePostsStates.confirming_reset_topics, lambda m: m.text == "✅ Да, сбросить статистику")
+    async def confirm_reset_topics(message: types.Message, state: FSMContext):
+        """Подтверждение сброса статистики"""
+        from src.topic_manager import TopicManager
+        
+        tm = TopicManager()
+        tm.reset_usage_stats()
+        
+        stats = tm.get_usage_stats()
+        
+        await state.set_state(ImagePostsStates.topics_menu)
+        
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="📝 Выбрать 20 тем автоматически")],
+                [KeyboardButton(text="👀 Посмотреть все темы")],
+                [KeyboardButton(text="✏️ Добавить свою тему")],
+                [KeyboardButton(text="🤖 Сгенерировать новые темы")],
+                [KeyboardButton(text="🔄 Сбросить статистику тем")],
+                [KeyboardButton(text="❌ Отмена")]
+            ],
+            resize_keyboard=True
+        )
+        
+        await message.answer(
+            f"✅ <b>Статистика сброшена!</b>\n\n"
+            f"📊 Все {stats['total_topics']} тем теперь доступны для использования.\n"
+            f"Вы можете выбрать любые темы заново.",
+            parse_mode="HTML",
+            reply_markup=keyboard
+        )
+    
+    @dp.message(ImagePostsStates.confirming_reset_topics, lambda m: m.text == "❌ Отмена")
+    async def cancel_reset_topics(message: types.Message, state: FSMContext):
+        """Отмена сброса статистики"""
+        await state.set_state(ImagePostsStates.topics_menu)
+        
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="📝 Выбрать 20 тем автоматически")],
+                [KeyboardButton(text="👀 Посмотреть все темы")],
+                [KeyboardButton(text="✏️ Добавить свою тему")],
+                [KeyboardButton(text="🤖 Сгенерировать новые темы")],
+                [KeyboardButton(text="🔄 Сбросить статистику тем")],
+                [KeyboardButton(text="❌ Отмена")]
+            ],
+            resize_keyboard=True
+        )
+        
+        await message.answer("Отмена сброса статистики", reply_markup=keyboard)
     
     @dp.message(ImagePostsStates.topics_menu, lambda m: m.text == "📝 Выбрать 20 тем автоматически")
     async def auto_select_topics(message: types.Message, state: FSMContext):

@@ -219,6 +219,7 @@ class ImagePostsStates(StatesGroup):
     adding_custom_topic = State()  # Добавление своей темы
     generating_new_topics = State()  # Генерация новых тем AI
     selecting_topics = State()  # Выбор тем для генерации
+    confirming_reset_topics = State()  # Подтверждение сброса статистики тем
     # 3. Выбор модели и настроек
     choosing_text_model = State()  # Выбор модели для текста
     choosing_image_model = State()  # Выбор модели для картинок (Nano Banana)
