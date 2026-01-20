@@ -3851,7 +3851,7 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         progress_callback=None
     ) -> List[GeneratedPostAI]:
         """
-        Генерирует все посты.
+        Генерирует все посты с сохранением промежуточных результатов.
         
         Args:
             videos: Список данных о видео
@@ -3860,33 +3860,53 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             
         Returns:
             Список сгенерированных постов
+            
+        Note:
+            При ошибке возвращает частичные результаты вместо Exception!
         """
         posts = []
         total = len(videos) + image_count
         current = 0
+        last_error = None
         
         # Генерируем посты для видео
         for i, video in enumerate(videos):
-            post = await self.generate_video_post(video, current)
-            posts.append(post)
-            current += 1
-            
-            if progress_callback:
-                await progress_callback(current, total)
-            
-            # Небольшая задержка чтобы не перегружать API
-            await asyncio.sleep(0.5)
+            try:
+                post = await self.generate_video_post(video, current)
+                posts.append(post)
+                current += 1
+                
+                if progress_callback:
+                    await progress_callback(current, total)
+                
+                # Небольшая задержка чтобы не перегружать API
+                await asyncio.sleep(0.5)
+                
+            except Exception as e:
+                last_error = e
+                print(f"❌ Критическая ошибка при генерации video поста #{current}: {e}")
+                print(f"⚠️ СОХРАНЯЕМ {len(posts)} уже сгенерированных постов!")
+                # НЕ ВЫБРАСЫВАЕМ EXCEPTION - возвращаем частичные результаты!
+                break
         
-        # Генерируем посты для картинок
-        for i in range(image_count):
-            post = await self.generate_image_post(current)
-            posts.append(post)
-            current += 1
-            
-            if progress_callback:
-                await progress_callback(current, total)
-            
-            await asyncio.sleep(0.5)
+        # Генерируем посты для картинок (только если нет критической ошибки)
+        if last_error is None:
+            for i in range(image_count):
+                try:
+                    post = await self.generate_image_post(current)
+                    posts.append(post)
+                    current += 1
+                    
+                    if progress_callback:
+                        await progress_callback(current, total)
+                    
+                    await asyncio.sleep(0.5)
+                    
+                except Exception as e:
+                    last_error = e
+                    print(f"❌ Критическая ошибка при генерации image поста #{current}: {e}")
+                    print(f"⚠️ СОХРАНЯЕМ {len(posts)} уже сгенерированных постов!")
+                    break
         
         # ОТКЛЮЧЕНО: Перемешивание постов
         # Комментарий: Раньше посты перемешивались для разнообразия,
@@ -3899,6 +3919,17 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         for i, post in enumerate(posts):
             if post.index != i:
                 post.index = i
+        
+        # КРИТИЧНО: Если были сгенерированы хотя бы некоторые посты - возвращаем их!
+        if len(posts) > 0:
+            if last_error:
+                print(f"⚠️ Генерация прервана после {len(posts)}/{total} постов из-за ошибки: {last_error}")
+                print(f"✅ Возвращаем {len(posts)} успешно сгенерированных постов")
+            return posts
+        
+        # Если вообще ничего не сгенерировано - выбрасываем ошибку
+        if last_error:
+            raise last_error
         
         return posts
     
