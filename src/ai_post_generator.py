@@ -3596,26 +3596,34 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     continue
                 
                 # КРИТИЧНАЯ ПРОВЕРКА: Текст должен быть ТОЛЬКО на РУССКОМ языке!
-                # Список частых английских слов которые недопустимы
+                # Список частых английских ФРАЗ которые недопустимы
+                # ВАЖНО: Отдельные слова как "wild", "gate" НЕ проверяем - они могут быть в названиях слотов!
                 english_phrases = [
-                    'the abyss', 'answered the call', 'summoning circle', 'multiplier',
+                    'the abyss', 'answered the call', 'summoning circle',
                     'play it safe', 'bright lights', 'chose to dive', 'deep into',
                     'dark forces', 'aligned', 'full-blown ritual', 'pulled straight',
                     'from the void', 'sometimes', 'when you stare', 'into the darkness',
                     'hands you', 'fortune in return', 'outcome is terrifyingly good',
                     'claim the', 'massive', 'boost', 'activate', 'balance power',
                     'visuals shifted', 'eerie sounds peaked', 'screen locked',
-                    'wild', 'random luck', 'felt like', 'handshake with the supernatural'
+                    'random luck', 'felt like', 'handshake with the supernatural'
                 ]
                 
-                # Проверяем наличие английских фраз
+                # Проверяем наличие английских фраз (НО ИСКЛЮЧАЕМ слова из названия слота!)
                 text_lower = text.lower()
+                slot_lower = video.slot.lower()
                 found_english = []
-                for phrase in english_phrases:
-                    if phrase.lower() in text_lower:
-                        found_english.append(phrase)
                 
-                # Если нашли английские фразы - регенерируем
+                for phrase in english_phrases:
+                    phrase_lower = phrase.lower()
+                    # Проверяем есть ли фраза в тексте
+                    if phrase_lower in text_lower:
+                        # Проверяем - не является ли эта фраза частью названия слота
+                        # Например: "wild" есть в "2 wild 2 die"
+                        if phrase_lower not in slot_lower:
+                            found_english.append(phrase)
+                
+                # Если нашли английские фразы (которые НЕ из названия слота) - регенерируем
                 if found_english:
                     print(f"   ⚠️ Обнаружен английский текст: {', '.join(found_english[:3])}... Регенерируем с РУССКИМ языком!")
                     sys.stdout.flush()
