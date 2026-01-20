@@ -3609,15 +3609,22 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     'random luck', 'felt like', 'handshake with the supernatural'
                 ]
                 
-                # Проверяем наличие английских фраз (НО ИСКЛЮЧАЕМ слова из названия слота!)
+                # Проверяем наличие английских фраз (НО ИСКЛЮЧАЕМ слова из названия слота и валюты!)
                 text_lower = text.lower()
                 slot_lower = video.slot.lower()
                 found_english = []
+                
+                # Список допустимых английских слов (валюты, аббревиатуры)
+                allowed_words = ['usd', 'eur', 'gbp', 'rub', 'fs', 'x', 'max', 'bet', 'win']
                 
                 for phrase in english_phrases:
                     phrase_lower = phrase.lower()
                     # Проверяем есть ли фраза в тексте
                     if phrase_lower in text_lower:
+                        # Пропускаем если это допустимое слово
+                        if phrase_lower in allowed_words:
+                            continue
+                        
                         # Проверяем - не является ли эта фраза частью названия слота
                         # Например: "wild" есть в "2 wild 2 die"
                         if phrase_lower not in slot_lower:
