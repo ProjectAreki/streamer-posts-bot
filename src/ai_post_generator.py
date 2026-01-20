@@ -2235,6 +2235,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         self._used_structures: List[int] = []  # Отслеживание использованных структур из VIDEO_POST_PROMPTS
         self._used_slot_structure: Dict[str, List[int]] = {}  # Отслеживание структур по слотам {slot: [structure_indices]}
         self._existing_posts: List[str] = []  # База существующих постов для обучения AI
+        self._used_bonus1_variations: List[str] = []  # Отслеживание использованных вариаций bonus1
+        self._used_bonus2_variations: List[str] = []  # Отслеживание использованных вариаций bonus2
     
     def _get_system_prompt(self) -> str:
         """
@@ -2266,6 +2268,12 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             url2=url2,
             bonus2_desc=bonus2
         )
+    
+    def reset_bonus_variations(self):
+        """Сбрасывает списки использованных вариаций бонусов"""
+        self._used_bonus1_variations.clear()
+        self._used_bonus2_variations.clear()
+        print("   🔄 Списки использованных вариаций бонусов сброшены")
     
     def load_existing_posts(self, posts: List[str]):
         """
@@ -2325,9 +2333,13 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             print(f"❌ Ошибка загрузки постов: {e}")
             return 0
     
-    def _get_random_bonus_variation(self, original: str) -> str:
+    def _get_random_bonus_variation(self, original: str, is_bonus1: bool = True) -> str:
         """
-        Генерирует УНИКАЛЬНУЮ вариацию описания бонуса.
+        Генерирует УНИКАЛЬНУЮ вариацию описания бонуса с отслеживанием использованных.
+        
+        Args:
+            original: Оригинальное описание бонуса
+            is_bonus1: True если это bonus1, False если bonus2
         
         Пример входа: "100.000 рублей к депозиту и 100 фриспинов"
         Примеры выхода: 
@@ -2337,8 +2349,15 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         """
         import re
         
-        # Парсим все компоненты бонуса
-        parts = []
+        # Определяем список использованных вариаций для данного бонуса
+        used_list = self._used_bonus1_variations if is_bonus1 else self._used_bonus2_variations
+        
+        # Генерируем несколько вариантов и выбираем неиспользованный
+        max_attempts = 50  # Максимум попыток найти уникальную вариацию
+        
+        for attempt in range(max_attempts):
+            # Парсим все компоненты бонуса
+            parts = []
         
         # Ищем рубли (100.000 рублей, 100000₽, 30к и т.д.)
         rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
@@ -2478,12 +2497,72 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             random.shuffle(parts)
             k = 2 if len(parts) == 2 else random.choice([2, 3])
             chosen = parts[:k]
-            return random.choice(connectors).join(chosen)
+            variation = random.choice(connectors).join(chosen)
         elif len(parts) == 1:
-            return parts[0]
+            variation = parts[0]
+        else:
+            # Fallback - возвращаем оригинал
+            variation = original
         
-        # Fallback - возвращаем оригинал
-        return original
+        # Проверяем, использовалась ли эта вариация
+        if variation not in used_list:
+            # Новая уникальная вариация - сохраняем и возвращаем
+            used_list.append(variation)
+            
+            # Ограничиваем размер списка (храним последние 100 вариаций)
+            if len(used_list) > 100:
+                used_list.pop(0)
+            
+            return variation
+        
+        # Вариация уже использовалась, пробуем снова
+        
+        # Если после 50 попыток не нашли уникальную - сбрасываем список и возвращаем новую
+        print(f"   ⚠️ Все вариации бонуса использованы, сбрасываем список...")
+        used_list.clear()
+        
+        # Генерируем финальную вариацию (упрощённая логика)
+        parts = []
+        
+        # Ищем рубли
+        rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
+        if rub_match:
+            amount_str = rub_match.group(1).replace('.', '').replace(',', '')
+            try:
+                amount = int(amount_str)
+                if 'к' in original.lower() and amount < 1000:
+                    amount *= 1000
+                if amount >= 1000:
+                    amount_k = amount // 1000
+                    parts.append(f"{amount_k}к рублей")
+                else:
+                    parts.append(f"{amount}₽")
+            except:
+                pass
+        
+        # Ищем проценты
+        percent_match = re.search(r'(\d+)\s*%', original)
+        if percent_match:
+            percent = int(percent_match.group(1))
+            parts.append(f"{percent}% бонус")
+        
+        # Ищем спины
+        spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
+        if spin_match:
+            count = spin_match.group(1)
+            parts.append(f"{count} вращений")
+        
+        # Объединяем
+        if len(parts) >= 2:
+            result = " + ".join(parts[:2])
+        elif len(parts) == 1:
+            result = parts[0]
+        else:
+            result = original
+        
+        # Добавляем в список и возвращаем
+        used_list.append(result)
+        return result
     
     # ═══════════════════════════════════════════════════════════════════
     # СТРУКТУРЫ ПОСТОВ (ДЛЯ ПЕРЕМЕШИВАНИЯ БЛОКОВ)
@@ -3298,8 +3377,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     used_structure_index = structure_index + 1000
 
                 # Генерируем уникальные описания бонусов
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc)
-                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc)
+                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
+                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
 
                 # Форматируем данные
                 formatted_bet = video.get_formatted_bet()
@@ -3622,8 +3701,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 prompt_template = random.choice(self.IMAGE_POST_PROMPTS)
                 
                 # Генерируем уникальные описания
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc)
-                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc)
+                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
+                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
                 
                 prompt = prompt_template.format(
                     url1=self.bonus_data.url1,
