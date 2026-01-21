@@ -4141,7 +4141,7 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                         {"role": "user", "content": prompt}
                     ],
                     "temperature": 0.1,  # Низкая температура для точности
-                    "max_tokens": 2000
+                    "max_tokens": 4000  # Увеличено до 4000 чтобы JSON не обрывался
                 }
                 
                 async with session.post(
@@ -4159,6 +4159,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     
                     data = await response.json()
                     content = data["choices"][0]["message"]["content"]
+                    
+                    # Сохраняем оригинальный ответ для отладки
+                    original_content = content
                     
                     # Парсим JSON из ответа
                     # Убираем возможные markdown обертки
@@ -4181,6 +4184,32 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     try:
                         result = json.loads(content)
                     except json.JSONDecodeError as e:
+                        # Попытка починить оборванную строку
+                        if "Unterminated string" in str(e):
+                            # Находим позицию ошибки
+                            error_pos = e.pos if hasattr(e, 'pos') else -1
+                            if error_pos > 0:
+                                # Обрезаем до последней валидной запятой или закрывающей скобки
+                                # и пытаемся закрыть JSON
+                                fixed_content = content[:error_pos]
+                                # Убираем незавершенную строку
+                                fixed_content = re.sub(r'"[^"]*$', '', fixed_content)
+                                # Закрываем массивы и объекты
+                                fixed_content = fixed_content.rstrip(',').rstrip()
+                                # Добавляем закрывающие скобки
+                                open_braces = fixed_content.count('{') - fixed_content.count('}')
+                                open_brackets = fixed_content.count('[') - fixed_content.count(']')
+                                fixed_content += ']' * open_brackets + '}' * open_braces
+                                
+                                try:
+                                    result = json.loads(fixed_content)
+                                    # Успешно починили! Добавляем warning
+                                    if not isinstance(result, dict):
+                                        result = {"duplicates": [], "warnings": []}
+                                    result.setdefault("warnings", [])
+                                    result["warnings"].append("⚠️ JSON был оборван, автоматически исправлено")
+                                except json.JSONDecodeError:
+                                    pass  # Продолжаем к следующему блоку обработки
                         # Пытаемся найти JSON в ответе
                         import re
                         json_match = re.search(r'\{[\s\S]*\}', content)
@@ -4198,7 +4227,12 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                                     "summary": "⚠️ Проверка завершена с ошибкой парсинга JSON. Посты считаются уникальными по умолчанию.",
                                     "error": f"Ошибка парсинга JSON: {str(e)}. AI вернул невалидный JSON.",
                                     "model_used": model_info["name"],
-                                    "raw_response": content[:500]  # Первые 500 символов для отладки
+                                    "raw_response": original_content[:1000],  # Увеличено до 1000 символов
+                                    "error_details": {
+                                        "error_type": type(e).__name__,
+                                        "error_msg": str(e),
+                                        "content_length": len(original_content)
+                                    }
                                 }
                         else:
                             return {
