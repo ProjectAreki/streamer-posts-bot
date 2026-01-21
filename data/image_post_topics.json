@@ -748,6 +748,213 @@
       "used_count": 0,
       "last_used": null,
       "is_custom": false
+    },
+    {
+      "id": 81,
+      "category": "custom",
+      "title": "Музыка и атмосфера игры",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 82,
+      "category": "psychology",
+      "title": "Психология победителя",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 83,
+      "category": "custom",
+      "title": "Теории заговора",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 84,
+      "category": "custom",
+      "title": "Еда и выигрыши",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 85,
+      "category": "custom",
+      "title": "Слоты про еду",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 86,
+      "category": "custom",
+      "title": "Новые релизы слотов",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 87,
+      "category": "psychology",
+      "title": "Эмоциональный выход",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 88,
+      "category": "mechanics",
+      "title": "Механика Ante Bet",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 89,
+      "category": "industry",
+      "title": "Провайдер NoLimit City",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 90,
+      "category": "industry",
+      "title": "Провайдер Push Gaming",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 91,
+      "category": "industry",
+      "title": "Провайдер Yggdrasil",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 92,
+      "category": "custom",
+      "title": "Быстрые слоты",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 93,
+      "category": "industry",
+      "title": "Провайдер Pragmatic Play",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 94,
+      "category": "custom",
+      "title": "Max Win",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 95,
+      "category": "strategy",
+      "title": "Hit & Run стратегия",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 96,
+      "category": "custom",
+      "title": "Старые/классические слоты",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 97,
+      "category": "custom",
+      "title": "Символика 777",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 98,
+      "category": "industry",
+      "title": "Провайдер Big Time Gaming",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 99,
+      "category": "custom",
+      "title": "Астрология и слоты",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 100,
+      "category": "industry",
+      "title": "Провайдер Hacksaw Gaming",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 101,
+      "category": "psychology",
+      "title": "Тильт и эмоции",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 102,
+      "category": "industry",
+      "title": "Провайдер Thunderkick",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
+    },
+    {
+      "id": 103,
+      "category": "psychology",
+      "title": "Миф - новичкам везёт",
+      "description": "Извлечено из новых постов",
+      "used_count": 0,
+      "last_used": null,
+      "is_custom": true
     }
   ],
   "usage_history": [],
