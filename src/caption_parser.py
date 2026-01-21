@@ -226,35 +226,35 @@ class CaptionParser:
         # Приоритет: явное указание валюты рядом с числами (выигрыш/ставка)
         
         # Ищем валюту в строках с выигрышем и ставкой
-        # Паттерны: "выигрыш 1235 USD", "ставка 1 USD", "выигрыш 2 262 700 руб"
+        # Паттерны: "выигрыш 1235 USD", "ставка 1 USD", "выигрыш 2 262 700 руб", "выигрыш 10000.00 евро"
         currency_found = False
         
-        # 1. Ищем USD (явное указание)
-        if re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$)', caption, re.IGNORECASE):
+        # 1. Ищем USD (явное указание включая "доллар")
+        if re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption, re.IGNORECASE):
             result.currency = 'USD'
             currency_found = True
-        # 2. Ищем EUR (явное указание)
-        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€)', caption, re.IGNORECASE):
+        # 2. Ищем EUR (явное указание включая "евро")
+        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption, re.IGNORECASE):
             result.currency = 'EUR'
             currency_found = True
-        # 3. Ищем GBP (явное указание)
-        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£)', caption, re.IGNORECASE):
+        # 3. Ищем GBP (явное указание включая "фунт")
+        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption, re.IGNORECASE):
             result.currency = 'GBP'
             currency_found = True
-        # 4. Ищем RUB (руб, р, RUB, ₽)
-        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|р\b|RUB|₽)', caption, re.IGNORECASE):
+        # 4. Ищем RUB (руб, р, RUB, ₽, рубл)
+        elif re.search(r'(?:выигрыш|ставка|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption, re.IGNORECASE):
             result.currency = 'RUB'
             currency_found = True
         
         # Если не нашли в строках выигрыша/ставки, ищем во всем тексте
         if not currency_found:
-            if re.search(r'\bUSD\b', caption, re.IGNORECASE):
+            if re.search(r'\b(?:USD|доллар)\b', caption, re.IGNORECASE):
                 result.currency = 'USD'
-            elif re.search(r'\bEUR\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:EUR|евро)\b', caption, re.IGNORECASE):
                 result.currency = 'EUR'
-            elif re.search(r'\bGBP\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:GBP|фунт)\b', caption, re.IGNORECASE):
                 result.currency = 'GBP'
-            elif re.search(r'\b(?:руб|р\b|RUB)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:руб|рубл|р\b|RUB)\b', caption, re.IGNORECASE):
                 result.currency = 'RUB'
             # Если явного указания нет, ищем символы валюты
             elif '$' in caption or re.search(r'\$\d', caption):

@@ -1140,11 +1140,12 @@ def register_streamer_handlers(bot_instance):
         # Пытаемся извлечь валюту из введенных данных
         currency = "RUB"  # По умолчанию
         text_upper = message.text.upper()
-        if 'USD' in text_upper or '$' in message.text:
+        text_lower = message.text.lower()
+        if 'USD' in text_upper or '$' in message.text or 'доллар' in text_lower:
             currency = "USD"
-        elif 'EUR' in text_upper or '€' in message.text:
+        elif 'EUR' in text_upper or '€' in message.text or 'евро' in text_lower:
             currency = "EUR"
-        elif 'GBP' in text_upper or '£' in message.text:
+        elif 'GBP' in text_upper or '£' in message.text or 'фунт' in text_lower:
             currency = "GBP"
     
         pending_video['streamer'] = streamer
