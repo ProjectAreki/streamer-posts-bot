@@ -1261,8 +1261,6 @@ def register_streamer_handlers(bot_instance):
              InlineKeyboardButton(text="⚖️ Ротация средних (~0.3₽)", callback_data="ai_model:rotation:medium")],
             [InlineKeyboardButton(text="💎 Ротация премиум (~1₽)", callback_data="ai_model:rotation:premium"),
              InlineKeyboardButton(text="🔄 Ротация всех моделей", callback_data="ai_model:rotation:mixed")],
-            # OpenAI (напрямую)
-            [InlineKeyboardButton(text="🚀 GPT-5 Mini — ~0.5₽ [OpenAI]", callback_data="ai_model:gpt-5-mini:openai")],
             # Дешёвые (до 0.1₽/пост)
             [InlineKeyboardButton(text="🔥 Grok 4.1 Fast — ~0.1₽", callback_data="ai_model:grok-4.1-fast:openrouter"),
              InlineKeyboardButton(text="🎨 Mistral Creative — ~0.05₽", callback_data="ai_model:mistral-small-creative:openrouter")],
@@ -1325,11 +1323,11 @@ def register_streamer_handlers(bot_instance):
     
         # Определяем отображаемое имя модели
         model_names = {
-            "gpt-5-mini": "GPT-5 Mini",
             "gpt-5.2": "GPT-5.2",
             "gpt-4.1-mini": "GPT-4.1 Mini",
             "gemini-3-pro": "Gemini 3 Pro",
             "gemini-3-flash": "Gemini 3 Flash",
+            "gemini-2.5-pro": "Gemini 2.5 Pro",
             "claude-opus-4.5": "Claude Opus 4.5",
             "claude-sonnet-4.5": "Claude Sonnet 4.5",
             "grok-4.1-fast": "Grok 4.1 Fast",
@@ -1366,7 +1364,6 @@ def register_streamer_handlers(bot_instance):
             ("deepseek-r1", "openrouter", "DeepSeek R1"),
         ]
         rotation_premium = [  # Премиум (~0.5-3₽/пост)
-            ("gpt-5-mini", "openai", "GPT-5 Mini"),
             ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
             ("gpt-5.2", "openrouter", "GPT-5.2"),
             ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
@@ -1374,6 +1371,7 @@ def register_streamer_handlers(bot_instance):
             ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
             ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
             ("claude-opus-4.5", "openrouter", "Claude Opus 4.5"),
+            ("mistral-large", "openrouter", "Mistral Large"),
         ]
         rotation_mixed = [  # Все (дешёвые + средние + премиум)
             # Дешёвые
@@ -1389,7 +1387,7 @@ def register_streamer_handlers(bot_instance):
             ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
             ("deepseek-r1", "openrouter", "DeepSeek R1"),
             # Премиум
-            ("gpt-5-mini", "openai", "GPT-5 Mini"),
+            ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
             ("gpt-5.2", "openrouter", "GPT-5.2"),
             ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
             ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
@@ -1569,9 +1567,9 @@ def register_streamer_handlers(bot_instance):
                     ai_posts.append(post)
                 except Exception as e:
                     print(f"❌ Ошибка ротации пост #{i} ({rot_name}): {e}")
-                    # Пробуем fallback на GPT-5-mini
+                    # Пробуем fallback на Gemini Flash (быстрая и дешёвая)
                     try:
-                        fallback_gen = create_generator("gpt-5-mini", "openai")
+                        fallback_gen = create_generator("gemini-3-flash", "openrouter")
                         fallback_gen.set_bonus_data(
                             url1=data['url1'],
                             bonus1=data['bonus1'],
@@ -1579,14 +1577,15 @@ def register_streamer_handlers(bot_instance):
                             bonus2=data['bonus2']
                         )
                         post = await fallback_gen.generate_video_post(video, i)
-                        post.model_used = "GPT-5 Mini (fallback)"
+                        post.model_used = "Gemini 3 Flash (fallback)"
                         ai_posts.append(post)
-                    except:
-                        pass
+                    except Exception as fallback_error:
+                        print(f"❌ Fallback тоже не сработал для поста #{i}: {fallback_error}")
+                        # КРИТИЧНО: Не прерываем цикл! Пост пропущен, но продолжаем генерацию
         
-            # Генерация картинок (всегда GPT-5-mini)
+            # Генерация картинок (используем Gemini 3 Flash - быстрая и дешёвая)
             if images:
-                img_generator = create_generator("gpt-5-mini", "openai")
+                img_generator = create_generator("gemini-3-flash", "openrouter")
                 img_generator.set_bonus_data(
                     url1=data['url1'],
                     bonus1=data['bonus1'],
@@ -1597,8 +1596,8 @@ def register_streamer_handlers(bot_instance):
                     try:
                         post = await img_generator.generate_image_post(len(video_data_list) + j)
                         ai_posts.append(post)
-                    except:
-                        pass
+                    except Exception as img_error:
+                        print(f"❌ Ошибка генерации картинки #{j}: {img_error}")
         else:
             # Обычный режим - одна модель для всех
             generator.set_bonus_data(
