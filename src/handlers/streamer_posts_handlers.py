@@ -1533,6 +1533,9 @@ def register_streamer_handlers(bot_instance):
             # НЕ используем data.get() — там старые данные до update_data()
             rotation_models_list = rotation_models  # локальная переменная
             # rotation_type и rotation_label уже определены выше
+            
+            # КРИТИЧНО: глобальный счетчик для ротации форматов ссылок
+            link_format_counter = 0
         
             for i, video in enumerate(video_data_list):
                 # Выбираем модель по индексу (циклически)
@@ -1560,11 +1563,15 @@ def register_streamer_handlers(bot_instance):
                     url2=data['url2'],
                     bonus2=data['bonus2']
                 )
+                # КРИТИЧНО: передаем текущий счетчик форматов
+                rot_generator.set_link_format_counter(link_format_counter)
             
                 try:
                     post = await rot_generator.generate_video_post(video, i)
                     post.model_used = rot_name  # Сохраняем какая модель использовалась
                     ai_posts.append(post)
+                    # КРИТИЧНО: сохраняем обновленный счетчик для следующего генератора
+                    link_format_counter = rot_generator.get_link_format_counter()
                 except Exception as e:
                     print(f"❌ Ошибка ротации пост #{i} ({rot_name}): {e}")
                     # Пробуем fallback на Gemini Flash (быстрая и дешёвая)
@@ -1576,9 +1583,13 @@ def register_streamer_handlers(bot_instance):
                             url2=data['url2'],
                             bonus2=data['bonus2']
                         )
+                        # КРИТИЧНО: передаем счетчик форматов в fallback
+                        fallback_gen.set_link_format_counter(link_format_counter)
                         post = await fallback_gen.generate_video_post(video, i)
                         post.model_used = "Gemini 3 Flash (fallback)"
                         ai_posts.append(post)
+                        # КРИТИЧНО: сохраняем обновленный счетчик
+                        link_format_counter = fallback_gen.get_link_format_counter()
                     except Exception as fallback_error:
                         print(f"❌ Fallback тоже не сработал для поста #{i}: {fallback_error}")
                         # КРИТИЧНО: Не прерываем цикл! Пост пропущен, но продолжаем генерацию
@@ -1592,6 +1603,8 @@ def register_streamer_handlers(bot_instance):
                     url2=data['url2'],
                     bonus2=data['bonus2']
                 )
+                # КРИТИЧНО: продолжаем ротацию форматов для картинок
+                img_generator.set_link_format_counter(link_format_counter)
                 for j in range(len(images)):
                     try:
                         post = await img_generator.generate_image_post(len(video_data_list) + j)

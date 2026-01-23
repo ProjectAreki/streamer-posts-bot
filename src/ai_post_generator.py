@@ -2275,6 +2275,14 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         self._used_bonus2_variations: List[str] = []  # Отслеживание использованных вариаций bonus2
         self._link_format_counter = 0  # Счётчик для строгой ротации форматов ссылок (1-6)
     
+    def set_link_format_counter(self, counter: int):
+        """Устанавливает счетчик форматов ссылок (для ротации между генераторами)"""
+        self._link_format_counter = counter
+    
+    def get_link_format_counter(self) -> int:
+        """Возвращает текущее значение счетчика форматов ссылок"""
+        return self._link_format_counter
+    
     def _get_system_prompt(self) -> str:
         """
         Строгая ротация системных промптов для максимального разнообразия.
