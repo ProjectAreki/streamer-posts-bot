@@ -1363,17 +1363,19 @@ def register_streamer_handlers(bot_instance):
             ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
             ("deepseek-r1", "openrouter", "DeepSeek R1"),
         ]
-        rotation_premium = [  # Премиум (~0.5-3₽/пост)
-            ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
-            ("gpt-5.2", "openrouter", "GPT-5.2"),
-            ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
-            ("gemini-3-flash", "openrouter", "Gemini 3 Flash"),
-            ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
-            ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
+        rotation_premium = [  # Премиум (~0.5-3₽/пост) - 10 моделей для максимального разнообразия
             ("claude-opus-4.5", "openrouter", "Claude Opus 4.5"),
+            ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
+            ("gpt-5.2", "openrouter", "GPT-5.2"),
+            ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
+            ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
             ("mistral-large", "openrouter", "Mistral Large"),
+            ("deepseek-r1", "openrouter", "DeepSeek R1"),
+            ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
+            ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
+            ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
         ]
-        rotation_mixed = [  # Все (дешёвые + средние + премиум)
+        rotation_mixed = [  # Все (дешёвые + средние + премиум) - максимальное разнообразие
             # Дешёвые
             ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
             ("mistral-small-creative", "openrouter", "Mistral Creative"),
@@ -1382,7 +1384,6 @@ def register_streamer_handlers(bot_instance):
             ("seed-1.6-flash", "openrouter", "Seed Flash"),
             ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
             # Средние
-            ("gemini-3-flash", "openrouter", "Gemini 3 Flash"),
             ("gpt-4.1-mini", "openrouter", "GPT-4.1 Mini"),
             ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
             ("deepseek-r1", "openrouter", "DeepSeek R1"),
