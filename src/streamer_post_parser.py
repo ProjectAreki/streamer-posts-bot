@@ -20,8 +20,8 @@ class StreamerPostData:
     multiplier: float = 0.0
     
     def is_valid(self) -> bool:
-        """Проверяет что есть минимум слот, ставка и выигрыш"""
-        return bool(self.slot and self.bet > 0 and self.win > 0)
+        """Проверяет что есть минимум ставка и выигрыш (слот опционален)"""
+        return bool(self.bet > 0 and self.win > 0)
     
     def __post_init__(self):
         """Вычисляет множитель если не указан"""
@@ -33,13 +33,15 @@ class StreamerPostParser:
     """
     Парсер имён файлов видео.
     
-    Поддерживаемый формат:
-    Стример_Слот_Ставка_Выигрыш.mp4
+    Поддерживаемые форматы:
+    1. Ставка_Выигрыш.mp4 (без слота и стримера)
+    2. Слот_Ставка_Выигрыш.mp4 (со слотом, без стримера)
+    3. Стример_Слот_Ставка_Выигрыш.mp4 (полный формат)
     
     Примеры:
-    - Жека_Gates of Olympus_500_125000.mp4
-    - Gena88_Sweet Bonanza_200_89000.mp4
-    - Player_Slot Name_1000_500000.mp4
+    - 725_14500.mp4 (без слота)
+    - Gates_of_Olympus_500_125000.mp4 (со слотом)
+    - Жека_Gates_of_Olympus_500_125000.mp4 (полный)
     """
     
     def parse_filename(self, filename: str) -> Optional[StreamerPostData]:
@@ -47,7 +49,7 @@ class StreamerPostParser:
         Парсит имя файла и извлекает метаданные.
         
         Args:
-            filename: Имя файла (например: "Жека_Gates of Olympus_500_125000.mp4")
+            filename: Имя файла
             
         Returns:
             StreamerPostData с данными или None если не удалось распарсить
@@ -58,28 +60,63 @@ class StreamerPostParser:
         # Убираем расширение
         name_without_ext = filename.rsplit('.', 1)[0]
         
-        # Паттерн: Стример_Слот_Ставка_Выигрыш
-        # Слот может содержать пробелы и подчёркивания
-        pattern = r'^([^_]+)_(.+?)_(\d+)_(\d+)$'
-        match = re.match(pattern, name_without_ext)
+        # Убираем валютные символы и буквы из чисел (например: 725EUR, 14500USD)
+        # Заменяем на просто числа для парсинга
+        name_clean = re.sub(r'([A-Z]{3}|[€$£])', '', name_without_ext)
         
-        if not match:
-            return None
+        # Паттерн 1: Ставка_Выигрыш (2 числа)
+        pattern_2 = r'^(\d+)_(\d+)$'
+        match_2 = re.match(pattern_2, name_clean)
+        if match_2:
+            try:
+                bet = int(match_2.group(1))
+                win = int(match_2.group(2))
+                if bet > 0 and win > 0:
+                    return StreamerPostData(
+                        streamer="",
+                        slot="",  # Без слота
+                        bet=bet,
+                        win=win
+                    )
+            except ValueError:
+                pass
         
-        try:
-            streamer = match.group(1).strip()
-            slot = match.group(2).strip().replace('_', ' ')  # Заменяем _ на пробелы в названии слота
-            bet = int(match.group(3))
-            win = int(match.group(4))
-            
-            if bet <= 0 or win <= 0:
-                return None
-            
-            return StreamerPostData(
-                streamer=streamer,
-                slot=slot,
-                bet=bet,
-                win=win
-            )
-        except (ValueError, IndexError):
-            return None
+        # Паттерн 2: Слот_Ставка_Выигрыш (3 части, последние 2 - числа)
+        pattern_3 = r'^(.+?)_(\d+)_(\d+)$'
+        match_3 = re.match(pattern_3, name_clean)
+        if match_3:
+            try:
+                slot = match_3.group(1).strip().replace('_', ' ')
+                bet = int(match_3.group(2))
+                win = int(match_3.group(3))
+                if bet > 0 and win > 0:
+                    return StreamerPostData(
+                        streamer="",  # Без стримера
+                        slot=slot,
+                        bet=bet,
+                        win=win
+                    )
+            except ValueError:
+                pass
+        
+        # Паттерн 3: Стример_Слот_Ставка_Выигрыш (4 части, последние 2 - числа)
+        # Ищем последние 2 числа и всё что перед ними
+        pattern_4 = r'^(.+?)_(.+?)_(\d+)_(\d+)$'
+        match_4 = re.match(pattern_4, name_clean)
+        if match_4:
+            try:
+                streamer = match_4.group(1).strip()
+                slot = match_4.group(2).strip().replace('_', ' ')
+                bet = int(match_4.group(3))
+                win = int(match_4.group(4))
+                if bet > 0 and win > 0:
+                    return StreamerPostData(
+                        streamer=streamer,
+                        slot=slot,
+                        bet=bet,
+                        win=win
+                    )
+            except ValueError:
+                pass
+        
+        return None

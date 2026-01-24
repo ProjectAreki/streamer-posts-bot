@@ -1,11 +1,11 @@
 """
-@file: streamer_posts_handlers.py
-@description: Handlers для сценария "100 постов стримеров"
+@file: spanish_posts_handlers.py
+@description: Handlers para el escenario "100 posteos en español"
 @dependencies: aiogram, src.states
-@created: 2026-01-12
+@created: 2026-01-24
 
-Этот модуль содержит все handlers для сценария генерации 100 постов стримеров.
-Для использования вызовите register_streamer_handlers(bot_instance) из _register_handlers().
+Este módulo contiene todos los handlers para el escenario de generación de 100 posts en español.
+Para usar, llama register_spanish_handlers(bot_instance) desde _register_handlers().
 """
 
 import os
@@ -15,15 +15,15 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import StateFilter
 
-from src.states import StreamerPostsStates
+from src.states import SpanishPostsStates
 
 
-def register_streamer_handlers(bot_instance):
+def register_spanish_handlers(bot_instance):
     """
-    Регистрирует все handlers для сценария "100 постов стримеров".
+    Registra todos los handlers para el escenario "100 posteos en español".
     
     Args:
-        bot_instance: Экземпляр NinjaVideoBot с доступом к dp, bot, config_manager и т.д.
+        bot_instance: Instancia del bot con acceso a dp, bot, config_manager, etc.
     """
     # Ссылки на нужные объекты
     dp = bot_instance.dp
@@ -49,24 +49,24 @@ def register_streamer_handlers(bot_instance):
     # ОБРАБОТЧИКИ СЦЕНАРИЯ "100 ПОСТОВ СТРИМЕРОВ"
     # ============================================
 
-    @dp.message(lambda m: m.text == "📹 100 постов стримеров")
-    async def streamer_posts_start_handler(message: types.Message, state: FSMContext):
-        """Начало сценария 100 постов стримеров"""
+    @dp.message(lambda m: m.text == "📹ES 100 posteos")
+    async def spanish_posts_start_handler(message: types.Message, state: FSMContext):
+        """Начало сценария 100 постов на испанском"""
         await state.clear()
     
-        if not is_allowed(message.from_user.id, "streamer_posts"):
+        if not is_allowed(message.from_user.id, "spanish_posts"):
             await message.answer("❌ У вас нет доступа к этому сценарию")
             return
 
         info_text = """
-    📹 <b>100 постов стримеров</b>
+    📹ES <b>100 постов на испанском</b>
 
-    Генерация уникальных постов про стримеров казино.
+    Генерация уникальных постов о победах в слотах на испанском языке.
 
-    <b>Что входит:</b>
-    • 80 видео + текст (выигрыши стримеров)
-    • 20 картинок + текст (бонусы)
-    • 2 ссылки с бонусами в каждом посте
+    <b>Что включает:</b>
+    • 80 видео + текст (победы в слотах)
+    • 20 изображений + текст (бонусы)
+    • 2 ссылки с бонусами в каждой публикации
 
     <b>Что делает бот:</b>
     • 55 уникальных структур для видео
@@ -74,20 +74,21 @@ def register_streamer_handlers(bot_instance):
     • Рандомизация описаний бонусов
     • 15 форматов блоков ссылок
 
-    <b>412 500 возможных комбинаций!</b>
+    <b>412,500 возможных комбинаций!</b>
 
-    <b>Формат имён видео файлов:</b>
-    <code>Стример_Слот_Ставка_Выигрыш.mp4</code>
-    Пример: <code>Жека_Gates of Olympus_500_125000.mp4</code>
+    <b>Формат имен файлов видео:</b>
+    <code>Slot_Ставка_Выигрыш.mp4</code>
+    Пример: <code>Gates of Olympus_50_12500.mp4</code>
 
     <b>Шаги:</b>
-    1. Укажите ссылки и бонусы (2 шт)
-    2. Отправьте видео файлы
-    3. Отправьте картинки для бонусов
-    4. Выберите канал для публикации
-    5. Подтвердите и запустите!
+    1. Укажи ссылки и бонусы (2)
+    2. Выбери валюту (USD, EUR, CLP, MXN, ARS, COP)
+    3. Отправь файлы видео
+    4. Отправь изображения для бонусов
+    5. Выбери канал для публикации
+    6. Подтверди и запусти!
 
-    Начнём с ввода ссылок и бонусов 👇
+    Начнем со ссылок и бонусов 👇
     """
 
         keyboard = ReplyKeyboardMarkup(
@@ -100,22 +101,24 @@ def register_streamer_handlers(bot_instance):
         )
 
         await message.answer(info_text, reply_markup=keyboard, parse_mode="HTML")
-        await state.set_state(StreamerPostsStates.waiting_for_url1)
+        await state.set_state(SpanishPostsStates.waiting_for_url1)
 
-    @dp.message(StreamerPostsStates.waiting_for_url1, lambda m: m.text == "📖 Как именовать файлы")
+    @dp.message(SpanishPostsStates.waiting_for_url1, lambda m: m.text == "📖 Как именовать файлы")
     async def streamer_posts_naming_help(message: types.Message, state: FSMContext):
         """Справка по именованию файлов"""
         help_text = """
     📖 <b>Как именовать видео файлы</b>
 
     <b>Формат:</b>
-    <code>Стример_Слот_Ставка_Выигрыш.mp4</code>
+    <code>Slot_Ставка_Выигрыш.mp4</code>
+    или
+    <code>Jugador_Slot_Ставка_Выигрыш.mp4</code>
 
     <b>Примеры:</b>
-    • <code>Жека_Gates of Olympus_500_125000.mp4</code>
-    • <code>ALMAX_Sweet Bonanza_200_89000.mp4</code>
-    • <code>Mattron_Zeus vs Hades_1000_450000.mp4</code>
-    • <code>Vaskov_Royal Potato 2_60_115000.mp4</code>
+    • <code>Gates_of_Olympus_50USD_12500USD.mp4</code>
+    • <code>Sweet_Bonanza_100EUR_25000EUR.mp4</code>
+    • <code>Pedro_Gates_of_Olympus_50_12500.mp4</code>
+    • <code>Book_of_Dead_10000CLP_500000CLP.mp4</code>
 
     <b>Разделители:</b>
     Можно использовать <code>_</code> или <code>-</code>
@@ -130,7 +133,7 @@ def register_streamer_handlers(bot_instance):
     """
         await message.answer(help_text, parse_mode="HTML")
 
-    @dp.message(StreamerPostsStates.waiting_for_url1, lambda m: m.text == "🚀 Начать настройку")
+    @dp.message(SpanishPostsStates.waiting_for_url1, lambda m: m.text == "🚀 Начать настройку")
     async def streamer_posts_begin_setup(message: types.Message, state: FSMContext):
         """Начало настройки - запрос первой ссылки"""
         await message.answer(
@@ -144,10 +147,10 @@ def register_streamer_handlers(bot_instance):
             )
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_url1)
+    @dp.message(SpanishPostsStates.waiting_for_url1)
     async def streamer_posts_url1_handler(message: types.Message, state: FSMContext):
         """Обработка первой ссылки"""
-        if message.text == "❌ Отмена":
+        if message.text in ["❌ Отмена", "❌ Cancelar"]:
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
             await message.answer("❌ Отменено", reply_markup=kb)
@@ -159,20 +162,20 @@ def register_streamer_handlers(bot_instance):
             return
     
         await state.update_data(url1=url1)
-        await state.set_state(StreamerPostsStates.waiting_for_bonus1)
+        await state.set_state(SpanishPostsStates.waiting_for_bonus1)
     
         await message.answer(
-            f"✅ Ссылка 1: {url1}\n\n"
-            "🎁 <b>Шаг 2/4: Описание первого бонуса</b>\n\n"
-            "Введите описание бонуса для первой ссылки:\n"
-            "(например: 100 FS или 150% до 30000₽)",
+            f"✅ Ссылка: {url1}\n\n"
+            "🎁 <b>Шаг 2/4: Описание бонуса</b>\n\n"
+            "Введите описание бонуса:\n"
+            "(например: 100 FS или 150% до $100)",
             parse_mode="HTML"
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_bonus1)
+    @dp.message(SpanishPostsStates.waiting_for_bonus1)
     async def streamer_posts_bonus1_handler(message: types.Message, state: FSMContext):
-        """Обработка описания первого бонуса"""
-        if message.text == "❌ Отмена":
+        """Обработка описания бонуса → выбор валюты"""
+        if message.text in ["❌ Отмена", "❌ Cancelar"]:
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
             await message.answer("❌ Отменено", reply_markup=kb)
@@ -180,65 +183,89 @@ def register_streamer_handlers(bot_instance):
     
         bonus1 = message.text.strip()
         await state.update_data(bonus1=bonus1)
-        await state.set_state(StreamerPostsStates.waiting_for_url2)
-    
-        await message.answer(
-            f"✅ Бонус 1: {bonus1}\n\n"
-            "🔗 <b>Шаг 3/4: Вторая ссылка</b>\n\n"
-            "Введите URL второго бонуса:",
-            parse_mode="HTML"
-        )
-
-    @dp.message(StreamerPostsStates.waiting_for_url2)
-    async def streamer_posts_url2_handler(message: types.Message, state: FSMContext):
-        """Обработка второй ссылки"""
-        if message.text == "❌ Отмена":
-            await state.clear()
-            kb = get_scenarios_kb(message.from_user.id)
-            await message.answer("❌ Отменено", reply_markup=kb)
-            return
-    
-        url2 = message.text.strip()
-        if not url2.startswith("http"):
-            await message.answer("❌ Введите корректный URL (начинается с http:// или https://)")
-            return
-    
-        await state.update_data(url2=url2)
-        await state.set_state(StreamerPostsStates.waiting_for_bonus2)
-    
-        await message.answer(
-            f"✅ Ссылка 2: {url2}\n\n"
-            "🎁 <b>Шаг 4/4: Описание второго бонуса</b>\n\n"
-            "Введите описание бонуса для второй ссылки:\n"
-            "(например: 150% + 500 FS + 30000₽)",
-            parse_mode="HTML"
-        )
-
-    @dp.message(StreamerPostsStates.waiting_for_bonus2)
-    async def streamer_posts_bonus2_handler(message: types.Message, state: FSMContext):
-        """Обработка описания второго бонуса → выбор источника видео"""
-        if message.text == "❌ Отмена":
-            await state.clear()
-            kb = get_scenarios_kb(message.from_user.id)
-            await message.answer("❌ Отменено", reply_markup=kb)
-            return
-    
-        bonus2 = message.text.strip()
-        await state.update_data(bonus2=bonus2, videos=[], video_metadata=[], images=[])
     
         data = await state.get_data()
     
         summary = f"""
-    ✅ <b>Ссылки и бонусы настроены!</b>
+    ✅ <b>Ссылка и бонус настроены!</b>
 
-    🔗 Ссылка 1: {data['url1']}
-    🎁 Бонус 1: {data['bonus1']}
-
-    🔗 Ссылка 2: {data['url2']}
-    🎁 Бонус 2: {bonus2}
+    🔗 Ссылка: {data['url1']}
+    🎁 Бонус: {bonus1}
 
     ━━━━━━━━━━━━━━━━━━━━━━━
-    <b>📹 Шаг 2: Откуда брать видео?</b>
+    <b>💰 Шаг 3/4: Выбери валюту для постов</b>
+
+    Выбери валюту, которая будет использоваться в постах:
+    """
+    
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="💵 USD"), KeyboardButton(text="💶 EUR")],
+                [KeyboardButton(text="🇨🇱 CLP"), KeyboardButton(text="🇲🇽 MXN")],
+                [KeyboardButton(text="🇦🇷 ARS"), KeyboardButton(text="🇨🇴 COP")],
+                [KeyboardButton(text="❌ Отмена")]
+            ],
+            resize_keyboard=True
+        )
+    
+        await state.set_state(SpanishPostsStates.waiting_for_currency)
+        await message.answer(summary, reply_markup=keyboard, parse_mode="HTML")
+
+    @dp.message(SpanishPostsStates.waiting_for_currency)
+    async def spanish_posts_currency_handler(message: types.Message, state: FSMContext):
+        """Обработка выбора валюты"""
+        if message.text in ["❌ Отмена", "❌ Cancelar"]:
+            await state.clear()
+            kb = get_scenarios_kb(message.from_user.id)
+            await message.answer("❌ Отменено", reply_markup=kb)
+            return
+        
+        # Определяем валюту по тексту кнопки
+        currency_map = {
+            "💵 USD": "USD",
+            "💶 EUR": "EUR",
+            "🇨🇱 CLP": "CLP",
+            "🇲🇽 MXN": "MXN",
+            "🇦🇷 ARS": "ARS",
+            "🇨🇴 COP": "COP",
+        }
+        
+        currency = currency_map.get(message.text)
+        if not currency:
+            # Попытка определить по тексту
+            text_upper = message.text.upper()
+            if "USD" in text_upper or "$" in message.text:
+                currency = "USD"
+            elif "EUR" in text_upper or "€" in message.text:
+                currency = "EUR"
+            elif "CLP" in text_upper:
+                currency = "CLP"
+            elif "MXN" in text_upper:
+                currency = "MXN"
+            elif "ARS" in text_upper:
+                currency = "ARS"
+            elif "COP" in text_upper:
+                currency = "COP"
+            else:
+                await message.answer(
+                    "❌ Выбери валюту из предложенных кнопок:\n"
+                    "💵 USD, 💶 EUR, 🇨🇱 CLP, 🇲🇽 MXN, 🇦🇷 ARS, 🇨🇴 COP"
+                )
+                return
+        
+        await state.update_data(currency=currency, videos=[], video_metadata=[], images=[])
+        
+        data = await state.get_data()
+        
+        summary = f"""
+    ✅ <b>Валюта выбрана: {currency}</b>
+
+    🔗 Ссылка: {data['url1']}
+    🎁 Бонус: {data['bonus1']}
+    💰 Валюта: {currency}
+
+    ━━━━━━━━━━━━━━━━━━━━━━━
+    <b>📹 Шаг 4: Откуда брать видео?</b>
 
     📡 <b>Из канала</b> — укажи канал с нарезанными видео
     📤 <b>Загрузить</b> — отправь видео прямо в чат
@@ -253,13 +280,13 @@ def register_streamer_handlers(bot_instance):
             resize_keyboard=True
         )
     
-        await state.set_state(StreamerPostsStates.choosing_video_source)
+        await state.set_state(SpanishPostsStates.choosing_video_source)
         await message.answer(summary, reply_markup=keyboard, parse_mode="HTML")
 
-    @dp.message(StreamerPostsStates.choosing_video_source, lambda m: m.text == "📡 Взять из канала")
+    @dp.message(SpanishPostsStates.choosing_video_source, lambda m: m.text == "📡 Взять из канала")
     async def streamer_posts_choose_channel_source(message: types.Message, state: FSMContext):
         """Выбран источник - канал"""
-        await state.set_state(StreamerPostsStates.waiting_for_source_channel)
+        await state.set_state(SpanishPostsStates.waiting_for_source_channel)
         await state.update_data(streamer_posts_flow=True)
     
         await message.answer(
@@ -280,7 +307,7 @@ def register_streamer_handlers(bot_instance):
             )
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_source_channel)
+    @dp.message(SpanishPostsStates.waiting_for_source_channel)
     async def streamer_posts_source_channel_handler(message: types.Message, state: FSMContext):
         """Обработка канала-источника"""
         if message.text == "❌ Отмена":
@@ -320,7 +347,7 @@ def register_streamer_handlers(bot_instance):
     
         # Поддержка кнопки "Ссылка на пост" (НОВОЕ!)
         if message.text == "🔗 Ссылка на пост":
-            await state.set_state(StreamerPostsStates.waiting_for_post_link)
+            await state.set_state(SpanishPostsStates.waiting_for_post_link)
             await message.answer(
                 "🔗 <b>Ссылка на стартовый пост</b>\n\n"
                 "Отправьте ссылку на пост, с которого начать:\n\n"
@@ -414,7 +441,7 @@ def register_streamer_handlers(bot_instance):
                     resize_keyboard=True
                 )
             )
-            await state.set_state(StreamerPostsStates.waiting_for_scan_direction)
+            await state.set_state(SpanishPostsStates.waiting_for_scan_direction)
         
         except Exception as e:
             logger.error(f"Ошибка доступа к каналу: {e}")
@@ -423,7 +450,7 @@ def register_streamer_handlers(bot_instance):
                 "Попробуйте ввести канал ещё раз"
             )
 
-    @dp.message(StreamerPostsStates.waiting_for_post_link)
+    @dp.message(SpanishPostsStates.waiting_for_post_link)
     async def streamer_posts_link_handler(message: types.Message, state: FSMContext):
         """Обработка ссылки на конкретный пост"""
         import re
@@ -528,9 +555,9 @@ def register_streamer_handlers(bot_instance):
                 resize_keyboard=True
             )
         )
-        await state.set_state(StreamerPostsStates.waiting_for_scan_direction)
+        await state.set_state(SpanishPostsStates.waiting_for_scan_direction)
 
-    @dp.message(StreamerPostsStates.waiting_for_scan_direction)
+    @dp.message(SpanishPostsStates.waiting_for_scan_direction)
     async def streamer_posts_direction_handler(message: types.Message, state: FSMContext):
         """Обработка выбора направления сканирования"""
         if message.text == "❌ Отмена":
@@ -580,9 +607,9 @@ def register_streamer_handlers(bot_instance):
                 resize_keyboard=True
             )
         )
-        await state.set_state(StreamerPostsStates.waiting_for_video_range)
+        await state.set_state(SpanishPostsStates.waiting_for_video_range)
 
-    @dp.message(StreamerPostsStates.waiting_for_video_range)
+    @dp.message(SpanishPostsStates.waiting_for_video_range)
     async def streamer_posts_video_range_handler(message: types.Message, state: FSMContext):
         """Обработка количества видео из канала"""
         if message.text == "❌ Отмена":
@@ -684,8 +711,7 @@ def register_streamer_handlers(bot_instance):
                 
                     videos_found.append(video_info)
                 
-                    # Для русского сценария слот обязателен!
-                    if parsed.is_valid() and parsed.slot:
+                    if parsed.is_valid():
                         videos_auto_parsed.append(video_info)
                     else:
                         videos_need_input.append(video_info)
@@ -750,7 +776,7 @@ def register_streamer_handlers(bot_instance):
         caption_preview = video['caption'][:150] + "..." if len(video['caption']) > 150 else video['caption']
     
         await state.update_data(current_video_index=index)
-        await state.set_state(StreamerPostsStates.entering_metadata_for_channel)
+        await state.set_state(SpanishPostsStates.entering_metadata_for_channel)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -772,7 +798,7 @@ def register_streamer_handlers(bot_instance):
             reply_markup=keyboard
         )
 
-    @dp.message(StreamerPostsStates.entering_metadata_for_channel)
+    @dp.message(SpanishPostsStates.entering_metadata_for_channel)
     async def streamer_posts_channel_metadata_handler(message: types.Message, state: FSMContext):
         """Обработка метаданных для видео из канала"""
         if message.text == "❌ Отмена":
@@ -856,7 +882,7 @@ def register_streamer_handlers(bot_instance):
         data = await state.get_data()
         videos = data.get('videos', [])
     
-        await state.set_state(StreamerPostsStates.waiting_for_target_channel)
+        await state.set_state(SpanishPostsStates.waiting_for_target_channel)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -877,10 +903,10 @@ def register_streamer_handlers(bot_instance):
             reply_markup=keyboard
         )
 
-    @dp.message(StreamerPostsStates.choosing_video_source, lambda m: m.text == "📤 Загрузить вручную")
+    @dp.message(SpanishPostsStates.choosing_video_source, lambda m: m.text == "📤 Загрузить вручную")
     async def streamer_posts_choose_manual_upload(message: types.Message, state: FSMContext):
         """Выбрана ручная загрузка видео"""
-        await state.set_state(StreamerPostsStates.waiting_for_videos)
+        await state.set_state(SpanishPostsStates.waiting_for_videos)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -903,22 +929,22 @@ def register_streamer_handlers(bot_instance):
 
     # ====== ОБРАБОТЧИКИ КАРТИНОК ======
 
-    @dp.message(StreamerPostsStates.choosing_image_source, lambda m: m.text == "⏭ Без картинок")
+    @dp.message(SpanishPostsStates.choosing_image_source, lambda m: m.text == "⏭ Без картинок")
     async def streamer_posts_skip_images(message: types.Message, state: FSMContext):
         """Пропуск картинок — переходим к выбору модели"""
         await state.update_data(images=[])
     
         # Сначала устанавливаем состояние waiting_for_images, 
         # затем вызываем хендлер (он ожидает это состояние)
-        await state.set_state(StreamerPostsStates.waiting_for_images)
+        await state.set_state(SpanishPostsStates.waiting_for_images)
     
         # Переходим к генерации
         await streamer_posts_images_done(message, state)
 
-    @dp.message(StreamerPostsStates.choosing_image_source, lambda m: m.text == "📤 Загрузить картинки")
+    @dp.message(SpanishPostsStates.choosing_image_source, lambda m: m.text == "📤 Загрузить картинки")
     async def streamer_posts_upload_images(message: types.Message, state: FSMContext):
         """Ручная загрузка картинок"""
-        await state.set_state(StreamerPostsStates.waiting_for_images)
+        await state.set_state(SpanishPostsStates.waiting_for_images)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -937,10 +963,10 @@ def register_streamer_handlers(bot_instance):
             reply_markup=keyboard
         )
 
-    @dp.message(StreamerPostsStates.choosing_image_source, lambda m: m.text == "📡 Картинки из канала")
+    @dp.message(SpanishPostsStates.choosing_image_source, lambda m: m.text == "📡 Картинки из канала")
     async def streamer_posts_images_from_channel(message: types.Message, state: FSMContext):
         """Картинки из канала"""
-        await state.set_state(StreamerPostsStates.waiting_for_image_channel)
+        await state.set_state(SpanishPostsStates.waiting_for_image_channel)
     
         await message.answer(
             "📡 <b>Канал с картинками</b>\n\n"
@@ -953,7 +979,7 @@ def register_streamer_handlers(bot_instance):
             )
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_image_channel)
+    @dp.message(SpanishPostsStates.waiting_for_image_channel)
     async def streamer_posts_image_channel_handler(message: types.Message, state: FSMContext):
         """Обработка канала с картинками"""
         if message.text == "❌ Отмена":
@@ -1019,7 +1045,7 @@ def register_streamer_handlers(bot_instance):
         except Exception as e:
             await message.answer(f"❌ Ошибка: {e}")
 
-    @dp.message(StreamerPostsStates.waiting_for_videos, lambda m: m.video is not None)
+    @dp.message(SpanishPostsStates.waiting_for_videos, lambda m: m.video is not None)
     async def streamer_posts_video_handler(message: types.Message, state: FSMContext):
         """Обработка полученного видео"""
         data = await state.get_data()
@@ -1037,9 +1063,8 @@ def register_streamer_handlers(bot_instance):
         parser = StreamerPostParser()
         parsed = parser.parse_filename(video_info['file_name'])
     
-        # Для русского сценария слот обязателен!
-        if parsed and parsed.is_valid() and parsed.slot:
-            # Данные успешно извлечены из имени файла (и слот есть)
+        if parsed and parsed.is_valid():
+            # Данные успешно извлечены из имени файла
             video_info['streamer'] = parsed.streamer
             video_info['slot'] = parsed.slot
             video_info['bet'] = parsed.bet
@@ -1062,13 +1087,13 @@ def register_streamer_handlers(bot_instance):
                 parse_mode="HTML"
             )
         else:
-            # Не удалось распарсить или слот пустой - запрашиваем данные вручную
+            # Не удалось распарсить - запрашиваем данные вручную
             video_info['parsed'] = False
             await state.update_data(
                 videos=videos,
                 pending_video=video_info
             )
-            await state.set_state(StreamerPostsStates.waiting_for_video_metadata)
+            await state.set_state(SpanishPostsStates.waiting_for_video_metadata)
         
             await message.answer(
                 f"📹 Получено видео: {video_info['file_name']}\n\n"
@@ -1083,7 +1108,7 @@ def register_streamer_handlers(bot_instance):
                 parse_mode="HTML"
             )
 
-    @dp.message(StreamerPostsStates.waiting_for_video_metadata)
+    @dp.message(SpanishPostsStates.waiting_for_video_metadata)
     async def streamer_posts_metadata_handler(message: types.Message, state: FSMContext):
         """Обработка ручного ввода метаданных"""
         if message.text == "❌ Отмена":
@@ -1098,10 +1123,12 @@ def register_streamer_handlers(bot_instance):
         # Поддерживаем 2 формата:
         # 3 значения: Слот | Ставка | Выигрыш (без стримера)
         # 4 значения: Стример | Слот | Ставка | Выигрыш
-        if len(parts) < 3:
+        if len(parts) < 2:
             await message.answer(
                 "❌ Неверный формат!\n\n"
-                "Введите минимум 3 значения через |:\n"
+                "Введите минимум 2 значения через |:\n"
+                "<code>Ставка | Выигрыш</code> (без слота)\n"
+                "или 3 значения:\n"
                 "<code>Слот | Ставка | Выигрыш</code>\n"
                 "или 4 значения:\n"
                 "<code>Стример | Слот | Ставка | Выигрыш</code>",
@@ -1110,25 +1137,32 @@ def register_streamer_handlers(bot_instance):
             return
     
         try:
-            if len(parts) == 3:
+            if len(parts) == 2:
+                # Без слота и стримера: Ставка | Выигрыш
+                streamer = ""
+                slot = ""  # Без слота
+                bet = int(parts[0].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                win = int(parts[1].strip().replace(' ', '').replace(',', '').replace('.', ''))
+            elif len(parts) == 3:
                 # Без стримера: Слот | Ставка | Выигрыш
-                streamer = ""  # Пустое имя
+                streamer = ""
                 slot = parts[0].strip()
-                bet = int(parts[1].strip().replace(' ', '').replace(',', ''))
-                win = int(parts[2].strip().replace(' ', '').replace(',', ''))
+                bet = int(parts[1].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                win = int(parts[2].strip().replace(' ', '').replace(',', '').replace('.', ''))
             else:
                 # Со стримером: Стример | Слот | Ставка | Выигрыш
                 streamer = parts[0].strip()
                 slot = parts[1].strip()
-                bet = int(parts[2].strip().replace(' ', '').replace(',', ''))
-                win = int(parts[3].strip().replace(' ', '').replace(',', ''))
+                bet = int(parts[2].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                win = int(parts[3].strip().replace(' ', '').replace(',', '').replace('.', ''))
         
             multiplier = round(win / bet, 1) if bet > 0 else 0
         except ValueError:
             await message.answer(
                 "❌ Ставка и выигрыш должны быть числами!\n\n"
                 "Примеры:\n"
-                "<code>Gates | 500 | 125000</code>\n"
+                "<code>725 | 14500</code> (без слота)\n"
+                "<code>Gates of Olympus | 500 | 125000</code>\n"
                 "<code>Жека | Gates | 500 | 125000</code>",
                 parse_mode="HTML"
             )
@@ -1160,7 +1194,7 @@ def register_streamer_handlers(bot_instance):
     
         videos.append(pending_video)
         await state.update_data(videos=videos, pending_video=None)
-        await state.set_state(StreamerPostsStates.waiting_for_videos)
+        await state.set_state(SpanishPostsStates.waiting_for_videos)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -1170,15 +1204,20 @@ def register_streamer_handlers(bot_instance):
             resize_keyboard=True
         )
     
-        # Формируем сообщение (стример опционален)
-        streamer_line = f"👤 Стример: {streamer}\n" if streamer else "👤 Стример: не указан\n"
+        # Формируем сообщение (стример и слот опциональны)
+        streamer_line = f"👤 Стример: {streamer}\n" if streamer else ""
+        slot_line = f"🎰 Слот: {slot}\n" if slot else "🎰 Слот: не указан\n"
+        
+        # Получаем валюту из state
+        data_currency = data.get('currency', 'USD')
+        currency_symbol = "$" if data_currency == "USD" else "€" if data_currency == "EUR" else data_currency
     
         await message.answer(
             f"✅ Видео #{len(videos)} добавлено!\n\n"
             f"{streamer_line}"
-            f"🎰 Слот: {slot}\n"
-            f"💵 Ставка: {bet}₽\n"
-            f"💰 Выигрыш: {win}₽\n"
+            f"{slot_line}"
+            f"💵 Ставка: {bet} {currency_symbol}\n"
+            f"💰 Выигрыш: {win} {currency_symbol}\n"
             f"📊 Множитель: x{multiplier}\n\n"
             f"<i>Всего видео: {len(videos)}</i>\n\n"
             "Отправьте ещё видео или нажмите '✅ Видео готовы'",
@@ -1186,7 +1225,7 @@ def register_streamer_handlers(bot_instance):
             parse_mode="HTML"
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_videos, lambda m: m.text == "✅ Видео готовы")
+    @dp.message(SpanishPostsStates.waiting_for_videos, lambda m: m.text == "✅ Видео готовы")
     async def streamer_posts_videos_done(message: types.Message, state: FSMContext):
         """Видео загружены - переход к выбору канала для публикации"""
         data = await state.get_data()
@@ -1200,7 +1239,7 @@ def register_streamer_handlers(bot_instance):
             return
     
         # Переходим к выбору канала для публикации
-        await state.set_state(StreamerPostsStates.waiting_for_target_channel)
+        await state.set_state(SpanishPostsStates.waiting_for_target_channel)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -1221,7 +1260,7 @@ def register_streamer_handlers(bot_instance):
             parse_mode="HTML"
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_images, lambda m: m.photo is not None)
+    @dp.message(SpanishPostsStates.waiting_for_images, lambda m: m.photo is not None)
     async def streamer_posts_image_handler(message: types.Message, state: FSMContext):
         """Обработка полученной картинки"""
         data = await state.get_data()
@@ -1243,7 +1282,7 @@ def register_streamer_handlers(bot_instance):
             parse_mode="HTML"
         )
 
-    @dp.message(StreamerPostsStates.waiting_for_images, lambda m: m.text in ["✅ Картинки готовы", "⏭ Пропустить картинки"])
+    @dp.message(SpanishPostsStates.waiting_for_images, lambda m: m.text in ["✅ Картинки готовы", "⏭ Пропустить картинки"])
     async def streamer_posts_images_done(message: types.Message, state: FSMContext):
         """Картинки загружены - переходим к выбору модели"""
         data = await state.get_data()
@@ -1253,7 +1292,7 @@ def register_streamer_handlers(bot_instance):
         total_posts = len(videos) + len(images)
     
         # Переходим к выбору AI модели
-        await state.set_state(StreamerPostsStates.choosing_ai_model)
+        await state.set_state(SpanishPostsStates.choosing_ai_model)
     
         # Создаём клавиатуру с моделями и ценами
         model_keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -1299,7 +1338,7 @@ def register_streamer_handlers(bot_instance):
             reply_markup=model_keyboard
         )
 
-    @dp.callback_query(lambda c: c.data.startswith("ai_model:"), StateFilter(StreamerPostsStates.choosing_ai_model))
+    @dp.callback_query(lambda c: c.data.startswith("ai_model:"), StateFilter(SpanishPostsStates.choosing_ai_model))
     async def streamer_posts_model_selected(callback: types.CallbackQuery, state: FSMContext):
         """Обработка выбора AI модели"""
         try:
@@ -1438,7 +1477,7 @@ def register_streamer_handlers(bot_instance):
         )
     
         # Импортируем AI генератор
-        from src.ai_post_generator import AIPostGenerator, VideoData, OPENROUTER_MODELS
+        from src.ai_post_generator_es import AIPostGenerator, VideoData, OPENROUTER_MODELS
         from dotenv import load_dotenv
         load_dotenv()  # Загружаем переменные из .env
     
@@ -1562,9 +1601,7 @@ def register_streamer_handlers(bot_instance):
                 rot_generator = create_generator(rot_model_key, rot_provider)
                 rot_generator.set_bonus_data(
                     url1=data['url1'],
-                    bonus1=data['bonus1'],
-                    url2=data['url2'],
-                    bonus2=data['bonus2']
+                    bonus1=data['bonus1']
                 )
                 # КРИТИЧНО: передаем текущий счетчик форматов
                 rot_generator.set_link_format_counter(link_format_counter)
@@ -1582,9 +1619,7 @@ def register_streamer_handlers(bot_instance):
                         fallback_gen = create_generator("gemini-3-flash", "openrouter")
                         fallback_gen.set_bonus_data(
                             url1=data['url1'],
-                            bonus1=data['bonus1'],
-                            url2=data['url2'],
-                            bonus2=data['bonus2']
+                            bonus1=data['bonus1']
                         )
                         # КРИТИЧНО: передаем счетчик форматов в fallback
                         fallback_gen.set_link_format_counter(link_format_counter)
@@ -1602,9 +1637,7 @@ def register_streamer_handlers(bot_instance):
                 img_generator = create_generator("gemini-3-flash", "openrouter")
                 img_generator.set_bonus_data(
                     url1=data['url1'],
-                    bonus1=data['bonus1'],
-                    url2=data['url2'],
-                    bonus2=data['bonus2']
+                    bonus1=data['bonus1']
                 )
                 # КРИТИЧНО: продолжаем ротацию форматов для картинок
                 img_generator.set_link_format_counter(link_format_counter)
@@ -1618,9 +1651,7 @@ def register_streamer_handlers(bot_instance):
             # Обычный режим - одна модель для всех
             generator.set_bonus_data(
                 url1=data['url1'],
-                bonus1=data['bonus1'],
-                url2=data['url2'],
-                bonus2=data['bonus2']
+                bonus1=data['bonus1']
             )
         
             # Callback для обновления прогресса
@@ -1791,7 +1822,7 @@ def register_streamer_handlers(bot_instance):
        Максимальное качество
     """
     
-        await state.set_state(StreamerPostsStates.waiting_for_uniqueness_check)
+        await state.set_state(SpanishPostsStates.waiting_for_uniqueness_check)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -1865,7 +1896,7 @@ def register_streamer_handlers(bot_instance):
     <i>Нажми «👁 Ещё превью» чтобы посмотреть посты</i>
     """
     
-        await state.set_state(StreamerPostsStates.preview_and_publish)
+        await state.set_state(SpanishPostsStates.preview_and_publish)
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
@@ -1893,7 +1924,7 @@ def register_streamer_handlers(bot_instance):
     """
             await message.answer(fallback_summary, reply_markup=keyboard, parse_mode="HTML")
 
-    @dp.message(StreamerPostsStates.waiting_for_uniqueness_check)
+    @dp.message(SpanishPostsStates.waiting_for_uniqueness_check)
     async def streamer_posts_uniqueness_check_handler(message: types.Message, state: FSMContext):
         """Обработка выбора модели проверки уникальности"""
         text = message.text.lower()
@@ -2047,7 +2078,7 @@ def register_streamer_handlers(bot_instance):
                 )
             
                 # Показываем кнопки действий
-                await state.set_state(StreamerPostsStates.showing_uniqueness_results)
+                await state.set_state(SpanishPostsStates.showing_uniqueness_results)
             
                 keyboard = ReplyKeyboardMarkup(
                     keyboard=[
@@ -2072,7 +2103,7 @@ def register_streamer_handlers(bot_instance):
             )
             await _show_posts_preview_after_check(message, state, None)
 
-    @dp.message(StreamerPostsStates.showing_uniqueness_results)
+    @dp.message(SpanishPostsStates.showing_uniqueness_results)
     async def streamer_posts_uniqueness_results_handler(message: types.Message, state: FSMContext):
         """Обработка действий после проверки уникальности"""
         text = message.text.lower()
@@ -2146,7 +2177,7 @@ def register_streamer_handlers(bot_instance):
             )
         
             try:
-                from src.ai_post_generator import AIPostGenerator, VideoData, OPENROUTER_MODELS
+                from src.ai_post_generator_es import AIPostGenerator, VideoData, OPENROUTER_MODELS
             
                 generated_posts = data.get('generated_posts', [])
                 videos = data.get('videos', [])
@@ -2158,8 +2189,6 @@ def register_streamer_handlers(bot_instance):
                 # Бонусы
                 url1 = data.get('url1', '')
                 bonus1 = data.get('bonus1', '')
-                url2 = data.get('url2', '')
-                bonus2 = data.get('bonus2', '')
             
                 regenerated_count = 0
             
@@ -2209,8 +2238,6 @@ def register_streamer_handlers(bot_instance):
                     generator.set_bonus_data(
                         url1=url1,
                         bonus1=bonus1,
-                        url2=url2,
-                        bonus2=bonus2
                     )
                 
                     # Генерируем новый пост
@@ -2259,7 +2286,7 @@ def register_streamer_handlers(bot_instance):
     
         await message.answer("⚠️ Выберите действие из кнопок")
 
-    @dp.message(StreamerPostsStates.preview_and_publish, lambda m: m.text == "👁 Ещё превью")
+    @dp.message(SpanishPostsStates.preview_and_publish, lambda m: m.text == "👁 Ещё превью")
     async def streamer_posts_more_preview(message: types.Message, state: FSMContext):
         """Показать превью с листанием"""
         data = await state.get_data()
@@ -2339,7 +2366,7 @@ def register_streamer_handlers(bot_instance):
     
         await callback.answer()
 
-    @dp.message(StreamerPostsStates.waiting_for_target_channel, lambda m: m.text == "📋 Мои каналы")
+    @dp.message(SpanishPostsStates.waiting_for_target_channel, lambda m: m.text == "📋 Мои каналы")
     async def streamer_posts_show_channels(message: types.Message, state: FSMContext):
         """Показать список каналов пользователя"""
         try:
@@ -2373,7 +2400,7 @@ def register_streamer_handlers(bot_instance):
             logger.error(f"Ошибка получения каналов: {e}")
             await message.answer(f"❌ Ошибка: {e}\n\nВведите @username или ID канала вручную.")
 
-    @dp.message(StreamerPostsStates.waiting_for_target_channel)
+    @dp.message(SpanishPostsStates.waiting_for_target_channel)
     async def streamer_posts_channel_handler(message: types.Message, state: FSMContext):
         """Обработка выбора канала для публикации → переход к выбору видео"""
         if message.text == "❌ Отмена":
@@ -2446,7 +2473,7 @@ def register_streamer_handlers(bot_instance):
             await state.update_data(target_channel_id=channel_id, target_channel_name=channel_name)
         
             # Переходим к выбору картинок
-            await state.set_state(StreamerPostsStates.choosing_image_source)
+            await state.set_state(SpanishPostsStates.choosing_image_source)
         
             data = await state.get_data()
             videos = data.get('videos', [])
@@ -2479,8 +2506,8 @@ def register_streamer_handlers(bot_instance):
                 "Попробуйте ввести канал ещё раз"
             )
 
-    @dp.message(StreamerPostsStates.confirming, lambda m: m.text == "🔄 Перегенерировать посты")
-    @dp.message(StreamerPostsStates.preview_and_publish, lambda m: m.text == "🔄 Перегенерировать все")
+    @dp.message(SpanishPostsStates.confirming, lambda m: m.text == "🔄 Перегенерировать посты")
+    @dp.message(SpanishPostsStates.preview_and_publish, lambda m: m.text == "🔄 Перегенерировать все")
     async def streamer_posts_regenerate(message: types.Message, state: FSMContext):
         """Перегенерация постов через AI"""
         data = await state.get_data()
@@ -2508,9 +2535,7 @@ def register_streamer_handlers(bot_instance):
             pass
         generator.set_bonus_data(
             url1=data['url1'],
-            bonus1=data['bonus1'],
-            url2=data['url2'],
-            bonus2=data['bonus2']
+            bonus1=data['bonus1']
         )
     
         video_data_list = [
@@ -2608,8 +2633,8 @@ def register_streamer_handlers(bot_instance):
             parse_mode="HTML"
         )
 
-    @dp.message(StreamerPostsStates.confirming, lambda m: m.text == "✅ Начать публикацию")
-    @dp.message(StreamerPostsStates.preview_and_publish, lambda m: m.text == "✅ Начать публикацию")
+    @dp.message(SpanishPostsStates.confirming, lambda m: m.text == "✅ Начать публикацию")
+    @dp.message(SpanishPostsStates.preview_and_publish, lambda m: m.text == "✅ Начать публикацию")
     async def streamer_posts_start_publishing(message: types.Message, state: FSMContext):
         """Начало публикации постов"""
         data = await state.get_data()
@@ -2620,7 +2645,7 @@ def register_streamer_handlers(bot_instance):
             await message.answer("❌ Ошибка: нет постов или канала")
             return
     
-        await state.set_state(StreamerPostsStates.processing)
+        await state.set_state(SpanishPostsStates.processing)
     
         # Инициализируем Telethon клиент
         from src.telethon_manager import TelethonClientManager
@@ -2807,9 +2832,9 @@ def register_streamer_handlers(bot_instance):
         except:
             pass
 
-    @dp.message(StreamerPostsStates.confirming, lambda m: m.text == "❌ Отмена")
-    @dp.message(StreamerPostsStates.waiting_for_videos, lambda m: m.text == "❌ Отмена")
-    @dp.message(StreamerPostsStates.waiting_for_images, lambda m: m.text == "❌ Отмена")
+    @dp.message(SpanishPostsStates.confirming, lambda m: m.text == "❌ Отмена")
+    @dp.message(SpanishPostsStates.waiting_for_videos, lambda m: m.text == "❌ Отмена")
+    @dp.message(SpanishPostsStates.waiting_for_images, lambda m: m.text == "❌ Отмена")
     async def streamer_posts_cancel(message: types.Message, state: FSMContext):
         """Отмена сценария"""
         await state.clear()

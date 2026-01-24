@@ -237,6 +237,43 @@ class ImagePostsStates(StatesGroup):
     publishing = State()  # Процесс публикации
 
 
+class SpanishPostsStates(StatesGroup):
+    """Состояния для сценария '100 постов на испанском'"""
+    # 1. Ввод ссылок и бонусов
+    waiting_for_url1 = State()  # Ввод URL первого бонуса
+    waiting_for_bonus1 = State()  # Описание первого бонуса
+    waiting_for_url2 = State()  # Ввод URL второго бонуса
+    waiting_for_bonus2 = State()  # Описание второго бонуса
+    # 2. Выбор валюты (НОВОЕ!)
+    waiting_for_currency = State()  # Выбор валюты (USD, EUR, CLP, MXN, ARS, COP)
+    # 3. Выбор канала для публикации
+    waiting_for_target_channel = State()  # Выбор канала для публикации
+    # 4. Выбор источника видео
+    choosing_video_source = State()  # Выбор источника видео
+    waiting_for_source_channel = State()  # Ввод канала-источника видео
+    waiting_for_post_link = State()  # Ввод ссылки на конкретный пост
+    waiting_for_post_count = State()  # Ввод количества постов
+    choosing_ai_model = State()  # Выбор AI модели для генерации
+    scanning_source_channel = State()  # Сканирование канала
+    waiting_for_scan_direction = State()  # Выбор направления сканирования
+    waiting_for_video_range = State()  # Диапазон видео из канала
+    waiting_for_videos = State()  # Получение видео файлов
+    waiting_for_video_metadata = State()  # Ввод метаданных видео
+    entering_metadata_for_channel = State()  # Ввод метаданных для видео из канала
+    # 5. Картинки
+    waiting_for_images = State()  # Получение картинок
+    choosing_image_source = State()  # Выбор источника картинок
+    waiting_for_image_channel = State()  # Канал с картинками
+    # 6. Генерация и публикация
+    preview_and_publish = State()  # Превью и кнопка публикации
+    confirming = State()  # Подтверждение
+    processing = State()  # Публикация
+    # 7. Проверка уникальности (Сторожевой AI)
+    waiting_for_uniqueness_check = State()  # Выбор модели проверки
+    showing_uniqueness_results = State()  # Показ результатов проверки
+    regenerating_duplicates = State()  # Перегенерация дублей
+
+
 # Экспортируем все классы
 __all__ = [
     'GenerateLinksStates',
@@ -254,4 +291,5 @@ __all__ = [
     'StreamerPostsStates',
     'ContentWithAdsStates',
     'ImagePostsStates',
+    'SpanishPostsStates',  # Новый класс
 ]
