@@ -787,16 +787,47 @@ def register_spanish_handlers(bot_instance):
         video_data['bet'] = bet
         video_data['win'] = win
         video_data['multiplier'] = multiplier
+        
+        # Сохраняем валюту из парсинга подписи, если есть
+        if 'currency' in video_data and video_data['currency']:
+            currency = video_data['currency']
+        else:
+            # Пытаемся определить валюту из введенных данных
+            currency = "USD"  # По умолчанию USD для испанского сценария
+            text_upper = message.text.upper()
+            if 'USD' in text_upper or '$' in message.text:
+                currency = "USD"
+            elif 'EUR' in text_upper or '€' in message.text:
+                currency = "EUR"
+            elif 'CLP' in text_upper:
+                currency = "CLP"
+            elif 'MXN' in text_upper:
+                currency = "MXN"
+            elif 'ARS' in text_upper or 'ARG' in text_upper:
+                currency = "ARS"
+            elif 'COP' in text_upper:
+                currency = "COP"
+            elif 'PEN' in text_upper:
+                currency = "PEN"
+            elif 'UYU' in text_upper:
+                currency = "UYU"
+            elif 'RUB' in text_upper or '₽' in message.text or 'руб' in message.text.lower():
+                currency = "RUB"
+        
+        video_data['currency'] = currency
     
         videos.append(video_data)
         await state.update_data(videos=videos)
+        
+        # Определяем символ валюты для отображения
+        currency_symbol = "$" if currency == "USD" else "€" if currency == "EUR" else currency
     
         streamer_text = f"👤 {streamer}" if streamer else "👤 не указан"
         await message.answer(
             f"✅ Видео добавлено!\n\n"
             f"{streamer_text}\n"
-            f"🎰 {slot}\n"
-            f"💵 {bet}₽ → {win}₽\n"
+            f"🎰 {slot if slot else 'не указан'}\n"
+            f"💵 {bet}{currency_symbol} → {win}{currency_symbol}\n"
             f"📊 x{multiplier}\n\n"
             f"<i>Всего добавлено: {len(videos)} видео</i>",
             parse_mode="HTML"
@@ -1102,21 +1133,36 @@ def register_spanish_handlers(bot_instance):
         pending_video = data.get('pending_video', {})
     
         # Добавляем данные к видео
-        # Пытаемся извлечь валюту из введенных данных
-        currency = "RUB"  # По умолчанию
+        # Пытаемся извлечь валюту из введенных данных или используем из парсинга подписи
+        currency = pending_video.get('currency', 'USD')  # По умолчанию USD для испанского сценария
         text_upper = message.text.upper()
         text_lower = message.text.lower()
         if 'USD' in text_upper or '$' in message.text or 'доллар' in text_lower:
             currency = "USD"
         elif 'EUR' in text_upper or '€' in message.text or 'евро' in text_lower:
             currency = "EUR"
+        elif 'CLP' in text_upper:
+            currency = "CLP"
+        elif 'MXN' in text_upper:
+            currency = "MXN"
+        elif 'ARS' in text_upper or 'ARG' in text_upper:
+            currency = "ARS"
+        elif 'COP' in text_upper:
+            currency = "COP"
+        elif 'PEN' in text_upper:
+            currency = "PEN"
+        elif 'UYU' in text_upper:
+            currency = "UYU"
         elif 'GBP' in text_upper or '£' in message.text or 'фунт' in text_lower:
             currency = "GBP"
+        elif 'RUB' in text_upper or '₽' in message.text or 'руб' in text_lower:
+            currency = "RUB"
     
         pending_video['streamer'] = streamer
         pending_video['slot'] = slot
         pending_video['bet'] = bet
         pending_video['win'] = win
+        pending_video['currency'] = currency
         pending_video['multiplier'] = multiplier
         pending_video['currency'] = currency
         pending_video['parsed'] = True

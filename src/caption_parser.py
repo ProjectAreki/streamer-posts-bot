@@ -119,7 +119,13 @@ class CaptionParser:
         if not caption:
             return ParsedCaption()
         
-        text = caption.lower()
+        # Убираем markdown форматирование (**text** -> text)
+        caption_clean = re.sub(r'\*\*([^*]+)\*\*', r'\1', caption)
+        # Убираем другие markdown теги
+        caption_clean = re.sub(r'`([^`]+)`', r'\1', caption_clean)
+        caption_clean = re.sub(r'_([^_]+)_', r'\1', caption_clean)
+        
+        text = caption_clean.lower()
         result = ParsedCaption()
         
         # Извлекаем слот
@@ -227,6 +233,8 @@ class CaptionParser:
         
         # Извлекаем валюту из строк выигрыша и ставки
         # Приоритет: явное указание валюты рядом с числами (выигрыш/ставка)
+        # Используем очищенную версию без markdown
+        caption_for_currency = caption_clean
         
         # Ищем валюту в строках с выигрышем и ставкой
         # Паттерны: "выигрыш 1235 USD", "ставка 1 USD", "выигрыш 2 262 700 руб", "выигрыш 10000.00 евро"
@@ -234,78 +242,86 @@ class CaptionParser:
         currency_found = False
         
         # 1. Ищем USD (явное указание включая "доллар")
-        if re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption, re.IGNORECASE):
+        if re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption_for_currency, re.IGNORECASE):
             result.currency = 'USD'
             currency_found = True
         # 2. Ищем EUR (явное указание включая "евро")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption_for_currency, re.IGNORECASE):
             result.currency = 'EUR'
             currency_found = True
         # 3. Ищем GBP (явное указание включая "фунт")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption_for_currency, re.IGNORECASE):
             result.currency = 'GBP'
             currency_found = True
         # 4. Ищем CLP (чилийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:CLP)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:CLP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'CLP'
             currency_found = True
         # 5. Ищем MXN (мексиканское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:MXN)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:MXN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'MXN'
             currency_found = True
         # 6. Ищем ARS (аргентинское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption_for_currency, re.IGNORECASE):
             result.currency = 'ARS'
             currency_found = True
         # 7. Ищем COP (колумбийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:COP)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:COP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'COP'
             currency_found = True
         # 8. Ищем PEN (перуанское соль)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:PEN)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:PEN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'PEN'
             currency_found = True
         # 9. Ищем UYU (уругвайское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:UYU)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:UYU)', caption_for_currency, re.IGNORECASE):
             result.currency = 'UYU'
             currency_found = True
         # 10. Ищем RUB (руб, р, RUB, ₽, рубл)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption_for_currency, re.IGNORECASE):
             result.currency = 'RUB'
             currency_found = True
         
         # Если не нашли в строках выигрыша/ставки, ищем во всем тексте
         if not currency_found:
-            if re.search(r'\b(?:USD|доллар)\b', caption, re.IGNORECASE):
+            # СНАЧАЛА проверяем символы валюты (приоритет выше чем слова)
+            if '$' in caption_for_currency or re.search(r'\d+\s*\$\s*|\$\s*\d+', caption_for_currency):
                 result.currency = 'USD'
-            elif re.search(r'\b(?:EUR|евро)\b', caption, re.IGNORECASE):
+                currency_found = True
+            elif '€' in caption_for_currency or re.search(r'\d+\s*€\s*|€\s*\d+', caption_for_currency):
                 result.currency = 'EUR'
-            elif re.search(r'\b(?:GBP|фунт)\b', caption, re.IGNORECASE):
+                currency_found = True
+            elif '£' in caption_for_currency or re.search(r'\d+\s*£\s*|£\s*\d+', caption_for_currency):
                 result.currency = 'GBP'
-            elif re.search(r'\b(?:CLP)\b', caption, re.IGNORECASE):
+                currency_found = True
+            elif '₽' in caption_for_currency or re.search(r'\d+\s*₽\s*|₽\s*\d+', caption_for_currency):
+                result.currency = 'RUB'
+                currency_found = True
+            # Затем проверяем слова
+            elif re.search(r'\b(?:USD|доллар)\b', caption_for_currency, re.IGNORECASE):
+                result.currency = 'USD'
+            elif re.search(r'\b(?:EUR|евро)\b', caption_for_currency, re.IGNORECASE):
+                result.currency = 'EUR'
+            elif re.search(r'\b(?:GBP|фунт)\b', caption_for_currency, re.IGNORECASE):
+                result.currency = 'GBP'
+            elif re.search(r'\b(?:CLP)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'CLP'
-            elif re.search(r'\b(?:MXN)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:MXN)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'MXN'
-            elif re.search(r'\b(?:ARS|ARG)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:ARS|ARG)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'ARS'
-            elif re.search(r'\b(?:COP)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:COP)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'COP'
-            elif re.search(r'\b(?:PEN)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:PEN)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'PEN'
-            elif re.search(r'\b(?:UYU)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:UYU)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'UYU'
-            elif re.search(r'\b(?:руб|рубл|р\b|RUB)\b', caption, re.IGNORECASE):
+            elif re.search(r'\b(?:руб|рубл|р\b|RUB)\b', caption_for_currency, re.IGNORECASE):
                 result.currency = 'RUB'
-            # Если явного указания нет, ищем символы валюты
-            elif '$' in caption or re.search(r'\$\d', caption):
-                result.currency = 'USD'
-            elif '€' in caption or re.search(r'€\d', caption):
-                result.currency = 'EUR'
-            elif '£' in caption or re.search(r'£\d', caption):
-                result.currency = 'GBP'
-            elif '₽' in caption or re.search(r'₽\d', caption):
-                result.currency = 'RUB'
-            # По умолчанию RUB (если ничего не найдено)
+            # По умолчанию USD для испанского сценария (если ничего не найдено, но есть числа)
+            elif re.search(r'\d+', caption_for_currency):
+                result.currency = 'USD'  # По умолчанию USD для испанского сценария
+            # Иначе RUB (для русского сценария)
         
         return result
     
