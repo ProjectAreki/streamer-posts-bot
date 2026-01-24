@@ -2978,7 +2978,7 @@ REGLAS HTML:
         instructions.append(f"\n🔗 КРИТИЧНО: ИСПОЛЬЗУЙ СТРОГО ФОРМАТ #{current_format}!")
         instructions.append(f"⚠️ Формат: {format_names[current_format]}")
         instructions.append(f"⚠️ НЕ используй другие форматы — только #{current_format}!")
-        instructions.append(f"⚠️ Для ОБЕИХ ссылок используй ОДИНАКОВЫЙ формат #{current_format}!")
+        instructions.append(f"⚠️ Используй ТОЛЬКО этот формат #{current_format} для ссылки!")
         
         if instructions:
             return "\n\n" + "\n".join(instructions) + "\n"
