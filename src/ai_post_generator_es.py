@@ -2350,9 +2350,7 @@ REGLAS HTML:
         """Устанавливает данные о бонусах (для испанского сценария используется только url1 и bonus1)"""
         self.bonus_data = BonusData(
             url1=url1,
-            bonus1_desc=bonus1,
-            url2=url2,
-            bonus2_desc=bonus2
+            bonus1_desc=bonus1
         )
     
     def reset_bonus_variations(self):
