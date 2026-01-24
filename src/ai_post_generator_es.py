@@ -3295,8 +3295,7 @@ REGLAS HTML:
         correct_urls = []
         if url1 and 'cutt.ly' in url1:
             correct_urls.append(url1)
-        if url2 and 'cutt.ly' in url2:
-            correct_urls.append(url2)
+        # Для испанского сценария используется только url1
         
         # Если нет правильных cutt.ly ссылок — ничего не делаем
         if not correct_urls:
@@ -3834,9 +3833,7 @@ REGLAS HTML:
                     slot="",
                     streamer="",
                     url1=self.bonus_data.url1,
-                    url2=self.bonus_data.url2,
                     bonus1=bonus1_var,
-                    bonus2=bonus2_var,
                     currency="",
                     person=self._get_random_person()
                 )
@@ -3910,17 +3907,11 @@ REGLAS HTML:
                 # ВАЖНО: НЕ ОБРЕЗАЕМ текст! Пользователь запретил обрезку.
                 # AI должен сам создавать посты оптимальной длины согласно промпту.
                 
-                # КРИТИЧЕСКАЯ ПРОВЕРКА: Обе ссылки должны присутствовать в финальном тексте!
+                # КРИТИЧЕСКАЯ ПРОВЕРКА: Ссылка должна присутствовать в финальном тексте!
                 url1_present = self.bonus_data.url1 in text or (self.bonus_data.url1.replace('https://', '') in text)
-                url2_present = self.bonus_data.url2 in text or (self.bonus_data.url2.replace('https://', '') in text)
                 
-                if not url1_present or not url2_present:
-                    missing = []
-                    if not url1_present:
-                        missing.append("url1")
-                    if not url2_present:
-                        missing.append("url2")
-                    print(f"   ⚠️ Image пост: Пропала ссылка(и): {', '.join(missing)}. Регенерируем...")
+                if not url1_present:
+                    print(f"   ⚠️ Image пост: Пропала ссылка url1. Регенерируем...")
                     sys.stdout.flush()
                     continue
                 
@@ -3947,8 +3938,7 @@ REGLAS HTML:
         print(f"⚠️ Не удалось сгенерировать image пост после {max_regens} попыток, используем fallback")
         fallback_text = f"""🎁 Бонусы дня!
 
-{self.bonus_data.bonus1_desc}: {self.bonus_data.url1}
-{self.bonus_data.bonus2_desc}: {self.bonus_data.url2}"""
+{self.bonus_data.bonus1_desc}: {self.bonus_data.url1}"""
         
         return GeneratedPostAI(
             index=index,
