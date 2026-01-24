@@ -244,9 +244,7 @@ class SpanishPostsStates(StatesGroup):
     waiting_for_bonus1 = State()  # Описание первого бонуса
     waiting_for_url2 = State()  # Ввод URL второго бонуса
     waiting_for_bonus2 = State()  # Описание второго бонуса
-    # 2. Выбор валюты (НОВОЕ!)
-    waiting_for_currency = State()  # Выбор валюты (USD, EUR, CLP, MXN, ARS, COP)
-    # 3. Выбор канала для публикации
+    # 2. Выбор канала для публикации
     waiting_for_target_channel = State()  # Выбор канала для публикации
     # 4. Выбор источника видео
     choosing_video_source = State()  # Выбор источника видео

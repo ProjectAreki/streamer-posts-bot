@@ -66,7 +66,7 @@ def register_spanish_handlers(bot_instance):
     <b>Что включает:</b>
     • 80 видео + текст (победы в слотах)
     • 20 изображений + текст (бонусы)
-    • 2 ссылки с бонусами в каждой публикации
+    • 1 ссылка с бонусом в каждой публикации
 
     <b>Что делает бот:</b>
     • 55 уникальных структур для видео
@@ -81,12 +81,11 @@ def register_spanish_handlers(bot_instance):
     Пример: <code>Gates of Olympus_50_12500.mp4</code>
 
     <b>Шаги:</b>
-    1. Укажи ссылки и бонусы (2)
-    2. Выбери валюту (USD, EUR, CLP, MXN, ARS, COP)
-    3. Отправь файлы видео
-    4. Отправь изображения для бонусов
-    5. Выбери канал для публикации
-    6. Подтверди и запусти!
+    1. Укажи ссылку и бонус
+    2. Отправь файлы видео
+    3. Отправь изображения для бонусов
+    4. Выбери канал для публикации
+    5. Подтверди и запусти!
 
     Начнем со ссылок и бонусов 👇
     """
@@ -137,7 +136,7 @@ def register_spanish_handlers(bot_instance):
     async def streamer_posts_begin_setup(message: types.Message, state: FSMContext):
         """Начало настройки - запрос первой ссылки"""
         await message.answer(
-            "🔗 <b>Шаг 1/4: Первая ссылка</b>\n\n"
+            "🔗 <b>Шаг 1/3: Первая ссылка</b>\n\n"
             "Введите URL первого бонуса:\n"
             "(например: https://example.com/bonus1)",
             parse_mode="HTML",
@@ -166,7 +165,7 @@ def register_spanish_handlers(bot_instance):
     
         await message.answer(
             f"✅ Ссылка: {url1}\n\n"
-            "🎁 <b>Шаг 2/4: Описание бонуса</b>\n\n"
+            "🎁 <b>Шаг 2/3: Описание бонуса</b>\n\n"
             "Введите описание бонуса:\n"
             "(например: 100 FS или 150% до $100)",
             parse_mode="HTML"
@@ -174,7 +173,7 @@ def register_spanish_handlers(bot_instance):
 
     @dp.message(SpanishPostsStates.waiting_for_bonus1)
     async def streamer_posts_bonus1_handler(message: types.Message, state: FSMContext):
-        """Обработка описания бонуса → выбор валюты"""
+        """Обработка описания бонуса → выбор источника видео"""
         if message.text in ["❌ Отмена", "❌ Cancelar"]:
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -182,7 +181,7 @@ def register_spanish_handlers(bot_instance):
             return
     
         bonus1 = message.text.strip()
-        await state.update_data(bonus1=bonus1)
+        await state.update_data(bonus1=bonus1, videos=[], video_metadata=[], images=[])
     
         data = await state.get_data()
     
@@ -193,79 +192,7 @@ def register_spanish_handlers(bot_instance):
     🎁 Бонус: {bonus1}
 
     ━━━━━━━━━━━━━━━━━━━━━━━
-    <b>💰 Шаг 3/4: Выбери валюту для постов</b>
-
-    Выбери валюту, которая будет использоваться в постах:
-    """
-    
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="💵 USD"), KeyboardButton(text="💶 EUR")],
-                [KeyboardButton(text="🇨🇱 CLP"), KeyboardButton(text="🇲🇽 MXN")],
-                [KeyboardButton(text="🇦🇷 ARS"), KeyboardButton(text="🇨🇴 COP")],
-                [KeyboardButton(text="❌ Отмена")]
-            ],
-            resize_keyboard=True
-        )
-    
-        await state.set_state(SpanishPostsStates.waiting_for_currency)
-        await message.answer(summary, reply_markup=keyboard, parse_mode="HTML")
-
-    @dp.message(SpanishPostsStates.waiting_for_currency)
-    async def spanish_posts_currency_handler(message: types.Message, state: FSMContext):
-        """Обработка выбора валюты"""
-        if message.text in ["❌ Отмена", "❌ Cancelar"]:
-            await state.clear()
-            kb = get_scenarios_kb(message.from_user.id)
-            await message.answer("❌ Отменено", reply_markup=kb)
-            return
-        
-        # Определяем валюту по тексту кнопки
-        currency_map = {
-            "💵 USD": "USD",
-            "💶 EUR": "EUR",
-            "🇨🇱 CLP": "CLP",
-            "🇲🇽 MXN": "MXN",
-            "🇦🇷 ARS": "ARS",
-            "🇨🇴 COP": "COP",
-        }
-        
-        currency = currency_map.get(message.text)
-        if not currency:
-            # Попытка определить по тексту
-            text_upper = message.text.upper()
-            if "USD" in text_upper or "$" in message.text:
-                currency = "USD"
-            elif "EUR" in text_upper or "€" in message.text:
-                currency = "EUR"
-            elif "CLP" in text_upper:
-                currency = "CLP"
-            elif "MXN" in text_upper:
-                currency = "MXN"
-            elif "ARS" in text_upper:
-                currency = "ARS"
-            elif "COP" in text_upper:
-                currency = "COP"
-            else:
-                await message.answer(
-                    "❌ Выбери валюту из предложенных кнопок:\n"
-                    "💵 USD, 💶 EUR, 🇨🇱 CLP, 🇲🇽 MXN, 🇦🇷 ARS, 🇨🇴 COP"
-                )
-                return
-        
-        await state.update_data(currency=currency, videos=[], video_metadata=[], images=[])
-        
-        data = await state.get_data()
-        
-        summary = f"""
-    ✅ <b>Валюта выбрана: {currency}</b>
-
-    🔗 Ссылка: {data['url1']}
-    🎁 Бонус: {data['bonus1']}
-    💰 Валюта: {currency}
-
-    ━━━━━━━━━━━━━━━━━━━━━━━
-    <b>📹 Шаг 4: Откуда брать видео?</b>
+    <b>📹 Шаг 2: Откуда брать видео?</b>
 
     📡 <b>Из канала</b> — укажи канал с нарезанными видео
     📤 <b>Загрузить</b> — отправь видео прямо в чат
@@ -706,12 +633,13 @@ def register_spanish_handlers(bot_instance):
                         'streamer': parsed.streamer,
                         'multiplier': parsed.multiplier,
                         'currency': parsed.currency,  # Добавляем валюту
-                        'auto_parsed': parsed.is_valid()
+                        'auto_parsed': parsed.bet > 0 and parsed.win > 0  # Для испанского сценария слот не обязателен
                     }
                 
                     videos_found.append(video_info)
                 
-                    if parsed.is_valid():
+                    # Для испанского сценария слот НЕ обязателен - достаточно ставки и выигрыша
+                    if parsed.bet > 0 and parsed.win > 0:
                         videos_auto_parsed.append(video_info)
                     else:
                         videos_need_input.append(video_info)
@@ -1063,7 +991,8 @@ def register_spanish_handlers(bot_instance):
         parser = StreamerPostParser()
         parsed = parser.parse_filename(video_info['file_name'])
     
-        if parsed and parsed.is_valid():
+        # Для испанского сценария слот НЕ обязателен - достаточно ставки и выигрыша
+        if parsed and parsed.bet > 0 and parsed.win > 0:
             # Данные успешно извлечены из имени файла
             video_info['streamer'] = parsed.streamer
             video_info['slot'] = parsed.slot
@@ -1208,16 +1137,13 @@ def register_spanish_handlers(bot_instance):
         streamer_line = f"👤 Стример: {streamer}\n" if streamer else ""
         slot_line = f"🎰 Слот: {slot}\n" if slot else "🎰 Слот: не указан\n"
         
-        # Получаем валюту из state
-        data_currency = data.get('currency', 'USD')
-        currency_symbol = "$" if data_currency == "USD" else "€" if data_currency == "EUR" else data_currency
-    
+        # Валюта будет случайной в каждом посте, поэтому не показываем её здесь
         await message.answer(
             f"✅ Видео #{len(videos)} добавлено!\n\n"
             f"{streamer_line}"
             f"{slot_line}"
-            f"💵 Ставка: {bet} {currency_symbol}\n"
-            f"💰 Выигрыш: {win} {currency_symbol}\n"
+            f"💵 Ставка: {bet}\n"
+            f"💰 Выигрыш: {win}\n"
             f"📊 Множитель: x{multiplier}\n\n"
             f"<i>Всего видео: {len(videos)}</i>\n\n"
             "Отправьте ещё видео или нажмите '✅ Видео готовы'",
