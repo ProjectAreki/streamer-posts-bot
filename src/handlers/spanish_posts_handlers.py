@@ -2209,7 +2209,7 @@ def register_spanish_handlers(bot_instance):
                         pass
                     generator.set_bonus_data(
                         url1=url1,
-                        bonus1=bonus1,
+                        bonus1=bonus1
                     )
                 
                     # Генерируем новый пост

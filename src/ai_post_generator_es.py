@@ -2346,8 +2346,8 @@ REGLAS HTML:
         prompt_index = (self._prompt_counter - 1) % 6
         return all_prompts[prompt_index]
     
-    def set_bonus_data(self, url1: str, bonus1: str, url2: str, bonus2: str):
-        """Устанавливает данные о бонусах"""
+    def set_bonus_data(self, url1: str, bonus1: str, url2: str = "", bonus2: str = ""):
+        """Устанавливает данные о бонусах (для испанского сценария используется только url1 и bonus1)"""
         self.bonus_data = BonusData(
             url1=url1,
             bonus1_desc=bonus1,
