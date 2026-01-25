@@ -3857,6 +3857,23 @@ IMPORTANTE:
                     # Убираем trailing commas перед } и ]
                     content = re.sub(r',(\s*[}\]])', r'\1', content)
                     
+                    # КРИТИЧНО: Убираем невалидные управляющие символы внутри строк
+                    # "Invalid control character" возникает когда \n, \t и т.д. не экранированы
+                    # Заменяем непечатные символы на пробелы (кроме \n между элементами JSON)
+                    def clean_json_strings(match):
+                        """Очищаем содержимое JSON строк от управляющих символов"""
+                        s = match.group(0)
+                        # Заменяем неэкранированные управляющие символы
+                        s = s.replace('\n', '\\n')
+                        s = s.replace('\r', '\\r')
+                        s = s.replace('\t', '\\t')
+                        # Убираем другие управляющие символы (0x00-0x1F кроме уже обработанных)
+                        s = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', s)
+                        return s
+                    
+                    # Находим все строки в JSON и очищаем их
+                    content = re.sub(r'"(?:[^"\\]|\\.)*"', clean_json_strings, content)
+                    
                     try:
                         result = json.loads(content)
                     except json.JSONDecodeError as e:
