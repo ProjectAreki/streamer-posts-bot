@@ -473,6 +473,17 @@ TAREA: ¡Muestra la victoria como algo emocionante y real!
   - NUNCA: CLP, ARS, MXN, PEN, USD, EUR, COP, UYU
 
 ═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
+
+═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
 ═══════════════════════════════════════════════════════════════
 
@@ -639,27 +650,18 @@ Variabilidad de introducciones (¡ROTACIÓN obligatoria!):
 📐 REGLA DE AIRE (¡OBLIGATORIO!):
 • SIEMPRE añade LÍNEA VACÍA ANTES y DESPUÉS de cada bloque de enlace
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post = formato diferente!):
 
-1️⃣ HIPERENLACE MINIMALISTA:
-   <a href="{url1}">Reclamar paquete de bienvenida hasta 100 dólares y 100 giros gratis</a>
+🚨 USA SOLO ESTE BONO: {bonus1}
+❌ NO INVENTES otros bonos!
+❌ NO uses "100 dólares", "100 giros" si NO están en {bonus1}!
 
-2️⃣ HIPERENLACE CON EMOJI:
-   🎁 <a href="{url1}">Bono de bienvenida hasta 100 dólares + 100 giros</a>
-
-3️⃣ EMOJI + URL + GUION + DESCRIPCIÓN:
-   👉 {url1} — paquete de bienvenida hasta 100 dólares + 100 giros gratis
-
-4️⃣ URL + NUEVA LÍNEA + DESCRIPCIÓN:
-   {url1}
-   🎁 Hasta 100 dólares en tu cuenta + 100 giros gratis para empezar
-
-5️⃣ FLECHA + URL + DESCRIPCIÓN:
-   ➡️ {url1}
-   💰 Bono del 500% en tu primer depósito + giros gratis
-
-6️⃣ DESCRIPCIÓN + GUION + URL:
-   🎁 Hasta 100 dólares gratis + 100 giros sin depósito — {url1}
+1️⃣ HIPERENLACE: <a href="{url1}">[parafrasea {bonus1}]</a>
+2️⃣ EMOJI + HIPERENLACE: 🎁 <a href="{url1}">[parafrasea {bonus1}]</a>
+3️⃣ URL + GUION: 👉 {url1} — [parafrasea {bonus1}]
+4️⃣ URL + NUEVA LÍNEA: {url1}\n🎁 [parafrasea {bonus1}]
+5️⃣ FLECHA + URL: ➡️ {url1}\n💰 [parafrasea {bonus1}]
+6️⃣ DESCRIPCIÓN + URL: 🎁 [parafrasea {bonus1}] — {url1}
 
 📏 LONGITUD: MÍNIMO 500, MÁXIMO 700 caracteres (¡CRÍTICO! Telegram limita a 1024)
 
@@ -701,6 +703,17 @@ TAREA: ¡Muestra la victoria en acción! ¡Dinámica y movimiento!
   - "ARS ganó..." ❌ INCORRECTO
   
 ✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
+
+═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -812,29 +825,18 @@ Volumen: Punto medio. Ni «sábana», ni telegrama.
 📐 REGLA DE AIRE (¡OBLIGATORIO!):
 • SIEMPRE añade LÍNEA VACÍA ANTES y DESPUÉS de cada bloque de enlace
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post = formato diferente!):
 
-1️⃣ ROMBOS:
-   ◆ {url1} — paquete de bienvenida hasta 100 dólares + giros gratis
+🚨 USA SOLO ESTE BONO: {bonus1}
+❌ NO INVENTES otros bonos!
 
-2️⃣ FLECHAS ASCII:
-   ► {url1} (hasta 100 dólares en cuenta + 100 giros de regalo)
-
-3️⃣ ESTRELLAS:
-   ★ Hasta 100 dólares + 100 giros gratis → {url1}
-
-4️⃣ CÍRCULOS CON NÚMEROS:
-   ① <a href="{url1}">Bono de bienvenida hasta 100 dólares + 100 giros</a>
-
-5️⃣ CUADRADOS:
-   ▪ {url1}
-   Hasta 100 dólares en cuenta + 100 giros gratis para empezar
-
-6️⃣ PARÉNTESIS:
-   ({url1}) — paquete de bienvenida hasta 100 dólares + giros gratis
-
-7️⃣ DIFERENTES EMOJIS:
-   🎰 {url1} — paquete de bienvenida hasta 100 dólares + 100 giros
+1️⃣ ROMBOS: ◆ {url1} — [parafrasea {bonus1}]
+2️⃣ FLECHAS: ► {url1} ([parafrasea {bonus1}])
+3️⃣ ESTRELLAS: ★ [parafrasea {bonus1}] → {url1}
+4️⃣ CÍRCULOS: ① <a href="{url1}">[parafrasea {bonus1}]</a>
+5️⃣ CUADRADOS: ▪ {url1}\n[parafrasea {bonus1}]
+6️⃣ PARÉNTESIS: ({url1}) — [parafrasea {bonus1}]
+7️⃣ EMOJIS: 🎰 {url1} — [parafrasea {bonus1}]
 
 📏 LONGITUD: ¡MÁXIMO 700 caracteres!"""
 
@@ -874,6 +876,17 @@ TAREA: ¡Muestra la acción del jugador y el resultado! ¡La slot es el lugar do
   - "ARS ganó..." ❌ INCORRECTO
   
 ✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
+
+═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -984,35 +997,17 @@ Comienza siempre inesperadamente: A veces con el resultado 🏆, a veces con una
 📐 REGLA DE AIRE (¡OBLIGATORIO!):
 • SIEMPRE añade LÍNEA VACÍA ANTES y DESPUÉS de cada bloque de enlace
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post diferente!):
 
-1️⃣ ONDAS:
-   〰️〰️〰️〰️〰️〰️
-   🎁 {url1}
-   Hasta 100 dólares + 100 giros gratis
-   〰️〰️〰️〰️〰️〰️
+🚨 USA SOLO ESTE BONO: {bonus1}
+❌ NO INVENTES otros bonos!
 
-2️⃣ LÍNEAS DOBLES:
-   ╔══════════════╗
-   {url1}
-   Hasta 100 dólares + 100 giros
-   ╚══════════════╝
-
-3️⃣ PUNTOS:
-   • • • • • • • •
-   {url1} — hasta 100 dólares + 100 giros gratis
-   • • • • • • • •
-
-4️⃣ MARCOS EMOJI:
-   🔸🔸🔸🔸🔸🔸
-   <a href="{url1}">Bono de bienvenida hasta 100 dólares</a>
-   🔸🔸🔸🔸🔸🔸
-
-5️⃣ BLOQUE VERTICAL:
-   ┃ <a href="{url1}">Bono de bienvenida hasta 100 dólares + 100 giros</a>
-
-6️⃣ EMOJI A AMBOS LADOS:
-   🔥 <a href="{url1}">Reclamar hasta 100 dólares al empezar</a> 🔥
+1️⃣ ONDAS: 〰️ {url1}\n[parafrasea {bonus1}] 〰️
+2️⃣ LÍNEAS: ╔══╗ {url1}\n[parafrasea {bonus1}] ╚══╝
+3️⃣ PUNTOS: • • • {url1} — [parafrasea {bonus1}] • • •
+4️⃣ EMOJI: 🔸 <a href="{url1}">[parafrasea {bonus1}]</a> 🔸
+5️⃣ VERTICAL: ┃ <a href="{url1}">[parafrasea {bonus1}]</a>
+6️⃣ AMBOS LADOS: 🔥 <a href="{url1}">[parafrasea {bonus1}]</a> 🔥
 
 📏 LONGITUD: ¡MÁXIMO 700 caracteres!"""
 
@@ -1053,6 +1048,17 @@ TAREA: ¡Muestra el camino del jugador al resultado! ¡La slot es la herramienta
   - "ARS ganó..." ❌ INCORRECTO
   
 ✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
+
+═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -1167,33 +1173,18 @@ Punto de vista: La narrativa es en tercera persona. Personaje — «héroe», «
 ✅ ÚSALO como BASE, pero PARAFRASÉALO diferente cada vez
 ❌ NO INVENTES nuevos bonos o cantidades - ¡SOLO lo que está en {bonus1}!
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post diferente!):
 
-1️⃣ ENCABEZADOS:
-   📌 TU BONO:
-   <a href="{url1}">Paquete de bienvenida hasta 100 dólares + 100 giros</a>
+🚨 USA SOLO ESTE BONO: {bonus1}
+❌ NO INVENTES otros bonos!
 
-2️⃣ DESCRIPCIONES:
-   Opción — hasta 100 dólares en cuenta + 100 giros gratis:
-   {url1}
-
-3️⃣ BLOQUES NUMERADOS:
-   OPCIÓN 1️⃣
-   Hasta 100 dólares + 100 giros gratis
-   {url1}
-
-4️⃣ MAYÚSCULAS + ACENTOS:
-   <a href="{url1}">🔥 ¡BONO DE BIENVENIDA HASTA 100 DÓLARES AQUÍ!</a>
-
-5️⃣ EXCLAMACIONES:
-   {url1} — ¡hasta 100 dólares + 100 giros gratis!!!
-
-6️⃣ POSICIONES MIXTAS:
-   <a href="{url1}">🎁 ¡RECLAMAR BONO!</a>
-   Hasta 100 dólares + 100 giros de regalo
-
-7️⃣ BLOQUE MINIMALISTA:
-   🎁 <a href="{url1}">Hasta 100 dólares al empezar + 100 giros</a>
+1️⃣ ENCABEZADO: 📌 TU BONO:\n<a href="{url1}">[parafrasea {bonus1}]</a>
+2️⃣ DESCRIPCIÓN: Opción — [parafrasea {bonus1}]:\n{url1}
+3️⃣ NUMERADO: OPCIÓN 1️⃣\n[parafrasea {bonus1}]\n{url1}
+4️⃣ MAYÚSCULAS: <a href="{url1}">🔥 ¡[PARAFRASEA {bonus1} EN MAYÚSCULAS]!</a>
+5️⃣ EXCLAMACIÓN: {url1} — ¡[parafrasea {bonus1}]!!!
+6️⃣ MIXTO: <a href="{url1}">🎁 ¡RECLAMAR!</a>\n[parafrasea {bonus1}]
+7️⃣ MINIMALISTA: 🎁 <a href="{url1}">[parafrasea {bonus1}]</a>
 
 📏 LONGITUD: ¡MÁXIMO 700 caracteres!"""
 
@@ -1233,6 +1224,17 @@ TAREA: ¡Haz del multiplicador el héroe! ¡Muestra su escala!
   - "ARS ganó..." ❌ INCORRECTO
   
 ✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
+
+═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -1336,35 +1338,17 @@ LA ESTRUCTURA DEBE «CAMINAR»: Rompe patrones. Inicios variables: pregunta, nú
 ✅ ÚSALO como BASE, pero PARAFRASÉALO diferente cada vez
 ❌ NO INVENTES nuevos bonos o cantidades - ¡SOLO lo que está en {bonus1}!
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post diferente!):
 
-1️⃣ MIX: MAYÚSCULAS + MARCOS EMOJI:
-   🔥🔥🔥🔥🔥🔥
-   <a href="{url1}">🎁 ¡BONO DE BIENVENIDA HASTA 100 DÓLARES!</a>
-   🔥🔥🔥🔥🔥🔥
+🚨 USA SOLO ESTE BONO: {bonus1}
+❌ NO INVENTES otros bonos!
 
-2️⃣ MIX: PUNTOS + COMILLAS:
-   • • • "hasta 100 dólares + 100 giros gratis" → {url1} • • •
-
-3️⃣ MIX: ENCABEZADOS + MAYÚSCULAS:
-   📌 TU PASO:
-   <a href="{url1}">🔥 ¡RECLAMAR HASTA 100 DÓLARES AHORA MISMO!</a>
-
-4️⃣ MIX: ONDAS + PREGUNTAS:
-   〰️〰️〰️〰️〰️〰️
-   ¿Quieres hasta 100 dólares en cuenta?
-   {url1}
-   〰️〰️〰️〰️〰️〰️
-
-5️⃣ MIX: BLOQUES + EXCLAMACIONES:
-   ╔═══════════╗
-   {url1}
-   ¡Hasta 100 dólares + 100 giros!!!
-   ╚═══════════╝
-
-6️⃣ MIX: DIFERENTES SÍMBOLOS:
-   ⭐ {url1}
-   Paquete de bienvenida hasta 100 dólares + 100 giros gratis
+1️⃣ MAYÚSCULAS: 🔥 <a href="{url1}">¡[PARAFRASEA {bonus1}]!</a> 🔥
+2️⃣ PUNTOS: • • • "[parafrasea {bonus1}]" → {url1} • • •
+3️⃣ ENCABEZADO: 📌 TU PASO:\n<a href="{url1}">🔥 ¡[PARAFRASEA {bonus1}]!</a>
+4️⃣ ONDAS: 〰️ ¿Quieres [parafrasea {bonus1}]? {url1} 〰️
+5️⃣ BLOQUES: ╔══╗ {url1}\n¡[parafrasea {bonus1}]!!! ╚══╝
+6️⃣ SÍMBOLOS: ⭐ {url1}\n[parafrasea {bonus1}]
 
 📏 LONGITUD: ¡MÁXIMO 700 caracteres!"""
 
@@ -1421,6 +1405,17 @@ TAREA: ¡Muestra el contraste! ¡Apuesta pequeña = gran valentía!
   - "El héroe", "El crack", "El ganador", "El campeón"
   - "Un apostador", "Un arriesgado", "Un audaz"
   - NUNCA: CLP, ARS, MXN, PEN, USD, EUR, COP, UYU
+
+═══════════════════════════════════════════════════════════════
+🚨🚨🚨 REGLA CRÍTICA #2 - BONOS 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ ABSOLUTAMENTE PROHIBIDO inventar bonos:
+
+✅ USA SOLO el bono indicado en {bonus1}
+❌ NO INVENTES "100 dólares", "100 giros", "150%", "500%" 
+❌ NO COPIES ejemplos de otros posts
+✅ PARAFRASEA {bonus1} con tus palabras cada vez diferente
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -1547,45 +1542,24 @@ VARIANTES (¡alterna!):
 ✅ ÚSALO como BASE, pero PARAFRASÉALO diferente cada vez
 ❌ NO INVENTES nuevos bonos o cantidades - ¡SOLO lo que está en {bonus1}!
 
-Ejemplos de variaciones para "hasta 100 dólares":
-  • "100 dólares completos al empezar"
-  • "un bono sustancioso de hasta 100$"
-  • "cien dólares en tu primer depósito"
-  • "paquete de inicio de hasta $100"
+🚨🚨🚨 USA SOLO ESTE BONO: {bonus1} 🚨🚨🚨
+❌ NO INVENTES "100 dólares", "100 giros" si NO están en {bonus1}!
+✅ PARAFRASEA {bonus1} своими словами cada vez diferente
 
 📐 REGLA DE AIRE (¡OBLIGATORIO!):
 • SIEMPRE añade LÍNEA VACÍA ANTES y DESPUÉS de cada bloque de enlace
 
-📋 ELIGE UNO de los formatos (¡cambia cada vez!):
+📋 ELIGE UNO de los formatos (¡ROTA! Cada post diferente!):
 
-1️⃣ HIPERENLACE CLÁSICO:
-   <a href="{url1}">🎁 Reclamar bono de bienvenida hasta 100 dólares + 100 giros</a>
-
-2️⃣ HIPERENLACE EN NEGRITA:
-   <b><a href="{url1}">🔥 ¡ACTIVAR BONO DE HASTA 100 DÓLARES!</a></b>
-
-3️⃣ LLAMADAS ENÉRGICAS:
-   <a href="{url1}">⚡ ¡RECLAMAR hasta 100 dólares al empezar!</a>
-
-4️⃣ LLAMADAS AMIGABLES:
-   <a href="{url1}">👉 ¡Toma tu bono de hasta 100 dólares ahora mismo!</a>
-
-5️⃣ INDICACIONES DIRECTAS:
-   <a href="{url1}">→ Ir por el bono de hasta 100 dólares + 100 giros</a>
-
-6️⃣ FORMA INTERROGATIVA:
-   <a href="{url1}">🤔 ¿Quieres un bono de hasta 100 dólares al empezar?</a>
-
-7️⃣ EMOJI A AMBOS LADOS:
-   🔥 <a href="{url1}">Reclamar hasta 100 dólares al empezar</a> 🔥
-
-8️⃣ PLAIN URL + DESCRIPCIÓN:
-   {url1}
-   👆 Paquete de bienvenida hasta 100 dólares + 100 giros gratis
-
-9️⃣ DESCRIPCIÓN + PLAIN URL:
-   🎁 Reclamar hasta 100 dólares al empezar:
-   {url1}
+1️⃣ CLÁSICO: <a href="{url1}">🎁 [parafrasea {bonus1}]</a>
+2️⃣ NEGRITA: <b><a href="{url1}">🔥 ¡[PARAFRASEA {bonus1}]!</a></b>
+3️⃣ ENÉRGICO: <a href="{url1}">⚡ ¡[parafrasea {bonus1}]!</a>
+4️⃣ AMIGABLE: <a href="{url1}">👉 ¡[parafrasea {bonus1}]!</a>
+5️⃣ DIRECTO: <a href="{url1}">→ [parafrasea {bonus1}]</a>
+6️⃣ PREGUNTA: <a href="{url1}">🤔 ¿Quieres [parafrasea {bonus1}]?</a>
+7️⃣ EMOJIS: 🔥 <a href="{url1}">[parafrasea {bonus1}]</a> 🔥
+8️⃣ URL + DESC: {url1}\n👆 [parafrasea {bonus1}]
+9️⃣ DESC + URL: 🎁 [parafrasea {bonus1}]:\n{url1}
 
 ❌ PROHIBIDO: **negrita**, `código`, __cursiva__, [texto](url) — ¡esto es Markdown!
 
@@ -1715,12 +1689,12 @@ FORMATO DE ENLACES (¡CRÍTICO!):
 ✅ Llama a la acción: "reclama YA", "activa tu bono", "empieza a ganar"
 
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
 - Comienza con 🎁 o 💎
-- Bonos en <code>tags</code>: <code>100 giros</code>
+- Bonos en <code>tags</code>: <code>[usa {bonus1}]</code>
 - Muchos emojis 🍒🔥💰🚀
 - SIN la palabra "casino" (usa: plataforma, sitio, club)
 - Termina con una nota motivacional positiva
@@ -1740,7 +1714,7 @@ POSICIÓN DE ENLACE: en el MEDIO de la publicación.
 
 FORMATO DE ENLACE:
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1765,7 +1739,7 @@ POSICIÓN DE ENLACE: mezclado con pasos.
 
 FORMATO DE ENLACE:
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1790,7 +1764,7 @@ POSICIÓN DE ENLACE: después de la comparación.
 
 FORMATO DE ENLACE:
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1815,7 +1789,7 @@ POSICIÓN DE ENLACE: al FINAL del post con línea vacía.
 
 FORMATO DE ENLACE:
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1840,7 +1814,7 @@ POSICIÓN DE ENLACE: al FINAL como recomendación.
 
 FORMATO DE ENLACE:
 {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1865,7 +1839,7 @@ POSICIÓN DE ENLACE: enlace con flecha al INICIO.
 
 FORMATO DE ENLACE:
 ➡️ {url1}
-🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!
 
 REGLAS:
 - MÍNIMO 500, MÁXIMO 700 caracteres
@@ -1890,10 +1864,11 @@ REGLAS HTML:
 - Emojis 🔥💰🍒
 - ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
-⚠️ FORMATO DE ENLACES (elige uno - ¡DESCRIBE EL BONO DE FORMA ATRACTIVA Y MOTIVADORA!):
-1) {url1} - ¡🎁 BONO EXCLUSIVO: hasta 100 dólares GRATIS en tu cuenta + 100 giros sin depósito! ¡No lo dejes pasar!
-2) {url1}\n🔥 ¡OFERTA LIMITADA! Reclama hasta 100 dólares instantáneos y 100 giros gratis - ¡activa ahora!
-3) <a href="URL">🚀 ¡RECLAMA TU BONO!</a> — hasta 100 dólares gratis + 100 giros sin depósito. ¡Empieza a ganar YA!""",
+⚠️ FORMATO DE ENLACES (elige uno):
+🚨 USA SOLO {bonus1} - NO inventes otros bonos!
+1) {url1} - 🎁 [parafrasea {bonus1}]
+2) {url1}\n🔥 [parafrasea {bonus1}]
+3) <a href="{url1}">🚀 ¡RECLAMA TU BONO!</a> — [parafrasea {bonus1}]""",
 
         """Escribe un reportaje (SIN nombre).
 {slot}, <b>{bet}{currency}</b> → <b>{win}{currency}</b>, x{multiplier}.
@@ -1907,8 +1882,8 @@ REGLAS HTML:
 - Slot: <b>Con Mayúscula</b>
 - ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
-⚠️ FORMATO DE ENLACES: URL - descripción ATRACTIVA Y MOTIVADORA o URL con nueva línea descripción
-Ejemplo: {url1} - ¡💰 BONO INCREÍBLE: hasta 150% en tu primer depósito + 100 giros gratis! ¡Duplica tu dinero AHORA!""",
+⚠️ FORMATO DE ENLACES: URL - [parafrasea {bonus1}] 
+🚨 USA SOLO {bonus1} - NO inventes otros bonos!""",
 
         """Escribe una publicación con PREGUNTA (sin nombre de jugador).
 {slot}, entrada <b>{bet}{currency}</b>, salida <b>{win}{currency}</b>, x{multiplier}.
@@ -1925,7 +1900,7 @@ REGLAS HTML:
 
 ⚠️ FORMATO DE ENLACES (¡MOTIVA A HACER CLIC!):
 👇 {url1}
-🎁 ¡BONO EXCLUSIVO! Hasta 100 dólares GRATIS en tu cuenta + 100 giros sin depósito. ¡Activa YA y empieza a ganar!""",
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!""",
 
         """Escribe una publicación EMOCIONAL (sin nombre).
 {slot}, <b>{bet}{currency}</b> se convirtió en <b>{win}{currency}</b> (x{multiplier}).
@@ -1939,10 +1914,9 @@ REGLAS HTML:
 - Slot <b>Con Mayúscula</b>
 - ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
-⚠️ FORMATO DE ENLACES: descripción ATRACTIVA PRIMERO, luego URL (¡CREA URGENCIA!)
-Ejemplo:
-✅ 🎁 ¡OFERTA ESPECIAL! Hasta 100 dólares GRATIS + 100 giros sin depósito. ¡Solo hoy! 🚀
-📲 👉 {url1} 👈 ¡Reclama tu bono AHORA!""",
+⚠️ FORMATO DE ENLACES: [parafrasea {bonus1}] PRIMERO, luego URL
+🚨 USA SOLO {bonus1} - NO inventes otros bonos!
+📲 👉 {url1} 👈""",
 
         """Escribe una publicación CASUAL (sin nombre).
 {slot}, <b>{bet}{currency}</b> → <b>{win}{currency}</b>, x{multiplier}.
@@ -1956,8 +1930,8 @@ REGLAS HTML:
 - Cantidades en <b>negrita</b>
 - ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
-⚠️ FORMATO DE ENLACES: 👉 URL - descripción MOTIVADORA
-Ejemplo: 👉 {url1} - 🎁 ¡PAQUETE DE BIENVENIDA EXCLUSIVO! Hasta 100 dólares gratis + 100 giros. ¡No esperes más!""",
+⚠️ FORMATO DE ENLACES: 👉 URL - [parafrasea {bonus1}]
+🚨 USA SOLO {bonus1} - NO inventes otros bonos!""",
 
         """Escribe una publicación con NÚMEROS (sin nombre).
 {slot}, entrada <b>{bet}{currency}</b>, resultado <b>{win}{currency}</b>, x{multiplier}.
@@ -1972,30 +1946,14 @@ REGLAS HTML:
 - Enlaces después de ━━━
 - ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
-⚠️ FORMATO DE ENLACES después del separador (¡MOTIVA A ACTUAR!):
+⚠️ FORMATO DE ENLACES después del separador:
 ━━━━━━━━━━
 ➡️ {url1}
-🎁 ¡BONO INCREÍBLE! Hasta 100 dólares GRATIS + 100 giros sin depósito. ¡Activa ahora y gana!""",
+🎁 [parafrasea {bonus1}] - 🚨 USA SOLO {bonus1}!""",
     ]
     
-    # Вариации описаний бонусов для AI (ESPAÑOL) - МОТИВИРУЮЩИЕ И ЗАВЛЕКАТЕЛЬНЫЕ
-    BONUS_VARIATIONS = [
-        "🎁 ¡BONO EXCLUSIVO! Hasta 100 dólares GRATIS en tu cuenta + 100 giros sin depósito. ¡Activa YA!",
-        "💰 ¡OFERTA INCREÍBLE! Bono hasta 100 dólares en el depósito + paquete de 100 giros gratis. ¡No lo dejes pasar!",
-        "🚀 ¡EMPIEZA A GANAR! 100 dólares GRATIS al balance + 100 giros de regalo. ¡Reclama ahora!",
-        "🔥 ¡BONO ESPECIAL! Hasta 100 dólares gratis + 100 giros sin depósito. ¡Solo por tiempo limitado!",
-        "💎 ¡PAQUETE DE BIENVENIDA EXCLUSIVO! Hasta $100 gratis + 100 rondas gratis. ¡Activa tu bono!",
-        "⚡ ¡IMPULSO INICIAL GRATIS! Hasta 100 dólares + 100 giros sin depósito. ¡Empieza a ganar YA!",
-        "🎯 ¡BONO MOMENTÁNEO! Hasta 100 dólares en la cuenta + 100 giros gratis. ¡Reclama tu premio!",
-        "💵 ¡DUPLICA TU DINERO! Bono hasta 150% en el primer depósito + 100 giros gratis. ¡Activa ahora!",
-        "🌟 ¡OFERTA ÚNICA! Hasta 150% en el depósito + pack de 100 giros gratis. ¡No esperes más!",
-        "🎁 ¡BONO DE BIENVENIDA 150%! + 100 giros gratis para empezar. ¡Reclama tu regalo!",
-        "💰 ¡IMPULSO AL BALANCE! Hasta 150% + 100 rondas gratis. ¡Duplica tu dinero AHORA!",
-        "🔥 ¡BONO EXCLUSIVO! Hasta 30.000 pesos en el depósito + 100 giros gratis. ¡Activa YA!",
-        "🚀 ¡COLCHÓN INICIAL GRATIS! Hasta 30k pesos + 100 giros gratis. ¡Empieza a ganar!",
-        "💎 ¡BONO ESPECIAL! Hasta 50 dólares gratis + 100 tiradas gratis. ¡No lo dejes pasar!",
-        "🎯 ¡PACK DE INICIO EXCLUSIVO! 100 dólares GRATIS + 100 giros completamente gratis. ¡Reclama ahora!",
-    ]
+    # BONUS_VARIATIONS убраны - теперь используем ТОЛЬКО оригинальный бонус пользователя {bonus1}
+    BONUS_VARIATIONS = []  # Пустой список - НЕ используется
     
     # Форматы размещения ссылок (для разнообразия)
     # Распределение: ~12% гиперссылки, ~88% plain URL форматы
