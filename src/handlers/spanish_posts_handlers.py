@@ -2657,6 +2657,27 @@ def register_spanish_handlers(bot_instance):
         errors = 0
         stopped = False
     
+        def trim_caption(text: str, max_len: int = 1024) -> str:
+            """Обрезает текст до лимита Telegram, сохраняя ссылку"""
+            if len(text) <= max_len:
+                return text
+            # Ищем ссылку
+            import re
+            link_match = re.search(r'(https?://[^\s<>"]+)', text)
+            if link_match:
+                link = link_match.group(1)
+                link_pos = text.find(link)
+                # Сохраняем текст вокруг ссылки
+                before = text[:link_pos]
+                after = text[link_pos + len(link):]
+                # Обрезаем before чтобы уместиться
+                available = max_len - len(link) - len(after) - 10
+                if available > 100:
+                    before = before[:available] + "..."
+                return before + link + after
+            # Нет ссылки - просто обрезаем
+            return text[:max_len - 3] + "..."
+
         for i, post in enumerate(posts):
             # Проверяем флаг остановки
             current_data = await state.get_data()
@@ -2664,6 +2685,9 @@ def register_spanish_handlers(bot_instance):
                 stopped = True
                 break
             try:
+                # КРИТИЧНО: Обрезаем текст до лимита Telegram (1024 символа)
+                post_text = trim_caption(post['text'], 1024)
+                
                 # Если есть source_channel_id и message_id - копируем через Telethon
                 if post.get('source_channel_id') and post.get('message_id'):
                     # Получаем оригинальное сообщение
@@ -2676,7 +2700,7 @@ def register_spanish_handlers(bot_instance):
                         # Копируем с новым текстом (HTML форматирование)
                         await client.send_message(
                             target_channel_id,
-                            post['text'],
+                            post_text,  # Используем обрезанный текст
                             file=original_msg.media,
                             parse_mode='html'  # HTML форматирование для Telethon
                         )
@@ -2690,14 +2714,14 @@ def register_spanish_handlers(bot_instance):
                         await bot.send_video(
                             chat_id=target_channel_id,
                             video=post['media_path'],  # file_id
-                            caption=post['text'],
+                            caption=post_text,  # Используем обрезанный текст
                             parse_mode="HTML"  # HTML форматирование
                         )
                     else:
                         await bot.send_photo(
                             chat_id=target_channel_id,
                             photo=post['media_path'],  # file_id
-                            caption=post['text'],
+                            caption=post_text,  # Используем обрезанный текст
                             parse_mode="HTML"  # HTML форматирование
                         )
                     published += 1

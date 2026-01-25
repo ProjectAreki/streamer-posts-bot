@@ -661,7 +661,7 @@ Variabilidad de introducciones (¡ROTACIÓN obligatoria!):
 6️⃣ DESCRIPCIÓN + GUION + URL:
    🎁 Hasta 100 dólares gratis + 100 giros sin depósito — {url1}
 
-📏 LONGITUD: MÍNIMO 650, MÁXIMO 800 caracteres
+📏 LONGITUD: MÍNIMO 500, MÁXIMO 700 caracteres (¡CRÍTICO! Telegram limita a 1024)
 
 """
 
@@ -1718,7 +1718,7 @@ FORMATO DE ENLACES (¡CRÍTICO!):
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Comienza con 🎁 o 💎
 - Bonos en <code>tags</code>: <code>100 giros</code>
 - Muchos emojis 🍒🔥💰🚀
@@ -1743,7 +1743,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Comienza con una pregunta ❓
 - <b>Negrita</b> para acentos
 - Bonos en <code>tags</code>
@@ -1768,7 +1768,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Comienza con 💡
 - Pasos 1. 2. 3.
 - Bonos en <code>tags</code>
@@ -1793,7 +1793,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Título «¿Qué elegir?» 🤔
 - Ventajas con ▸
 - Bonos en <code>tags</code>
@@ -1818,7 +1818,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Comienza con 🔔 o ⚡
 - <b>Negrita</b> para importante
 - Bonos en <code>tags</code>
@@ -1843,7 +1843,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Cita en «comillas»
 - Emojis de experiencia: 💬✅
 - Bonos en <code>tags</code>
@@ -1868,7 +1868,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- MÍNIMO 650, MÁXIMO 800 caracteres
+- MÍNIMO 500, MÁXIMO 700 caracteres
 - Bonos en <code>tags</code>
 - SIN la palabra "casino" (reemplaza: plataforma, club de juegos)
 - Termina en onda positiva
@@ -1888,7 +1888,7 @@ REGLAS HTML:
 - Slot: <b>Con Mayúscula</b>
 - Hiperenlaces: <a href="URL">texto</a> — descripción del bono LARGA (¡50+ caracteres!)
 - Emojis 🔥💰🍒
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES (elige uno - ¡DESCRIBE EL BONO DE FORMA ATRACTIVA Y MOTIVADORA!):
 1) {url1} - ¡🎁 BONO EXCLUSIVO: hasta 100 dólares GRATIS en tu cuenta + 100 giros sin depósito! ¡No lo dejes pasar!
@@ -1905,7 +1905,7 @@ REGLAS HTML:
 - Comienza con 🔴 o ⚡
 - Cantidades en <b>negrita</b>
 - Slot: <b>Con Mayúscula</b>
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES: URL - descripción ATRACTIVA Y MOTIVADORA o URL con nueva línea descripción
 Ejemplo: {url1} - ¡💰 BONO INCREÍBLE: hasta 150% en tu primer depósito + 100 giros gratis! ¡Duplica tu dinero AHORA!""",
@@ -1921,7 +1921,7 @@ REGLAS HTML:
 - Cantidades: <b>negrita</b> o <code>mono</code>
 - Intriga → respuesta
 - Enlaces con 👇
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES (¡MOTIVA A HACER CLIC!):
 👇 {url1}
@@ -1937,7 +1937,7 @@ REGLAS HTML:
 - Emojis: 🔥💰😱🍋🍒
 - Cantidades en <b>negrita</b>
 - Slot <b>Con Mayúscula</b>
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES: descripción ATRACTIVA PRIMERO, luego URL (¡CREA URGENCIA!)
 Ejemplo:
@@ -1954,7 +1954,7 @@ REGLAS HTML:
 - Comienza con "Mira," o "Escucha," o "Fíjate,"
 - Emojis: 💪😎🤙
 - Cantidades en <b>negrita</b>
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES: 👉 URL - descripción MOTIVADORA
 Ejemplo: 👉 {url1} - 🎁 ¡PAQUETE DE BIENVENIDA EXCLUSIVO! Hasta 100 dólares gratis + 100 giros. ¡No esperes más!""",
@@ -1970,7 +1970,7 @@ REGLAS HTML:
 - Cantidades en <b>negrita</b> o <code>monoespaciado</code>
 - Multiplicador: <b>x{multiplier}</b>
 - Enlaces después de ━━━
-- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
+- ¡MÍNIMO 500, MÁXIMO 700 caracteres!
 
 ⚠️ FORMATO DE ENLACES después del separador (¡MOTIVA A ACTUAR!):
 ━━━━━━━━━━
@@ -2913,7 +2913,7 @@ REGLAS HTML:
         
         return result
     
-    def _smart_trim_text(self, text: str, max_length: int = 850) -> str:
+    def _smart_trim_text(self, text: str, max_length: int = 950) -> str:
         """
         Умное сокращение текста с СОХРАНЕНИЕМ ссылок и их описаний.
         
@@ -3217,17 +3217,19 @@ REGLAS HTML:
                     print(f"   Получен текст длиной {len(candidate)} символов")
                     sys.stdout.flush()
 
-                    if 600 <= len(candidate) <= 850:
+                    # Telegram лимит caption = 1024 символа
+                    # С учётом HTML тегов целимся в 500-750 символов
+                    if 500 <= len(candidate) <= 750:
                         text = candidate
                         break
 
-                    if len(candidate) > 850:
+                    if len(candidate) > 750:
                         # следующая попытка просим короче
-                        length_note = "\n\n⚠️ Пост слишком длинный! Сократи до максимум 800 символов, но СОХРАНИ ссылку и её описание."
+                        length_note = "\n\n⚠️ Пост слишком длинный! Сократи до максимум 700 символов, но СОХРАНИ ссылку и её описание."
                         text = candidate  # на всякий случай запомним
-                    elif len(candidate) < 600:
+                    elif len(candidate) < 500:
                         # пост слишком короткий - просим длиннее
-                        length_note = "\n\n⚠️ Пост слишком КОРОТКИЙ! Добавь больше деталей, эмоций, описания. Минимум 650 символов!"
+                        length_note = "\n\n⚠️ Пост слишком КОРОТКИЙ! Добавь больше деталей, эмоций, описания. Минимум 550 символов!"
                         text = candidate
                         continue
 
