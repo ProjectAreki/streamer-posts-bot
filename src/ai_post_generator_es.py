@@ -3197,7 +3197,7 @@ REGLAS HTML:
                     if self.model in new_models:
                         api_params["max_completion_tokens"] = 8000
                     elif self.use_openrouter:
-                        api_params["max_tokens"] = 800  # Для поста 700 символов достаточно
+                        api_params["max_tokens"] = 2000  # Увеличено для болтливых моделей (Gemini 3 Pro)
                         api_params["temperature"] = 0.95
                     else:
                         api_params["max_tokens"] = 1500
