@@ -430,6 +430,17 @@ class AIPostGenerator:
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
 
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
+
 ═══════════════════════════════════════════════════════════════
 👤 ENFOQUE: LA VICTORIA COMO PROTAGONISTA
 ═══════════════════════════════════════════════════════════════
@@ -676,6 +687,17 @@ Variabilidad de introducciones (¡ROTACIÓN obligatoria!):
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
 
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
+
 ═══════════════════════════════════════════════════════════════
 👤 ENFOQUE: VICTORIA Y ACCIONES DEL JUGADOR
 ═══════════════════════════════════════════════════════════════
@@ -849,6 +871,17 @@ Volumen: Punto medio. Ni «sábana», ni telegrama.
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
 
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
+
 ═══════════════════════════════════════════════════════════════
 🎰 ENFOQUE: DINÁMICA DEL JUEGO Y RESULTADO
 ═══════════════════════════════════════════════════════════════
@@ -1019,6 +1052,17 @@ Comienza siempre inesperadamente: A veces con el resultado 🏆, a veces con una
 ❌ PROHIBIDO usar ruso, inglés u otros idiomas en el texto
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
+
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
 
 ═══════════════════════════════════════════════════════════════
 🎰 ENFOQUE: EMOCIONES Y DECISIONES DEL JUGADOR
@@ -1197,6 +1241,17 @@ Punto de vista: La narrativa es en tercera persona. Personaje — «héroe», «
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
 
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
+
 ═══════════════════════════════════════════════════════════════
 💥 ENFOQUE: EL MULTIPLICADOR COMO MILAGRO
 ═══════════════════════════════════════════════════════════════
@@ -1360,6 +1415,17 @@ LA ESTRUCTURA DEBE «CAMINAR»: Rompe patrones. Inicios variables: pregunta, nú
 ❌ PROHIBIDO usar ruso, inglés u otros idiomas en el texto
 ✅ PERMITIDO en inglés: nombres de slots (Gates of Olympus, Sweet Bonanza)
 ❌ TODO LO DEMÁS SOLO EN ESPAÑOL
+
+🚨🚨🚨 ¡REGLA #0 ANTES QUE TODO! 🚨🚨🚨
+⛔⛔⛔ CLP, ARS, MXN, PEN, USD, EUR, COP, UYU ⛔⛔⛔
+❌ ESTAS SON **MONEDAS**, ¡NO NOMBRES DE PERSONAS!
+❌ **NUNCA** escribas "CLP apostó", "ARS ganó", "MXN entró"
+✅ USA: "Un jugador", "Un tipo", "El héroe", "El ganador"
+⚠️ SI USAS CLP/ARS/MXN COMO NOMBRE = ¡TODO EL POST SERÁ RECHAZADO!
+
+🚨 REGLA #0.5: ¡SOLO TÉRMINOS EN ESPAÑOL! 🚨
+❌ NO uses "Free Spins", "Bonus", "Welcome Package"
+✅ USA: "giros gratis", "tiradas gratis", "bono", "paquete de bienvenida"
 
 ═══════════════════════════════════════════════════════════════
 💰 ENFOQUE: APUESTA Y RIESGO
@@ -3131,7 +3197,7 @@ REGLAS HTML:
                     if self.model in new_models:
                         api_params["max_completion_tokens"] = 8000
                     elif self.use_openrouter:
-                        api_params["max_tokens"] = 16000
+                        api_params["max_tokens"] = 800  # Для поста 700 символов достаточно
                         api_params["temperature"] = 0.95
                     else:
                         api_params["max_tokens"] = 1500
