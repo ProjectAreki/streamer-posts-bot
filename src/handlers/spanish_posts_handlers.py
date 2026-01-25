@@ -1473,18 +1473,10 @@ def register_spanish_handlers(bot_instance):
                         model=model_info['id'],
                         use_openrouter=True
                     )
-                    # Загрузка существующих постов
-                    try:
-                        gen.load_existing_posts_from_file("data/my_posts.json")
-                    except:
-                        pass
+                    # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты!
                     return gen
             gen = AIPostGenerator(api_key=openai_key, model=m_key)
-            # Загрузка существующих постов
-            try:
-                gen.load_existing_posts_from_file("data/my_posts.json")
-            except:
-                pass
+            # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты!
             return gen
     
         # Создаём генератор в зависимости от режима
@@ -1513,14 +1505,8 @@ def register_spanish_handlers(bot_instance):
             else:
                 generator = AIPostGenerator(api_key=openai_key, model=model_key)
     
-        # Загрузка существующих постов для обучения AI
-        try:
-            generator.load_existing_posts_from_file("data/my_posts.json")
-            logger.info("✅ Загружено существующих постов для обучения AI")
-        except FileNotFoundError:
-            logger.warning("⚠️ Файл data/my_posts.json не найден - AI будет работать без обучающей базы")
-        except Exception as e:
-            logger.warning(f"⚠️ Не удалось загрузить существующие посты: {e}")
+        # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты из my_posts.json!
+        # AI будет генерировать чисто испанский контент без влияния русских примеров
     
         # Преобразуем данные видео
         video_data_list = [
@@ -1981,11 +1967,7 @@ def register_spanish_handlers(bot_instance):
                 use_openrouter=True
             )
             
-            # Загрузка существующих постов для проверки уникальности
-            try:
-                checker.load_existing_posts_from_file("data/my_posts.json")
-            except:
-                pass
+            # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты!
         
             # Собираем тексты и слоты
             posts_texts = [p['text'] for p in generated_posts]
@@ -2194,11 +2176,7 @@ def register_spanish_handlers(bot_instance):
                         model=regenerate_model_id,
                         use_openrouter=True
                     )
-                    # Загрузка существующих постов
-                    try:
-                        generator.load_existing_posts_from_file("data/my_posts.json")
-                    except:
-                        pass
+                    # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты!
                     generator.set_bonus_data(
                         url1=url1,
                         bonus1=bonus1
@@ -2492,11 +2470,7 @@ def register_spanish_handlers(bot_instance):
         model = data.get('ai_model_used') or config_manager.default_model or "gpt-4o-mini"
     
         generator = AIPostGenerator(api_key=api_key, model=model)
-        # Загрузка существующих постов
-        try:
-            generator.load_existing_posts_from_file("data/my_posts.json")
-        except:
-            pass
+        # ИСПАНСКИЙ СЦЕНАРИЙ: НЕ загружаем русские посты!
         generator.set_bonus_data(
             url1=data['url1'],
             bonus1=data['bonus1']
