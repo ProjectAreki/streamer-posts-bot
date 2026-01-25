@@ -1365,7 +1365,8 @@ def register_streamer_handlers(bot_instance):
             ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
             ("deepseek-r1", "openrouter", "DeepSeek R1"),
         ]
-        rotation_premium = [  # Премиум (~0.5-3₽/пост) - 9 моделей (убран Opus)
+        rotation_premium = [  # Премиум (~0.5-3₽/пост) - 10 моделей для максимального разнообразия
+            ("claude-opus-4.5", "openrouter", "Claude Opus 4.5"),
             ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
             ("gpt-5.2", "openrouter", "GPT-5.2"),
             ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
@@ -1376,7 +1377,7 @@ def register_streamer_handlers(bot_instance):
             ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
             ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
         ]
-        rotation_mixed = [  # Все (дешёвые + средние + премиум) - 14 моделей (убран Opus)
+        rotation_mixed = [  # Все (дешёвые + средние + премиум) - максимальное разнообразие
             # Дешёвые
             ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
             ("mistral-small-creative", "openrouter", "Mistral Creative"),
@@ -1394,6 +1395,8 @@ def register_streamer_handlers(bot_instance):
             ("gemini-3-pro", "openrouter", "Gemini 3 Pro"),
             ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
             ("mistral-large", "openrouter", "Mistral Large"),
+            # Топ премиум
+            ("claude-opus-4.5", "openrouter", "Claude Opus 4.5"),
         ]
     
         # Выбор набора
