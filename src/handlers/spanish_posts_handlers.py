@@ -1684,38 +1684,33 @@ def register_spanish_handlers(bot_instance):
                 await asyncio.sleep(3)
     
         # Сохраняем посты с привязкой к медиа
+        # ВАЖНО: Используем ПРЯМОЕ сопоставление по индексу!
+        # video_data_list создаётся из videos в том же порядке (строки 1529-1538)
+        # ai_posts генерируются для video_data_list по порядку (строка 1554)
+        # Поэтому post.index соответствует индексу в videos!
         generated_posts = []
         video_idx = 0
         image_idx = 0
     
         for post in ai_posts:
             if post.media_type == "video" and video_idx < len(videos):
-                # КРИТИЧНО: Находим правильное видео по streamer+slot из поста!
-                # Посты могут быть перемешаны после shuffle, поэтому не можем брать просто videos[video_idx]
-                matching_video = None
+                # ИСПРАВЛЕНО: Используем ПРЯМОЕ сопоставление по индексу поста!
+                # post.index = индекс в video_data_list = индекс в videos
+                post_video_index = post.index
                 
-                # Ищем видео которое соответствует этому посту
-                for v in videos:
-                    v_streamer = v.get('streamer', '').strip().lower()
-                    v_slot = v.get('slot', '').strip().lower()
-                    post_streamer = post.streamer.strip().lower()
-                    post_slot = post.slot.strip().lower()
-                    
-                    # Сравниваем и стример и слот
-                    if v_streamer == post_streamer and v_slot == post_slot:
-                        matching_video = v
-                        break
-                
-                # Если не нашли точное совпадение - берем по индексу (fallback)
-                if not matching_video:
+                # Проверяем что индекс валидный
+                if 0 <= post_video_index < len(videos):
+                    matching_video = videos[post_video_index]
+                else:
+                    # Fallback на последовательный индекс
                     matching_video = videos[video_idx]
-                    print(f"⚠️ Не найдено точное совпадение для поста #{post.index} ({post.streamer}, {post.slot}), используем video_idx={video_idx}")
+                    print(f"⚠️ Индекс поста #{post.index} вне диапазона videos[0:{len(videos)}], используем video_idx={video_idx}")
                 
                 video_idx += 1
             
                 generated_posts.append({
                     'index': post.index,
-                    'media_path': matching_video.get('file_id'),  # ✅ Правильное видео!
+                    'media_path': matching_video.get('file_id'),
                     'source_channel_id': matching_video.get('source_channel_id'),
                     'message_id': matching_video.get('message_id'),
                     'media_type': post.media_type,
