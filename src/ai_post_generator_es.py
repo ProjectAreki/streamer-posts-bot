@@ -3197,7 +3197,7 @@ REGLAS HTML:
                     if self.model in new_models:
                         api_params["max_completion_tokens"] = 8000
                     elif self.use_openrouter:
-                        api_params["max_tokens"] = 3000  # Gemini 3 Pro очень болтливая - нужно больше
+                        api_params["max_tokens"] = 4000  # Gemini 2.5/3 Pro ОЧЕНЬ болтливые - нужно 4k
                         api_params["temperature"] = 0.95
                     else:
                         api_params["max_tokens"] = 1500
