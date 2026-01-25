@@ -447,15 +447,30 @@ EJEMPLOS:
 TAREA: ¡Muestra la victoria como algo emocionante y real!
 
 ═══════════════════════════════════════════════════════════════
-⚠️ CÓDIGOS DE MONEDA - ¡NUNCA COMO NOMBRES!
+🚨🚨🚨 REGLA CRÍTICA #1 - CÓDIGOS DE MONEDA 🚨🚨🚨
 ═══════════════════════════════════════════════════════════════
 
-❌ PROHIBIDO usar CLP, ARS, MXN, PEN, USD, EUR como nombres de jugadores:
-  - "CLP apostó..." ❌ INCORRECTO
-  - "ARS ganó..." ❌ INCORRECTO
+⛔ ABSOLUTAMENTE PROHIBIDO usar CLP, ARS, MXN, PEN, USD, EUR, COP, UYU como NOMBRES o APODOS de personas:
   
-✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
-✅ Los códigos de moneda son SOLO para indicar la divisa, NO son apodos
+❌ INCORRECTO (RECHAZADO INMEDIATAMENTE):
+  - "CLP apostó..." 
+  - "CLP entró al salón..."
+  - "Un valiente conocido como CLP..."
+  - "ARS ganó..."
+  - "MXN arriesgó..."
+  - "USD se llevó..."
+  
+✅ CORRECTO (estos códigos son SOLO para cantidades de dinero):
+  - "Un jugador apostó 5000 CLP"
+  - "El ganador se llevó 100.000 ARS"
+  - "Con 500 USD apostó..."
+  - "Ganancia de 1.000.000 MXN"
+
+⚠️ PARA NOMBRAR AL JUGADOR USA:
+  - "Un jugador", "Un tipo", "Un valiente", "Un afortunado"
+  - "El héroe", "El crack", "El ganador", "El campeón"
+  - "Un apostador", "Un arriesgado", "Un audaz"
+  - NUNCA: CLP, ARS, MXN, PEN, USD, EUR, COP, UYU
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -620,7 +635,7 @@ Variabilidad de introducciones (¡ROTACIÓN obligatoria!):
 6️⃣ DESCRIPCIÓN + GUION + URL:
    🎁 Hasta 100 dólares gratis + 100 giros sin depósito — {url1}
 
-📏 LONGITUD: MÁXIMO 700 caracteres
+📏 LONGITUD: MÍNIMO 650, MÁXIMO 800 caracteres
 
 """
 
@@ -1252,15 +1267,30 @@ EJEMPLOS:
 TAREA: ¡Muestra el contraste! ¡Apuesta pequeña = gran valentía!
 
 ═══════════════════════════════════════════════════════════════
-⚠️ CÓDIGOS DE MONEDA - ¡NUNCA COMO NOMBRES!
+🚨🚨🚨 REGLA CRÍTICA #1 - CÓDIGOS DE MONEDA 🚨🚨🚨
 ═══════════════════════════════════════════════════════════════
 
-❌ PROHIBIDO usar CLP, ARS, MXN, PEN, USD, EUR como nombres de jugadores:
-  - "CLP apostó..." ❌ INCORRECTO
-  - "ARS ganó..." ❌ INCORRECTO
+⛔ ABSOLUTAMENTE PROHIBIDO usar CLP, ARS, MXN, PEN, USD, EUR, COP, UYU como NOMBRES o APODOS de personas:
   
-✅ CORRECTO: "Un jugador apostó 5000 CLP", "El ganador se llevó 100.000 ARS"
-✅ Los códigos de moneda son SOLO para indicar la divisa, NO son apodos
+❌ INCORRECTO (RECHAZADO INMEDIATAMENTE):
+  - "CLP apostó..." 
+  - "CLP entró al salón..."
+  - "Un valiente conocido como CLP..."
+  - "ARS ganó..."
+  - "MXN arriesgó..."
+  - "USD se llevó..."
+  
+✅ CORRECTO (estos códigos son SOLO para cantidades de dinero):
+  - "Un jugador apostó 5000 CLP"
+  - "El ganador se llevó 100.000 ARS"
+  - "Con 500 USD apostó..."
+  - "Ganancia de 1.000.000 MXN"
+
+⚠️ PARA NOMBRAR AL JUGADOR USA:
+  - "Un jugador", "Un tipo", "Un valiente", "Un afortunado"
+  - "El héroe", "El crack", "El ganador", "El campeón"
+  - "Un apostador", "Un arriesgado", "Un audaz"
+  - NUNCA: CLP, ARS, MXN, PEN, USD, EUR, COP, UYU
 
 ═══════════════════════════════════════════════════════════════
 🚫 PROHIBIDO COMPARAR APUESTAS CON GASTOS COTIDIANOS
@@ -1422,7 +1452,7 @@ Ejemplos de variaciones para "hasta 100 dólares":
 REGLAS
 ═══════════════════════════════════════════════════════════════
 
-📏 LONGITUD: MÁXIMO 600 caracteres
+📏 LONGITUD: MÍNIMO 650 caracteres, MÁXIMO 800 caracteres
 
 🎭 ¡LA VICTORIA ES EL PROTAGONISTA DEL POST!
 ⚠️ Si el nombre del jugador ({streamer}) está indicado — ¡ÚSALO 1 VEZ!
@@ -1477,7 +1507,7 @@ Genera un post LISTO para Telegram.
 Solo texto con tags HTML.
 NO añadas explicaciones, comentarios, marcadores tipo [HOOK].
 
-📏 LONGITUD: MÁXIMO 600 caracteres
+📏 LONGITUD: MÍNIMO 650 caracteres, MÁXIMO 800 caracteres
 ¡Escribe VIVO! ¡Añade reacciones, detalles del momento!"""
 
     # ═══════════════════════════════════════════════════════════════════
@@ -1506,7 +1536,7 @@ ENLACE (¡obligatorio!):
 
 🎨 TEMÁTICA: Puedes interpretar el nombre de la slot {slot} libremente, ¡pero NO inventes un tema NO RELACIONADO!
 
-📏 Longitud: Máximo 600 caracteres
+📏 Longitud: MÍNIMO 650, MÁXIMO 800 caracteres
 🔗 Enlace 1 siempre ANTES del enlace 2
 ✅ Solo HTML: <b>, <i>, <u>, <code>, <a href>
 ❌ Prohibido: casino"""
@@ -1532,7 +1562,7 @@ FORMATO DE ENLACES (¡CRÍTICO!):
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Comienza con 🎁 o 💎
 - Bonos en <code>tags</code>: <code>100 giros</code>
 - Muchos emojis 🍒🔥💰🚀
@@ -1557,7 +1587,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Comienza con una pregunta ❓
 - <b>Negrita</b> para acentos
 - Bonos en <code>tags</code>
@@ -1582,7 +1612,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Comienza con 💡
 - Pasos 1. 2. 3.
 - Bonos en <code>tags</code>
@@ -1607,7 +1637,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Título «¿Qué elegir?» 🤔
 - Ventajas con ▸
 - Bonos en <code>tags</code>
@@ -1632,7 +1662,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Comienza con 🔔 o ⚡
 - <b>Negrita</b> para importante
 - Bonos en <code>tags</code>
@@ -1657,7 +1687,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Cita en «comillas»
 - Emojis de experiencia: 💬✅
 - Bonos en <code>tags</code>
@@ -1682,7 +1712,7 @@ FORMATO DE ENLACE:
 🎁 ¡BONO EXCLUSIVO! [descripción ATRACTIVA y MOTIVADORA del bono] ¡Reclama ahora!
 
 REGLAS:
-- Máximo 600 caracteres
+- MÍNIMO 650, MÁXIMO 800 caracteres
 - Bonos en <code>tags</code>
 - SIN la palabra "casino" (reemplaza: plataforma, club de juegos)
 - Termina en onda positiva
@@ -1702,7 +1732,7 @@ REGLAS HTML:
 - Slot: <b>Con Mayúscula</b>
 - Hiperenlaces: <a href="URL">texto</a> — descripción del bono LARGA (¡50+ caracteres!)
 - Emojis 🔥💰🍒
-- ¡Máximo 600 caracteres! ¡Brevedad!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES (elige uno - ¡DESCRIBE EL BONO DE FORMA ATRACTIVA Y MOTIVADORA!):
 1) {url1} - ¡🎁 BONO EXCLUSIVO: hasta 100 dólares GRATIS en tu cuenta + 100 giros sin depósito! ¡No lo dejes pasar!
@@ -1719,7 +1749,7 @@ REGLAS HTML:
 - Comienza con 🔴 o ⚡
 - Cantidades en <b>negrita</b>
 - Slot: <b>Con Mayúscula</b>
-- ¡Máximo 600 caracteres! ¡Brevedad!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES: URL - descripción ATRACTIVA Y MOTIVADORA o URL con nueva línea descripción
 Ejemplo: {url1} - ¡💰 BONO INCREÍBLE: hasta 150% en tu primer depósito + 100 giros gratis! ¡Duplica tu dinero AHORA!""",
@@ -1735,7 +1765,7 @@ REGLAS HTML:
 - Cantidades: <b>negrita</b> o <code>mono</code>
 - Intriga → respuesta
 - Enlaces con 👇
-- ¡Máximo 600 caracteres! ¡Brevedad!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES (¡MOTIVA A HACER CLIC!):
 👇 {url1}
@@ -1751,7 +1781,7 @@ REGLAS HTML:
 - Emojis: 🔥💰😱🍋🍒
 - Cantidades en <b>negrita</b>
 - Slot <b>Con Mayúscula</b>
-- ¡Máximo 600 caracteres!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES: descripción ATRACTIVA PRIMERO, luego URL (¡CREA URGENCIA!)
 Ejemplo:
@@ -1768,7 +1798,7 @@ REGLAS HTML:
 - Comienza con "Mira," o "Escucha," o "Fíjate,"
 - Emojis: 💪😎🤙
 - Cantidades en <b>negrita</b>
-- ¡Máximo 600 caracteres!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES: 👉 URL - descripción MOTIVADORA
 Ejemplo: 👉 {url1} - 🎁 ¡PAQUETE DE BIENVENIDA EXCLUSIVO! Hasta 100 dólares gratis + 100 giros. ¡No esperes más!""",
@@ -1784,7 +1814,7 @@ REGLAS HTML:
 - Cantidades en <b>negrita</b> o <code>monoespaciado</code>
 - Multiplicador: <b>x{multiplier}</b>
 - Enlaces después de ━━━
-- ¡Máximo 600 caracteres!
+- ¡MÍNIMO 650, MÁXIMO 800 caracteres!
 
 ⚠️ FORMATO DE ENLACES después del separador (¡MOTIVA A ACTUAR!):
 ━━━━━━━━━━
@@ -1982,234 +2012,23 @@ REGLAS HTML:
     
     def _get_random_bonus_variation(self, original: str, is_bonus1: bool = True) -> str:
         """
-        Генерирует УНИКАЛЬНУЮ вариацию описания бонуса с отслеживанием использованных.
+        Возвращает оригинальное описание бонуса БЕЗ модификаций.
+        
+        ВАЖНО: Для испанского сценария мы передаём бонус напрямую в AI,
+        и AI сам парафразирует его согласно инструкциям в промпте.
+        
+        Это гарантирует, что бонус от пользователя используется как есть,
+        без замены на hardcoded примеры.
         
         Args:
-            original: Оригинальное описание бонуса
+            original: Оригинальное описание бонуса от пользователя
             is_bonus1: True если это bonus1, False если bonus2
         
-        Пример входа: "100.000 рублей к депозиту и 100 фриспинов"
-        Примеры выхода: 
-            - "100к на счёт + 100 бесплатных вращений"
-            - "бонус до 100 000₽ и пак из 100 круток"
-            - "100 тысяч рублей + 100 фриспинов в подарок"
+        Returns:
+            Оригинальный бонус без изменений
         """
-        import re
-        
-        # Определяем список использованных вариаций для данного бонуса
-        used_list = self._used_bonus1_variations if is_bonus1 else self._used_bonus2_variations
-        
-        # Генерируем несколько вариантов и выбираем неиспользованный
-        max_attempts = 50  # Максимум попыток найти уникальную вариацию
-        
-        for attempt in range(max_attempts):
-            # Парсим все компоненты бонуса
-            parts = []
-        
-        # Ищем рубли (100.000 рублей, 100000₽, 30к и т.д.)
-        rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
-        if rub_match:
-            amount_str = rub_match.group(1).replace('.', '').replace(',', '')
-            try:
-                amount = int(amount_str)
-                # Если нашли "к" в оригинале - это тысячи
-                if 'к' in original.lower() and amount < 1000:
-                    amount *= 1000
-                
-                # Вариации для денег (25+ вариантов)
-                if amount >= 1000:
-                    amount_k = amount // 1000
-                    money_variations = [
-                        # Базовые
-                        f"{amount_k}к рублей",
-                        f"{amount_k}к на счёт",
-                        f"до {amount_k}к бонусом",
-                        f"{amount_k} тысяч рублей",
-                        f"бонус {amount_k}к₽",
-                        f"{amount_k}000₽ на баланс",
-                        f"до {amount_k}к на депозит",
-                        f"{amount_k}к в подарок",
-                        # Расширенные
-                        f"{amount_k}к на первый деп",
-                        f"старт с {amount_k}к",
-                        f"буст до {amount_k}к₽",
-                        f"{amount_k} штук рублей",
-                        f"до {amount_k}к на баланс",
-                        f"пополнение +{amount_k}к",
-                        f"{amount_k}к приветственных",
-                        f"бонус до {amount_k} тысяч",
-                        f"{amount_k}к для старта",
-                        f"подарок {amount_k}к₽",
-                        f"{amount_k}к сверху",
-                        f"плюс {amount_k}к рублей",
-                        f"кэшбек до {amount_k}к",
-                        f"{amount_k} косарей бонусом",
-                        f"до {amount_k}к приветственных",
-                        f"стартовые {amount_k}к",
-                        f"welcome {amount_k}к₽",
-                    ]
-                else:
-                    money_variations = [
-                        f"{amount}₽ бонусом",
-                        f"{amount} рублей на старт",
-                        f"до {amount}₽ на счёт",
-                        f"{amount} рублей в подарок",
-                    ]
-                parts.append(random.choice(money_variations))
-            except:
-                pass
-        
-        # Ищем проценты (150%, 100% и т.д.) - 20+ вариантов
-        percent_match = re.search(r'(\d+)\s*%', original)
-        if percent_match:
-            percent = int(percent_match.group(1))
-            multiplier = round(1 + percent / 100, 1)
-            percent_variations = [
-                # Базовые
-                f"{percent}% на депозит",
-                f"+{percent}% к пополнению",
-                f"буст {percent}%",
-                f"{percent}% бонус",
-                f"{percent}% к первому депу",
-                # С множителем
-                f"x{multiplier} к балансу",
-                f"множитель x{multiplier}",
-                f"депозит x{multiplier}",
-                # Расширенные
-                f"+{percent}% на старте",
-                f"{percent}% приветственных",
-                f"бонус +{percent}%",
-                f"{percent}% к первому пополнению",
-                f"welcome {percent}%",
-                f"первый деп +{percent}%",
-                f"старт +{percent}%",
-                f"депозит +{percent}%",
-                f"{percent}% сверху",
-                f"плюс {percent}% к депу",
-                f"увеличение на {percent}%",
-                f"{percent}%-ный бонус",
-            ]
-            parts.append(random.choice(percent_variations))
-        
-        # Ищем спины/FS (100 фриспинов, 500 FS, 100 вращений) - 30+ вариантов
-        spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
-        if spin_match:
-            count = spin_match.group(1)
-            spin_variations = [
-                # Базовые
-                f"{count} вращений",
-                f"{count} бесплатных раундов",
-                f"{count} круток",
-                f"пак из {count} прокрутов",
-                f"{count} фрибетов",
-                f"{count} бонусных попыток",
-                f"{count} FS",
-                f"{count} бесплатных заходов",
-                f"{count} фриспинов в подарок",
-                # Расширенные
-                f"{count} free-вращений",
-                f"{count} бонусных спинов",
-                f"пакет {count} круток",
-                f"{count} бесплатных крутилок",
-                f"{count} раундов бесплатно",
-                f"{count} прокрутов без депа",
-                f"до {count} вращений",
-                f"{count} спинов на халяву",
-                f"бонусный пак {count} FS",
-                f"{count} бесплатных прокруток",
-                f"{count} крутилок в подарок",
-                f"welcome {count} спинов",
-                f"{count} стартовых вращений",
-                f"{count} приветственных FS",
-                f"пачка {count} фриспинов",
-                f"{count} попыток бесплатно",
-                f"бесплатный пак {count} спинов",
-                f"{count} free spins",
-                f"{count} спинов на старте",
-                f"подарок {count} вращений",
-                f"{count} бесплатных заездов",
-            ]
-            parts.append(random.choice(spin_variations))
-        
-        # Если нашли несколько частей - объединяем (15+ вариантов соединений)
-        if len(parts) >= 2:
-            connectors = [
-                " + ", " и ", " плюс ", ", а также ", " — ", " & ",
-                " вместе с ", " в комплекте с ", " бонусом ",
-                ", плюс ", " + ещё ", " да ещё ",
-                " | ", " ➕ ", " // ",
-            ]
-            # Раньше брались только первые 2 части и третья (если была) терялась.
-            # Теперь: берём 2 или 3 части (если доступны), чтобы не терять проценты/FS/деньги.
-            random.shuffle(parts)
-            k = 2 if len(parts) == 2 else random.choice([2, 3])
-            chosen = parts[:k]
-            variation = random.choice(connectors).join(chosen)
-        elif len(parts) == 1:
-            variation = parts[0]
-        else:
-            # Fallback - возвращаем оригинал
-            variation = original
-        
-        # Проверяем, использовалась ли эта вариация
-        if variation not in used_list:
-            # Новая уникальная вариация - сохраняем и возвращаем
-            used_list.append(variation)
-            
-            # Ограничиваем размер списка (храним последние 100 вариаций)
-            if len(used_list) > 100:
-                used_list.pop(0)
-            
-            return variation
-        
-        # Вариация уже использовалась, пробуем снова
-        
-        # Если после 50 попыток не нашли уникальную - сбрасываем список и возвращаем новую
-        print(f"   ⚠️ Все вариации бонуса использованы, сбрасываем список...")
-        used_list.clear()
-        
-        # Генерируем финальную вариацию (упрощённая логика)
-        parts = []
-        
-        # Ищем рубли
-        rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
-        if rub_match:
-            amount_str = rub_match.group(1).replace('.', '').replace(',', '')
-            try:
-                amount = int(amount_str)
-                if 'к' in original.lower() and amount < 1000:
-                    amount *= 1000
-                if amount >= 1000:
-                    amount_k = amount // 1000
-                    parts.append(f"{amount_k}к рублей")
-                else:
-                    parts.append(f"{amount}₽")
-            except:
-                pass
-        
-        # Ищем проценты
-        percent_match = re.search(r'(\d+)\s*%', original)
-        if percent_match:
-            percent = int(percent_match.group(1))
-            parts.append(f"{percent}% бонус")
-        
-        # Ищем спины
-        spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
-        if spin_match:
-            count = spin_match.group(1)
-            parts.append(f"{count} вращений")
-        
-        # Объединяем
-        if len(parts) >= 2:
-            result = " + ".join(parts[:2])
-        elif len(parts) == 1:
-            result = parts[0]
-        else:
-            result = original
-        
-        # Добавляем в список и возвращаем
-        used_list.append(result)
-        return result
+        # Просто возвращаем оригинал - AI сам парафразирует в промпте
+        return original
     
     # ═══════════════════════════════════════════════════════════════════
     # СТРУКТУРЫ ПОСТОВ (ДЛЯ ПЕРЕМЕШИВАНИЯ БЛОКОВ)
@@ -2559,9 +2378,8 @@ REGLAS HTML:
         """
         link_format = random.choice(self.LINK_FORMATS)
         
-        # Делаем описание бонуса длинным если оно короткое
-        if len(bonus_desc) < 40:
-            bonus_desc = random.choice(self.BONUS_VARIATIONS)
+        # НЕ заменяем бонус пользователя - используем как есть
+        # AI сам парафразирует бонус в промпте
         
         if link_format == "url_dash_text":
             # https://url - описание бонуса
@@ -2574,10 +2392,10 @@ REGLAS HTML:
         
         elif link_format == "hyperlink":
             # <a href="url">описание</a>
-            # Короткий текст для гиперссылки
+            # Короткий текст для гиперссылки (ESPAÑOL)
             short_texts = [
-                "🔥 Забрать бонус", "👉 Получить", "💰 Активировать", 
-                "🎁 Забрать подарок", "🎰 Играть с бонусом", "⚡ Получить бонус"
+                "🔥 ¡Reclama tu bono!", "👉 Obtener", "💰 Activar bono", 
+                "🎁 ¡Reclamar regalo!", "🎰 Jugar con bono", "⚡ ¡Obtener ahora!"
             ]
             return f'<a href="{url}">{random.choice(short_texts)}</a> — {bonus_desc}'
         
@@ -2720,6 +2538,53 @@ REGLAS HTML:
         # Удаляем двойные пробелы после замен
         text = re.sub(r' +', ' ', text)
         text = re.sub(r'\n +', '\n', text)
+        
+        return text
+    
+    def _filter_ai_responses(self, text: str) -> str:
+        """
+        Удаляет типичные фразы-ответы AI, которые иногда попадают в начало поста.
+        
+        УДАЛЯЕТ:
+        - "Aquí te va...", "Aquí tienes...", "Claro, aquí..."
+        - "Por supuesto...", "Here is...", "Listo, aquí..."
+        - "¡Claro!", "¡Por supuesto!"
+        - Любые вводные фразы AI
+        """
+        import re
+        
+        # Фразы которые нужно удалить в начале текста
+        ai_intro_patterns = [
+            r'^¡?Aquí te va[:\.]?\s*',
+            r'^¡?Aquí tienes[:\.]?\s*',
+            r'^¡?Claro[,!]?\s*(?:aquí\s+)?',
+            r'^¡?Por supuesto[,!]?\s*(?:aquí\s+)?',
+            r'^¡?Listo[,!]?\s*(?:aquí\s+)?',
+            r'^Here is[:\.]?\s*',
+            r'^Here\'s[:\.]?\s*',
+            r'^Te presento[:\.]?\s*',
+            r'^Voy a[:\.]?\s*',
+            r'^¡?Perfecto[,!]?\s*',
+            r'^¡?Entendido[,!]?\s*',
+            r'^¡?Ok[,!]?\s*',
+            r'^¡?Muy bien[,!]?\s*',
+            r'^¡?De acuerdo[,!]?\s*',
+            r'^La publicación[:\.]?\s*',
+            r'^El post[:\.]?\s*',
+            r'^Aquí está[:\.]?\s*',
+            r'^¡?Excelente[,!]?\s*',
+            r'^Sure[,!]?\s*',
+            r'^Certainly[,!]?\s*',
+        ]
+        
+        # Удаляем все вводные фразы AI
+        for pattern in ai_intro_patterns:
+            text = re.sub(pattern, '', text, flags=re.IGNORECASE | re.MULTILINE)
+        
+        # Удаляем двойные пробелы и лишние переносы строк
+        text = re.sub(r' +', ' ', text)
+        text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
+        text = text.strip()
         
         return text
     
@@ -2892,7 +2757,7 @@ REGLAS HTML:
         
         return result
     
-    def _smart_trim_text(self, text: str, max_length: int = 600) -> str:
+    def _smart_trim_text(self, text: str, max_length: int = 850) -> str:
         """
         Умное сокращение текста с СОХРАНЕНИЕМ ссылок и их описаний.
         
@@ -3196,27 +3061,32 @@ REGLAS HTML:
                     print(f"   Получен текст длиной {len(candidate)} символов")
                     sys.stdout.flush()
 
-                    if 400 <= len(candidate) <= 600:
+                    if 600 <= len(candidate) <= 850:
                         text = candidate
                         break
 
-                    if len(candidate) > 600:
+                    if len(candidate) > 850:
                         # следующая попытка просим короче
-                        length_note = "\n\n⚠️ Пост слишком длинный! Сократи до максимум 600 символов, но СОХРАНИ ссылку и её описание."
+                        length_note = "\n\n⚠️ Пост слишком длинный! Сократи до максимум 800 символов, но СОХРАНИ ссылку и её описание."
                         text = candidate  # на всякий случай запомним
+                    elif len(candidate) < 600:
+                        # пост слишком короткий - просим длиннее
+                        length_note = "\n\n⚠️ Пост слишком КОРОТКИЙ! Добавь больше деталей, эмоций, описания. Минимум 650 символов!"
+                        text = candidate
                         continue
 
-                    # слишком короткий
-                    length_note = "\n\n⚠️ Пост слишком короткий! Добавь деталей и пояснений, но уложись в максимум 600 символов."
+                    # слишком короткий - эта ветка больше не должна срабатывать т.к. мы обрабатываем это выше
+                    length_note = "\n\n⚠️ Пост слишком короткий! Добавь больше деталей, эмоций, описания. Минимум 650 символов!"
                     text = candidate
 
                 if text is None or len(text) < 300:
                     raise Exception("Не удалось получить валидный текст от API")
 
                 # Постобработка
+                text = self._filter_ai_responses(text)  # Убираем ответы AI типа "Aquí tienes..."
                 text = self._postprocess_text(text, video.slot)
                 text = self._fix_broken_urls(text)
-                text = self._filter_non_russian(text)
+                # _filter_non_russian НЕ используем для испанского - она для русского
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
                 text = self._randomize_currency_format(text, video)
