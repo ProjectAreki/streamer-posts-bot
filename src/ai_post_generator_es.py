@@ -1923,6 +1923,14 @@ Enlace: {url1}.
 
 ⚠️ Nombra al héroe de manera ÚNICA: {person}
 
+🚨🚨🚨 ¡REGLA CRÍTICA! 🚨🚨🚨
+USA EXACTAMENTE LAS CIFRAS INDICADAS ARRIBA:
+- Apuesta: {bet}{currency}
+- Ganancia: {win}{currency}  
+- Multiplicador: x{multiplier}
+¡NO CAMBIES, NO REDONDEES, NO INVENTES OTROS NÚMEROS!
+Si en los datos dice "5.000 CLP", escribe EXACTAMENTE "5 000 CLP" (o como esté formateado)!
+
 REGLAS HTML:
 - Cantidades: <b>negrita</b> o <code>monoespaciado</code>
 - Slot: <b>Con Mayúscula</b>
@@ -1942,6 +1950,10 @@ Enlace: {url1}.
 
 ⚠️ Nombra al héroe: {person}
 
+🚨🚨🚨 ¡USA EXACTAMENTE ESTOS NÚMEROS! 🚨🚨🚨
+Apuesta: {bet}{currency} | Ganancia: {win}{currency} | x{multiplier}
+¡NO CAMBIES NI INVENTES OTROS NÚMEROS!
+
 REGLAS HTML:
 - Comienza con 🔴 o ⚡
 - Cantidades en <b>negrita</b>
@@ -1956,6 +1968,9 @@ REGLAS HTML:
 Enlace: {url1}.
 
 ⚠️ Nombra al héroe de manera única: {person}
+
+🚨 USA EXACTAMENTE: {bet}{currency} (entrada) → {win}{currency} (salida) | x{multiplier}
+¡NO CAMBIES LOS NÚMEROS!
 
 REGLAS HTML:
 - Comienza con ❓
@@ -1974,6 +1989,9 @@ Enlace: {url1}.
 
 ⚠️ Nombra al héroe: {person}
 
+🚨 NÚMEROS EXACTOS: {bet}{currency} → {win}{currency} (x{multiplier})
+¡NO INVENTES OTRAS CIFRAS!
+
 REGLAS HTML:
 - Emojis: 🔥💰😱🍋🍒
 - Cantidades en <b>negrita</b>
@@ -1990,6 +2008,8 @@ Enlace: {url1}.
 
 ⚠️ Nombra al héroe casualmente: {person}
 
+🚨 CIFRAS EXACTAS: {bet}{currency} → {win}{currency}, x{multiplier} - ¡NO LAS CAMBIES!
+
 REGLAS HTML:
 - Comienza con "Mira," o "Escucha," o "Fíjate,"
 - Emojis: 💪😎🤙
@@ -2004,6 +2024,9 @@ REGLAS HTML:
 Enlace: {url1}.
 
 ⚠️ Nombra al héroe: {person}
+
+🚨 USA ESTOS NÚMEROS EXACTOS EN EL TEXTO: {bet}{currency}, {win}{currency}, x{multiplier}
+¡PROHIBIDO cambiar o inventar otras cifras!
 
 REGLAS HTML:
 - Primera línea: ¡<b>{win}{currency}</b>!
