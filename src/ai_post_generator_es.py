@@ -3110,9 +3110,11 @@ REGLAS HTML:
                 currency_format = video.get_random_currency_format()
                 
                 # Если слот пустой, используем общие формулировки
+                slot_unknown = False
                 if not formatted_slot or formatted_slot.strip() == "":
                     slot_mention = "una slot"  # Общее упоминание
                     slot_bold = "una slot"  # Для HTML
+                    slot_unknown = True
                 else:
                     slot_mention = formatted_slot
                     slot_bold = f"<b>{formatted_slot}</b>"
@@ -3129,6 +3131,13 @@ REGLAS HTML:
                     bonus1=bonus1_var,
                     person=self._get_random_person()
                 )
+                
+                # КРИТИЧНО: Если слот неизвестен - ЗАПРЕЩАЕМ придумывать название!
+                if slot_unknown:
+                    base_prompt = base_prompt + "\n\n🚨🚨🚨 ¡MUY IMPORTANTE! 🚨🚨🚨\n" \
+                                                "El nombre de la slot es DESCONOCIDO — ¡NO INVENTES un nombre específico como 'Gates of Olympus', 'Big Bass', etc.!\n" \
+                                                "USA SOLO frases generales: 'una slot', 'un juego', 'la máquina', 'los rodillos'.\n" \
+                                                "PROHIBIDO inventar nombres de slots que no están en los datos originales!"
 
                 streamer_info = streamer_name if has_real_streamer else "без ника (общие формулировки)"
                 print(f"🤖 Генерация поста #{index} (regen {regen}/{max_regens}) для {streamer_info} на {video.slot}...")
