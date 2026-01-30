@@ -4425,6 +4425,46 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     # Убираем trailing commas перед } и ]
                     content = re.sub(r',(\s*[}\]])', r'\1', content)
                     
+                    # ⚠️ КРИТИЧНО: Убираем невалидные control characters (кроме \n, \r, \t)
+                    # Это частая проблема с Gemini — он добавляет символы с кодами 0-31
+                    def clean_control_chars(text):
+                        # Убираем все control characters кроме \n (10), \r (13), \t (9)
+                        cleaned = ""
+                        for char in text:
+                            code = ord(char)
+                            if code >= 32 or code in (9, 10, 13):  # printable или tab/newline
+                                cleaned += char
+                        return cleaned
+                    
+                    content = clean_control_chars(content)
+                    
+                    # Также заменяем literal \n внутри JSON строк на пробелы
+                    # (частая ошибка Gemini — реальные переносы внутри значений)
+                    def fix_newlines_in_strings(text):
+                        result = []
+                        in_string = False
+                        escape = False
+                        for i, char in enumerate(text):
+                            if escape:
+                                result.append(char)
+                                escape = False
+                                continue
+                            if char == '\\':
+                                escape = True
+                                result.append(char)
+                                continue
+                            if char == '"':
+                                in_string = not in_string
+                                result.append(char)
+                                continue
+                            if in_string and char == '\n':
+                                result.append(' ')  # Заменяем перенос на пробел
+                            else:
+                                result.append(char)
+                        return ''.join(result)
+                    
+                    content = fix_newlines_in_strings(content)
+                    
                     try:
                         result = json.loads(content)
                     except json.JSONDecodeError as e:
