@@ -1,0 +1,406 @@
+{
+  "description": "80 живых форматов блоков цифр для ротации в постах (без нейрофраз!)",
+  "total_formats": 80,
+  "formats": [
+    {
+      "id": 1,
+      "category": "vertical_3_lines",
+      "template": "💸 Вход: {bet}₽\n💰 Итог: {win}₽\n⚡ Множитель: x{multiplier}"
+    },
+    {
+      "id": 2,
+      "category": "vertical_3_lines",
+      "template": "📉 Ставка: {bet}₽\n📈 Результат: {win}₽\n🔥 Икс: x{multiplier}"
+    },
+    {
+      "id": 3,
+      "category": "vertical_3_lines",
+      "template": "🎯 Вход: {bet}₽\n🏆 Итог: {win}₽\n💥 x{multiplier}"
+    },
+    {
+      "id": 4,
+      "category": "vertical_3_lines",
+      "template": "💰 Ставка: {bet}₽\n💰 Выигрыш: {win}₽\n💰 Множитель: x{multiplier}"
+    },
+    {
+      "id": 5,
+      "category": "vertical_2_lines",
+      "template": "📉 Ставка всего: {bet}₽\n📈 На выход: {win}₽ 💰"
+    },
+    {
+      "id": 6,
+      "category": "vertical_2_lines",
+      "template": "💸 Вход: {bet}₽\n💰 Итог: {win}₽"
+    },
+    {
+      "id": 7,
+      "category": "vertical_2_lines",
+      "template": "📌 Вложил: {bet}₽\n📌 Забрал: {win}₽ 🔥"
+    },
+    {
+      "id": 8,
+      "category": "vertical_2_lines",
+      "template": "🎰 Ставка: {bet}₽\n💵 Выплата: {win}₽"
+    },
+    {
+      "id": 9,
+      "category": "inline_separator",
+      "template": "💸 {bet}₽ вход | 💰 {win}₽ итог | 🔥 x{multiplier}"
+    },
+    {
+      "id": 10,
+      "category": "inline_separator",
+      "template": "🎯 x{multiplier} | 💰 На балансе: {win}₽"
+    },
+    {
+      "id": 11,
+      "category": "inline_separator",
+      "template": "💰 Выигрыш: {win}₽ | Икс: x{multiplier}"
+    },
+    {
+      "id": 12,
+      "category": "inline_separator",
+      "template": "{bet}₽ вход | {win}₽ итог | x{multiplier} 🔥"
+    },
+    {
+      "id": 13,
+      "category": "inline_arrow",
+      "template": "Вход {bet}₽ → итог {win}₽ с иксом x{multiplier} 🔥"
+    },
+    {
+      "id": 14,
+      "category": "inline_arrow",
+      "template": "{bet}₽ → {win}₽ (x{multiplier})"
+    },
+    {
+      "id": 15,
+      "category": "inline_arrow",
+      "template": "🚀 {bet}₽ → {win}₽"
+    },
+    {
+      "id": 16,
+      "category": "inline_arrow",
+      "template": "{bet}₽ → {win}₽ 💰"
+    },
+    {
+      "id": 17,
+      "category": "result_simple",
+      "template": "Итог: {win}₽ 🏆"
+    },
+    {
+      "id": 18,
+      "category": "result_simple",
+      "template": "На балансе: {win}₽ 💰"
+    },
+    {
+      "id": 19,
+      "category": "result_simple",
+      "template": "Забрал: {win}₽ 💸"
+    },
+    {
+      "id": 20,
+      "category": "result_simple",
+      "template": "Результат: {win}₽ с {bet}₽!"
+    },
+    {
+      "id": 21,
+      "category": "result_simple",
+      "template": "итог {win}₽ 💰"
+    },
+    {
+      "id": 22,
+      "category": "result_simple",
+      "template": "получил {win}₽ 💰"
+    },
+    {
+      "id": 23,
+      "category": "result_simple",
+      "template": "забрал {win}₽ 💸🚀"
+    },
+    {
+      "id": 24,
+      "category": "result_simple",
+      "template": "на балансе: {win}₽ 🤑"
+    },
+    {
+      "id": 25,
+      "category": "result_simple",
+      "template": "итог: {win}₽ на балике 🤑💸"
+    },
+    {
+      "id": 26,
+      "category": "result_simple",
+      "template": "ИТОГ: {win}₽!"
+    },
+    {
+      "id": 27,
+      "category": "result_simple",
+      "template": "Итог: {win}₽ чистыми!"
+    },
+    {
+      "id": 28,
+      "category": "result_simple",
+      "template": "Результат: {win}₽ 💰"
+    },
+    {
+      "id": 29,
+      "category": "result_emoji",
+      "template": "💎 Результат: {win}₽"
+    },
+    {
+      "id": 30,
+      "category": "result_emoji",
+      "template": "🏆 Итог: {win}₽"
+    },
+    {
+      "id": 31,
+      "category": "result_emoji",
+      "template": "💰 Забрал: {win}₽"
+    },
+    {
+      "id": 32,
+      "category": "result_emoji",
+      "template": "💸 Профит: {win}₽"
+    },
+    {
+      "id": 33,
+      "category": "result_emoji",
+      "template": "🔥 На выходе: {win}₽"
+    },
+    {
+      "id": 34,
+      "category": "result_emoji",
+      "template": "😱 Итог: {win}₽"
+    },
+    {
+      "id": 35,
+      "category": "result_question",
+      "template": "Итог? {win}₽!"
+    },
+    {
+      "id": 36,
+      "category": "result_question",
+      "template": "Результат? {win}₽!"
+    },
+    {
+      "id": 37,
+      "category": "result_question",
+      "template": "Сколько забрал? {win}₽! 💰"
+    },
+    {
+      "id": 38,
+      "category": "result_question",
+      "template": "Что на выходе? {win}₽ 🔥"
+    },
+    {
+      "id": 39,
+      "category": "multiplier_live",
+      "template": "x{multiplier}! На счету уже {win}₽ 💸"
+    },
+    {
+      "id": 40,
+      "category": "multiplier_live",
+      "template": "Множитель x{multiplier} — {win}₽ в кармане!"
+    },
+    {
+      "id": 41,
+      "category": "multiplier_live",
+      "template": "x{multiplier}!!! итог {win}₽ 💸💸💸"
+    },
+    {
+      "id": 42,
+      "category": "multiplier_live",
+      "template": "x{multiplier} и {win}₽ на балансе 🔥"
+    },
+    {
+      "id": 43,
+      "category": "multiplier_live",
+      "template": "Множитель x{multiplier}, забрал {win}₽"
+    },
+    {
+      "id": 44,
+      "category": "multiplier_live",
+      "template": "x{multiplier} — итог {win}₽ 💰"
+    },
+    {
+      "id": 45,
+      "category": "multiplier_live",
+      "template": "Иксы x{multiplier}, на счету {win}₽"
+    },
+    {
+      "id": 46,
+      "category": "bet_to_win",
+      "template": "Ставка {bet}₽, итог {win}₽ 💰"
+    },
+    {
+      "id": 47,
+      "category": "bet_to_win",
+      "template": "Зашел с {bet}₽, забрал {win}₽ 💰"
+    },
+    {
+      "id": 48,
+      "category": "bet_to_win",
+      "template": "Залетел с {bet}₽, получил {win}₽ 💰"
+    },
+    {
+      "id": 49,
+      "category": "bet_to_win",
+      "template": "Поставил {bet}₽, получил {win}₽!"
+    },
+    {
+      "id": 50,
+      "category": "bet_to_win",
+      "template": "Кинул {bet}₽, забрал {win}₽ 🔥"
+    },
+    {
+      "id": 51,
+      "category": "bet_to_win",
+      "template": "Вход {bet}₽, выход {win}₽ 💸"
+    },
+    {
+      "id": 52,
+      "category": "bet_to_win",
+      "template": "С {bet}₽ до {win}₽! x{multiplier}"
+    },
+    {
+      "id": 53,
+      "category": "bet_to_win",
+      "template": "{bet}₽ ставка → {win}₽ выигрыш"
+    },
+    {
+      "id": 54,
+      "category": "compact",
+      "template": "x{multiplier}!!! {win}₽ 💸💸💸"
+    },
+    {
+      "id": 55,
+      "category": "compact",
+      "template": "{win}₽ (x{multiplier}) 🔥"
+    },
+    {
+      "id": 56,
+      "category": "compact",
+      "template": "итог — {win}₽. x{multiplier}"
+    },
+    {
+      "id": 57,
+      "category": "compact",
+      "template": "{win}₽ чистыми! 💰"
+    },
+    {
+      "id": 58,
+      "category": "compact",
+      "template": "{win}₽ на балансе 🤑"
+    },
+    {
+      "id": 59,
+      "category": "compact",
+      "template": "Забрал {win}₽ 😱"
+    },
+    {
+      "id": 60,
+      "category": "narrative_live",
+      "template": "С {bet}₽ поднял {win}₽. Икс x{multiplier}"
+    },
+    {
+      "id": 61,
+      "category": "narrative_live",
+      "template": "Начал с {bet}₽, закончил с {win}₽ 💰"
+    },
+    {
+      "id": 62,
+      "category": "narrative_live",
+      "template": "Вошел с {bet}₽ — вышел с {win}₽"
+    },
+    {
+      "id": 63,
+      "category": "narrative_live",
+      "template": "{bet}₽ выросли до {win}₽"
+    },
+    {
+      "id": 64,
+      "category": "narrative_live",
+      "template": "Из {bet}₽ сделал {win}₽!"
+    },
+    {
+      "id": 65,
+      "category": "narrative_live",
+      "template": "Было {bet}₽, стало {win}₽ 🔥"
+    },
+    {
+      "id": 66,
+      "category": "emphatic_live",
+      "template": "{win}₽ в кармане! 💰"
+    },
+    {
+      "id": 67,
+      "category": "emphatic_live",
+      "template": "Получил {win}₽ 💰💰💰"
+    },
+    {
+      "id": 68,
+      "category": "emphatic_live",
+      "template": "💰 {win}₽!"
+    },
+    {
+      "id": 69,
+      "category": "emphatic_live",
+      "template": "Финал: {win}₽ 🏆"
+    },
+    {
+      "id": 70,
+      "category": "emphatic_live",
+      "template": "На счету {win}₽!!!"
+    },
+    {
+      "id": 71,
+      "category": "emphatic_live",
+      "template": "{win}₽ — красавчик! 🔥"
+    },
+    {
+      "id": 72,
+      "category": "full_info",
+      "template": "ставка {bet}₽, множитель x{multiplier} — забрал {win}₽ 💸🔥"
+    },
+    {
+      "id": 73,
+      "category": "full_info",
+      "template": "{bet}₽ вход, x{multiplier}, итог {win}₽"
+    },
+    {
+      "id": 74,
+      "category": "full_info",
+      "template": "Вход: {bet}₽ | Икс: x{multiplier} | Итог: {win}₽"
+    },
+    {
+      "id": 75,
+      "category": "full_info",
+      "template": "{bet}₽ → x{multiplier} → {win}₽ 🔥"
+    },
+    {
+      "id": 76,
+      "category": "full_info",
+      "template": "Ставка {bet}₽, x{multiplier}, на балансе {win}₽"
+    },
+    {
+      "id": 77,
+      "category": "slang",
+      "template": "Закинул {bet}₽, снял {win}₽ 💸"
+    },
+    {
+      "id": 78,
+      "category": "slang",
+      "template": "Вкинул {bet}₽ — вытащил {win}₽!"
+    },
+    {
+      "id": 79,
+      "category": "slang",
+      "template": "С {bet}₽ раскрутился до {win}₽ 🔥"
+    },
+    {
+      "id": 80,
+      "category": "slang",
+      "template": "{bet}₽ затарил, {win}₽ забрал 💰"
+    }
+  ]
+}
