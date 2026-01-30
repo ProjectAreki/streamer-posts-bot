@@ -3016,6 +3016,47 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         # Сортируем для сравнения (одинаковые наборы в разном порядке = одинаковый паттерн)
         return ''.join(sorted(set(''.join(emojis))))
     
+    def _extract_bonus_descriptions(self, text: str) -> dict:
+        """Извлекает описания бонусов из сгенерированного поста"""
+        import re
+        result = {'bonus1': '', 'bonus2': ''}
+        
+        if not self.bonus_data:
+            return result
+        
+        # Паттерны для ссылки 1
+        url1 = self.bonus_data.url1.replace('.', r'\.').replace('/', r'\/')
+        # Ищем текст после/перед ссылкой 1 (до 100 символов)
+        patterns1 = [
+            rf'{url1}[^\n]{{0,10}}[—–\-]\s*([^\n]{{10,100}})',  # URL — описание
+            rf'([^\n]{{10,100}})\s*[—–\-][^\n]{{0,10}}{url1}',  # описание — URL
+            rf'{url1}\s*\n\s*([^\n]{{10,100}})',  # URL\nописание
+            rf'<a href="{url1}"[^>]*>([^<]{{5,60}})</a>',  # гиперссылка
+        ]
+        
+        for pattern in patterns1:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                result['bonus1'] = match.group(1).strip()[:80]
+                break
+        
+        # Паттерны для ссылки 2
+        url2 = self.bonus_data.url2.replace('.', r'\.').replace('/', r'\/')
+        patterns2 = [
+            rf'{url2}[^\n]{{0,10}}[—–\-]\s*([^\n]{{10,100}})',
+            rf'([^\n]{{10,100}})\s*[—–\-][^\n]{{0,10}}{url2}',
+            rf'{url2}\s*\n\s*([^\n]{{10,100}})',
+            rf'<a href="{url2}"[^>]*>([^<]{{5,60}})</a>',
+        ]
+        
+        for pattern in patterns2:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                result['bonus2'] = match.group(1).strip()[:80]
+                break
+        
+        return result
+    
     def _get_unused_structure_index(self, available_structures: List[int], used_count: int = 10, slot: str = "") -> int:
         """Выбирает индекс структуры, которая не использовалась в последних N постах для данного слота"""
         # Если указан слот, проверяем структуры, использованные для этого слота
@@ -3085,6 +3126,21 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         instructions.append(f"⚠️ Формат: {format_names[current_format]}")
         instructions.append(f"⚠️ НЕ используй другие форматы — только #{current_format}!")
         instructions.append(f"⚠️ Для ОБЕИХ ссылок используй ОДИНАКОВЫЙ формат #{current_format}!")
+        
+        # Анти-повторение описаний бонусов
+        if len(self._used_bonus1_variations) >= 2:
+            recent_bonus1 = self._used_bonus1_variations[-5:]  # Последние 5
+            instructions.append(f"\n⛔ НЕ ПОВТОРЯЙ описания для ССЫЛКИ 1 (уже использованы):")
+            for desc in recent_bonus1[-3:]:
+                instructions.append(f"   ❌ '{desc[:60]}...'")
+            instructions.append(f"   ✅ Придумай НОВУЮ формулировку!")
+        
+        if len(self._used_bonus2_variations) >= 2:
+            recent_bonus2 = self._used_bonus2_variations[-5:]  # Последние 5
+            instructions.append(f"\n⛔ НЕ ПОВТОРЯЙ описания для ССЫЛКИ 2 (уже использованы):")
+            for desc in recent_bonus2[-3:]:
+                instructions.append(f"   ❌ '{desc[:60]}...'")
+            instructions.append(f"   ✅ Придумай НОВУЮ формулировку!")
         
         if instructions:
             return "\n\n" + "\n".join(instructions) + "\n"
@@ -3951,6 +4007,17 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     self._used_emoji_patterns.append(emoji_pattern)
                     if len(self._used_emoji_patterns) > 30:
                         self._used_emoji_patterns = self._used_emoji_patterns[-30:]
+
+                # Извлекаем и сохраняем описания бонусов для анти-повторения
+                bonus_descs = self._extract_bonus_descriptions(text)
+                if bonus_descs.get('bonus1'):
+                    self._used_bonus1_variations.append(bonus_descs['bonus1'])
+                    if len(self._used_bonus1_variations) > 30:
+                        self._used_bonus1_variations = self._used_bonus1_variations[-30:]
+                if bonus_descs.get('bonus2'):
+                    self._used_bonus2_variations.append(bonus_descs['bonus2'])
+                    if len(self._used_bonus2_variations) > 30:
+                        self._used_bonus2_variations = self._used_bonus2_variations[-30:]
 
                 print(f"   ✅ Пост #{index} готов (длина: {len(text)})")
                 sys.stdout.flush()
