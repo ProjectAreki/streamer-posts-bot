@@ -214,6 +214,20 @@
 ```
 Запомни информацию о деплое:
 
+🚀 БЫСТРЫЙ ДЕПЛОЙ НА СЕРВЕР (одна команда):
+ssh streamer-do "cd /root/streamer-posts-bot && git pull origin main && systemctl restart streamer-posts-bot.service"
+
+Или полная команда:
+ssh -i ~/.ssh/digitalocean_streamer root@142.93.227.232 "cd /root/streamer-posts-bot && git pull origin main && systemctl restart streamer-posts-bot.service"
+
+Сервер Digital Ocean:
+- IP: 142.93.227.232
+- User: root
+- Путь: /root/streamer-posts-bot
+- SSH ключ: ~/.ssh/digitalocean_streamer
+- SSH alias: streamer-do (настроен в ~/.ssh/config)
+- Сервис: streamer-posts-bot.service
+
 Локальный запуск:
 1. python -m venv venv
 2. venv\Scripts\activate (Windows) или source venv/bin/activate (Linux)
