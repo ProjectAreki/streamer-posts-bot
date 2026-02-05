@@ -2677,7 +2677,7 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                         f"{amount} рублей в подарок",
                     ]
                 parts.append(random.choice(money_variations))
-            except:
+            except Exception:
                 pass
         
         # Ищем проценты (150%, 100% и т.д.) - 20+ вариантов
@@ -2805,7 +2805,7 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     parts.append(f"{amount_k}к рублей")
                 else:
                     parts.append(f"{amount}₽")
-            except:
+            except Exception:
                 pass
         
         # Ищем проценты

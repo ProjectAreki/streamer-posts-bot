@@ -14,6 +14,7 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import StateFilter
+from telethon.errors import FloodWaitError
 
 from src.states import StreamerPostsStates
 
@@ -147,6 +148,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_url1)
     async def streamer_posts_url1_handler(message: types.Message, state: FSMContext):
         """Обработка первой ссылки"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -172,6 +175,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_bonus1)
     async def streamer_posts_bonus1_handler(message: types.Message, state: FSMContext):
         """Обработка описания первого бонуса"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -192,6 +197,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_url2)
     async def streamer_posts_url2_handler(message: types.Message, state: FSMContext):
         """Обработка второй ссылки"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -217,6 +224,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_bonus2)
     async def streamer_posts_bonus2_handler(message: types.Message, state: FSMContext):
         """Обработка описания второго бонуса → выбор источника видео"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -283,6 +292,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_source_channel)
     async def streamer_posts_source_channel_handler(message: types.Message, state: FSMContext):
         """Обработка канала-источника"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -302,7 +313,9 @@ def register_streamer_handlers(bot_instance):
         # Поддержка кнопки "Обновить каналы"
         if message.text == "🔄 Обновить мои каналы":
             await message.answer("🔄 Обновляю список каналов...")
-            chat_scanner.refresh_cache()
+            from src.telethon_manager import TelethonClientManager
+            manager = TelethonClientManager.get_instance(config_manager)
+            await manager.reconnect()
             await state.update_data(streamer_posts_flow=True)
             await show_channels(message, state)
             return
@@ -426,8 +439,10 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_post_link)
     async def streamer_posts_link_handler(message: types.Message, state: FSMContext):
         """Обработка ссылки на конкретный пост"""
+        if not message.text:
+            return
         import re
-    
+
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -533,6 +548,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_scan_direction)
     async def streamer_posts_direction_handler(message: types.Message, state: FSMContext):
         """Обработка выбора направления сканирования"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -585,6 +602,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_video_range)
     async def streamer_posts_video_range_handler(message: types.Message, state: FSMContext):
         """Обработка количества видео из канала"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -775,6 +794,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.entering_metadata_for_channel)
     async def streamer_posts_channel_metadata_handler(message: types.Message, state: FSMContext):
         """Обработка метаданных для видео из канала"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -956,6 +977,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_image_channel)
     async def streamer_posts_image_channel_handler(message: types.Message, state: FSMContext):
         """Обработка канала с картинками"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -1086,6 +1109,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_video_metadata)
     async def streamer_posts_metadata_handler(message: types.Message, state: FSMContext):
         """Обработка ручного ввода метаданных"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -1468,14 +1493,14 @@ def register_streamer_handlers(bot_instance):
                     # Загрузка существующих постов
                     try:
                         gen.load_existing_posts_from_file("data/my_posts.json")
-                    except:
+                    except Exception:
                         pass
                     return gen
             gen = AIPostGenerator(api_key=openai_key, model=m_key)
             # Загрузка существующих постов
             try:
                 gen.load_existing_posts_from_file("data/my_posts.json")
-            except:
+            except Exception:
                 pass
             return gen
     
@@ -1555,7 +1580,7 @@ def register_streamer_handlers(bot_instance):
                         f"{'█' * (i * 20 // total_posts)}{'░' * (20 - i * 20 // total_posts)}",
                         parse_mode="HTML"
                     )
-                except:
+                except Exception:
                     pass
             
                 # Создаём генератор для этой модели
@@ -1576,7 +1601,7 @@ def register_streamer_handlers(bot_instance):
                     # КРИТИЧНО: сохраняем обновленный счетчик для следующего генератора
                     link_format_counter = rot_generator.get_link_format_counter()
                 except Exception as e:
-                    print(f"❌ Ошибка ротации пост #{i} ({rot_name}): {e}")
+                    logger.error(f"Ошибка ротации пост #{i} ({rot_name}): {e}")
                     # Пробуем fallback на Gemini Flash (быстрая и дешёвая)
                     try:
                         fallback_gen = create_generator("gemini-3-flash", "openrouter")
@@ -1594,7 +1619,7 @@ def register_streamer_handlers(bot_instance):
                         # КРИТИЧНО: сохраняем обновленный счетчик
                         link_format_counter = fallback_gen.get_link_format_counter()
                     except Exception as fallback_error:
-                        print(f"❌ Fallback тоже не сработал для поста #{i}: {fallback_error}")
+                        logger.error(f"Fallback тоже не сработал для поста #{i}: {fallback_error}")
                         # КРИТИЧНО: Не прерываем цикл! Пост пропущен, но продолжаем генерацию
         
             # Генерация картинок (используем Gemini 3 Flash - быстрая и дешёвая)
@@ -1613,7 +1638,7 @@ def register_streamer_handlers(bot_instance):
                         post = await img_generator.generate_image_post(len(video_data_list) + j)
                         ai_posts.append(post)
                     except Exception as img_error:
-                        print(f"❌ Ошибка генерации картинки #{j}: {img_error}")
+                        logger.error(f"Ошибка генерации картинки #{j}: {img_error}")
         else:
             # Обычный режим - одна модель для всех
             generator.set_bonus_data(
@@ -1637,7 +1662,7 @@ def register_streamer_handlers(bot_instance):
                         f"{'█' * (current * 20 // total)}{'░' * (20 - current * 20 // total)}",
                         parse_mode="HTML"
                     )
-                except:
+                except Exception:
                     pass
         
             try:
@@ -1706,7 +1731,7 @@ def register_streamer_handlers(bot_instance):
                 # Если не нашли точное совпадение - берем по индексу (fallback)
                 if not matching_video:
                     matching_video = videos[video_idx]
-                    print(f"⚠️ Не найдено точное совпадение для поста #{post.index} ({post.streamer}, {post.slot}), используем video_idx={video_idx}")
+                    logger.warning(f"Не найдено точное совпадение для поста #{post.index} ({post.streamer}, {post.slot}), используем video_idx={video_idx}")
                 
                 video_idx += 1
             
@@ -1758,7 +1783,7 @@ def register_streamer_handlers(bot_instance):
                 f"✅ AI сгенерировал {len(generated_posts)} постов!",
                 parse_mode="HTML"
             )
-        except:
+        except Exception:
             pass
     
         # Показываем меню проверки уникальности
@@ -1896,6 +1921,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_uniqueness_check)
     async def streamer_posts_uniqueness_check_handler(message: types.Message, state: FSMContext):
         """Обработка выбора модели проверки уникальности"""
+        if not message.text:
+            return
         text = message.text.lower()
         data = await state.get_data()
         generated_posts = data.get('generated_posts', [])
@@ -1989,7 +2016,7 @@ def register_streamer_handlers(bot_instance):
             # Загрузка существующих постов для проверки уникальности
             try:
                 checker.load_existing_posts_from_file("data/my_posts.json")
-            except:
+            except Exception:
                 pass
         
             # Собираем тексты и слоты
@@ -2075,6 +2102,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.showing_uniqueness_results)
     async def streamer_posts_uniqueness_results_handler(message: types.Message, state: FSMContext):
         """Обработка действий после проверки уникальности"""
+        if not message.text:
+            return
         text = message.text.lower()
         data = await state.get_data()
         result = data.get('uniqueness_result', {})
@@ -2204,7 +2233,7 @@ def register_streamer_handlers(bot_instance):
                     # Загрузка существующих постов
                     try:
                         generator.load_existing_posts_from_file("data/my_posts.json")
-                    except:
+                    except Exception:
                         pass
                     generator.set_bonus_data(
                         url1=url1,
@@ -2230,7 +2259,7 @@ def register_streamer_handlers(bot_instance):
                             parse_mode="HTML"
                         )
                     except Exception as e:
-                        print(f"Ошибка перегенерации поста #{idx+1}: {e}")
+                        logger.error(f"Ошибка перегенерации поста #{idx+1}: {e}")
             
                 # Сохраняем обновлённые посты
                 await state.update_data(generated_posts=generated_posts)
@@ -2334,7 +2363,7 @@ def register_streamer_handlers(bot_instance):
                 parse_mode="HTML",
                 reply_markup=nav_keyboard
             )
-        except:
+        except Exception:
             pass  # Если текст не изменился
     
         await callback.answer()
@@ -2376,6 +2405,8 @@ def register_streamer_handlers(bot_instance):
     @dp.message(StreamerPostsStates.waiting_for_target_channel)
     async def streamer_posts_channel_handler(message: types.Message, state: FSMContext):
         """Обработка выбора канала для публикации → переход к выбору видео"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             kb = get_scenarios_kb(message.from_user.id)
@@ -2504,7 +2535,7 @@ def register_streamer_handlers(bot_instance):
         # Загрузка существующих постов
         try:
             generator.load_existing_posts_from_file("data/my_posts.json")
-        except:
+        except Exception:
             pass
         generator.set_bonus_data(
             url1=data['url1'],
@@ -2532,7 +2563,7 @@ def register_streamer_handlers(bot_instance):
                     f"{'█' * (current * 20 // total)}{'░' * (20 - current * 20 // total)}",
                     parse_mode="HTML"
                 )
-            except:
+            except Exception:
                 pass
     
         try:
@@ -2567,7 +2598,7 @@ def register_streamer_handlers(bot_instance):
                 
                 if not matching_video:
                     matching_video = videos[video_idx]
-                    print(f"⚠️ Перегенерация: не найдено точное совпадение для поста #{post.index}")
+                    logger.warning(f"Перегенерация: не найдено точное совпадение для поста #{post.index}")
                 
                 video_idx += 1
             
@@ -2722,7 +2753,7 @@ def register_streamer_handlers(bot_instance):
                             f"Прогресс: {i+1}/{len(posts)}",
                             parse_mode="HTML"
                         )
-                    except:
+                    except Exception:
                         pass
             
                 # Динамическая задержка с учётом лимитов Telegram
@@ -2737,7 +2768,7 @@ def register_streamer_handlers(bot_instance):
                             f"✅ Опубликовано: {published}/{len(posts)}",
                             parse_mode="HTML"
                         )
-                    except:
+                    except Exception:
                         pass
                     await asyncio.sleep(VERY_LONG_PAUSE_SECONDS)
             
@@ -2750,7 +2781,7 @@ def register_streamer_handlers(bot_instance):
                             f"✅ Опубликовано: {published}/{len(posts)}",
                             parse_mode="HTML"
                         )
-                    except:
+                    except Exception:
                         pass
                     await asyncio.sleep(LONG_PAUSE_SECONDS)
             
@@ -2759,10 +2790,43 @@ def register_streamer_handlers(bot_instance):
                     delay = rnd.uniform(DELAY_MIN, DELAY_MAX)
                     await asyncio.sleep(delay)
             
+            except FloodWaitError as e:
+                logger.warning(f"FloodWait: ждём {e.seconds} сек (пост {i})")
+                try:
+                    await status_msg.edit_text(
+                        f"⏸ <b>FloodWait: ждём {e.seconds} сек...</b>\n\n"
+                        f"Telegram ограничил скорость\n"
+                        f"✅ Опубликовано: {published}/{len(posts)}",
+                        parse_mode="HTML"
+                    )
+                except Exception:
+                    pass
+                await asyncio.sleep(e.seconds + 1)
+                # Повторяем публикацию этого поста
+                try:
+                    post = posts[i]
+                    if post.video_path and os.path.exists(post.video_path):
+                        await client.send_file(
+                            target_channel,
+                            post.video_path,
+                            caption=post.text,
+                            parse_mode='html'
+                        )
+                    elif post.image_path and os.path.exists(post.image_path):
+                        await client.send_file(
+                            target_channel,
+                            post.image_path,
+                            caption=post.text,
+                            parse_mode='html'
+                        )
+                    published += 1
+                except Exception as retry_err:
+                    errors += 1
+                    logger.error(f"Ошибка повтора поста {i} после FloodWait: {retry_err}")
             except Exception as e:
                 errors += 1
-                print(f"Ошибка публикации поста {i}: {e}")
-    
+                logger.error(f"Ошибка публикации поста {i}: {e}")
+
         await state.clear()
         kb = get_scenarios_kb(message.from_user.id)
     
@@ -2804,7 +2868,7 @@ def register_streamer_handlers(bot_instance):
         # Убираем кнопку
         try:
             await callback.message.edit_reply_markup(reply_markup=None)
-        except:
+        except Exception:
             pass
 
     @dp.message(StreamerPostsStates.confirming, lambda m: m.text == "❌ Отмена")

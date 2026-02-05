@@ -160,6 +160,8 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.waiting_for_bonus1)
     async def bonus1_received(message: types.Message, state: FSMContext):
         """Получено описание первого бонуса"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             await message.answer("❌ Отменено", reply_markup=get_scenarios_kb(message.from_user.id))
@@ -190,6 +192,8 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.waiting_for_bonus2)
     async def bonus2_received(message: types.Message, state: FSMContext):
         """Получено описание второго бонуса - переход к темам"""
+        if not message.text:
+            return
         try:
             logger.info(f"[ImagePosts] bonus2_received triggered, text: {message.text[:50]}")
             
@@ -416,6 +420,8 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.adding_custom_topic)
     async def add_custom_topic(message: types.Message, state: FSMContext):
         """Добавление пользовательской темы"""
+        if not message.text:
+            return
         if message.text == "⬅️ Назад":
             await state.set_state(ImagePostsStates.topics_menu)
             keyboard = ReplyKeyboardMarkup(
@@ -554,6 +560,8 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.choosing_text_model)
     async def text_model_selected(message: types.Message, state: FSMContext):
         """Модель для текста выбрана"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.clear()
             await message.answer("❌ Отменено", reply_markup=get_scenarios_kb(message.from_user.id))
@@ -696,7 +704,7 @@ def register_image_posts_handlers(bot_instance):
                         f"{'█' * (i * 20 // len(topics))}{'░' * (20 - i * 20 // len(topics))}",
                         parse_mode="HTML"
                     )
-                except:
+                except Exception:
                     pass
                 
                 post = await generator.generate_post(
@@ -996,6 +1004,8 @@ def register_image_posts_handlers(bot_instance):
     @dp.message(ImagePostsStates.waiting_for_target_channel)
     async def channel_selected(message: types.Message, state: FSMContext):
         """Канал выбран - подтверждение публикации"""
+        if not message.text:
+            return
         if message.text == "❌ Отмена":
             await state.set_state(ImagePostsStates.preview_posts)
             keyboard = ReplyKeyboardMarkup(
@@ -1157,7 +1167,7 @@ def register_image_posts_handlers(bot_instance):
                                 f"📤 Публикация: {i+1}/{len(posts)}\n"
                                 f"{'█' * ((i+1) * 20 // len(posts))}{'░' * (20 - (i+1) * 20 // len(posts))}"
                             )
-                        except:
+                        except Exception:
                             pass
                     
                     await asyncio.sleep(1)  # Задержка между постами

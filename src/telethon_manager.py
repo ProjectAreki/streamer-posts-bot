@@ -26,17 +26,17 @@ class TelethonClientManager:
     """
 
     _instance: Optional["TelethonClientManager"] = None
-    _client: Optional[TelegramClient] = None  # Дефолтный клиент (для обратной совместимости)
-    _clients: List[TelegramClient] = []
-    _rr_index: int = 0
-    _lock = asyncio.Lock()
-    _accounts_meta: List[dict] = []
-    _user_active_clients: dict = {}  # user_id -> active_client_index
-    _user_allowed_accounts: dict = {}  # user_id -> List[account_index] - разрешенные аккаунты
 
     def __init__(self, config_manager: ConfigManager):
         self.config_manager = config_manager
         self.logger = BotLogger()
+        self._client: Optional[TelegramClient] = None
+        self._clients: List[TelegramClient] = []
+        self._rr_index: int = 0
+        self._lock = asyncio.Lock()
+        self._accounts_meta: List[dict] = []
+        self._user_active_clients: dict = {}  # user_id -> active_client_index
+        self._user_allowed_accounts: dict = {}  # user_id -> List[account_index]
         self.session_name = self._select_session_name()
 
     def _select_session_name(self) -> str:

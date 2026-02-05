@@ -231,7 +231,7 @@ class CaptionParser:
             if match:
                 try:
                     result.multiplier = float(match.group(1).replace(',', '.'))
-                except:
+                except Exception:
                     pass
                 break
         
@@ -390,5 +390,5 @@ class CaptionParser:
         cleaned = re.sub(r'[^\d.]', '', s)
         try:
             return float(cleaned) if cleaned else 0.0
-        except:
+        except Exception:
             return 0.0
