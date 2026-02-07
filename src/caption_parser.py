@@ -60,6 +60,7 @@ class CaptionParser:
         'slot': [
             r'[сc]лот[:\s]+([^\n\r]+)',  # слот/cлот Rip City (кириллица/латиница)
             r'ranura[:\s]+([^\n\r]+)',  # ranura: Mvertos Mvltiplier Megaways (испанский)
+            r'[Ss]lot[:\s]+([^\n\r]+)',  # Slot: Dragon Hero (итальянский/английский)
             r'🎰\s*([^\n\r]+)',  # 🎰 Sweet Bonanza
             r'игра[:\s]+([^\n\r]+)',  # игра: ...
             r'продукт[:\s]+([^\n\r]+)',  # продукт: ...
@@ -68,6 +69,7 @@ class CaptionParser:
         'win': [
             r'выигрыш[:\s]*[$₽€£\s]*([\d\s,.]+)',  # выигрыш $ 6609.50 или выигрыш 644580.00
             r'ganancia[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Ganancia: 498.095$ (испанский)
+            r'[Vv]incita[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Vincita: 505 € (итальянский)
             r'💰\s*[$₽€£\s]*([\d\s,.]+)',  # 💰 $ 89 000
             r'получил[:\s]*[$₽€£\s]*([\d\s,.]+)',  # получил $ 125000
             r'забрал[:\s]*[$₽€£\s]*([\d\s,.]+)',  # забрал $ 125000
@@ -79,6 +81,7 @@ class CaptionParser:
         'bet': [
             r'[сc]тавка[:\s]*[$₽€£\s]*([\d\s,.]+)',  # ставка/cтавка 1 USD (кириллица/латиница)
             r'apuesta[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Apuesta: 100$ (испанский)
+            r'[Pp]untata[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Puntata: 50 € (итальянский)
             r'💵\s*[$₽€£\s]*([\d\s,.]+)',  # 💵 $ 200
             r'вход[:\s]*[$₽€£\s]*([\d\s,.]+)',  # вход: $ 500
             r'бет[:\s]*[$₽€£\s]*([\d\s,.]+)',  # бет: $ 500
@@ -163,6 +166,10 @@ class CaptionParser:
             'депозит', 'баланс', 'профит', 'прибыль', 'сумма', 'bet', 'win', 'slot',
             'игрок', 'стример', 'ник', 'nick', 'name', 'казино', 'casino',
             'фриспины', 'фриспин', 'freespin', 'freespins', 'free', 'spin',
+            # Испанские слова (чтобы не путать с никами)
+            'apuesta', 'ganancia', 'ranura',
+            # Итальянские слова (чтобы не путать с никами)
+            'puntata', 'vincita', 'scommessa', 'giocatore', 'slot',
             # ⚠️ КРИТИЧНО: КОДЫ ВАЛЮТ НЕ МОГУТ БЫТЬ НИКАМИ!
             'clp', 'ars', 'mxn', 'pen', 'cop', 'uyu', 'gbp', 'rub',
             'usd', 'eur',  # дублируем в нижнем регистре для полной уверенности
@@ -250,43 +257,43 @@ class CaptionParser:
         currency_found = False
         
         # 1. Ищем USD (явное указание включая "доллар")
-        if re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption_for_currency, re.IGNORECASE):
+        if re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption_for_currency, re.IGNORECASE):
             result.currency = 'USD'
             currency_found = True
         # 2. Ищем EUR (явное указание включая "евро")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption_for_currency, re.IGNORECASE):
             result.currency = 'EUR'
             currency_found = True
         # 3. Ищем GBP (явное указание включая "фунт")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption_for_currency, re.IGNORECASE):
             result.currency = 'GBP'
             currency_found = True
         # 4. Ищем CLP (чилийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:CLP)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:CLP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'CLP'
             currency_found = True
         # 5. Ищем MXN (мексиканское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:MXN)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:MXN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'MXN'
             currency_found = True
         # 6. Ищем ARS (аргентинское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption_for_currency, re.IGNORECASE):
             result.currency = 'ARS'
             currency_found = True
         # 7. Ищем COP (колумбийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:COP)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:COP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'COP'
             currency_found = True
         # 8. Ищем PEN (перуанское соль)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:PEN)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:PEN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'PEN'
             currency_found = True
         # 9. Ищем UYU (уругвайское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:UYU)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:UYU)', caption_for_currency, re.IGNORECASE):
             result.currency = 'UYU'
             currency_found = True
         # 10. Ищем RUB (руб, р, RUB, ₽, рубл)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption_for_currency, re.IGNORECASE):
+        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption_for_currency, re.IGNORECASE):
             result.currency = 'RUB'
             currency_found = True
         

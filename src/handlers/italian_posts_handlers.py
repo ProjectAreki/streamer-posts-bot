@@ -645,7 +645,7 @@ def register_italian_handlers(bot_instance):
                         'slot': parsed.slot,
                         'bet': parsed.bet,
                         'win': parsed.win,
-                        'streamer': parsed.streamer,
+                        'streamer': '',  # В итальянском сценарии стримеров НЕТ
                         'multiplier': parsed.multiplier,
                         'currency': parsed.currency,  # Добавляем валюту
                         'auto_parsed': parsed.bet > 0 and parsed.win > 0  # Для итальянского сценария слот не обязателен
@@ -799,7 +799,7 @@ def register_italian_handlers(bot_instance):
     
         # Добавляем видео
         video_data = videos_need_input[current_index].copy()
-        video_data['streamer'] = streamer
+        video_data['streamer'] = ''  # В итальянском сценарии стримеров НЕТ
         video_data['slot'] = slot
         video_data['bet'] = bet
         video_data['win'] = win
@@ -1044,7 +1044,7 @@ def register_italian_handlers(bot_instance):
         # Для итальянского сценария слот НЕ обязателен - достаточно ставки и выигрыша
         if parsed and parsed.bet > 0 and parsed.win > 0:
             # Данные успешно извлечены из имени файла
-            video_info['streamer'] = parsed.streamer
+            video_info['streamer'] = ''  # В итальянском сценарии стримеров НЕТ
             video_info['slot'] = parsed.slot
             video_info['bet'] = parsed.bet
             video_info['win'] = parsed.win
@@ -1179,13 +1179,12 @@ def register_italian_handlers(bot_instance):
         elif 'RUB' in text_upper or '₽' in message.text or 'руб' in text_lower:
             currency = "RUB"
     
-        pending_video['streamer'] = streamer
+        pending_video['streamer'] = ''  # В итальянском сценарии стримеров НЕТ
         pending_video['slot'] = slot
         pending_video['bet'] = bet
         pending_video['win'] = win
         pending_video['currency'] = currency
         pending_video['multiplier'] = multiplier
-        pending_video['currency'] = currency
         pending_video['parsed'] = True
     
         videos.append(pending_video)

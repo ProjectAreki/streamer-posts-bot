@@ -430,6 +430,9 @@ class AIPostGenerator:
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
 
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
+
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
 ❌ QUESTI SONO **VALUTE**, NON NOMI DI PERSONE!
@@ -611,7 +614,7 @@ Variabilità delle introduzioni (ROTAZIONE obbligatoria!):
 ✅ SOLO HTML: <b>, <i>, <code>, <a href>
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -682,6 +685,9 @@ Variabilità delle introduzioni (ROTAZIONE obbligatoria!):
 ❌ VIETATO usare russo, inglese o altre lingue nel testo
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
+
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
 
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
@@ -785,8 +791,9 @@ Prospettiva: Scrivi sempre in terza persona («il giocatore», «l'eroe», «il 
 Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 
 🎭 LA VINCITA È LA PROTAGONISTA DEL POST!
-⚠️ Se il nome del giocatore ({streamer}) è indicato — USALO 1 VOLTA!
-• Se NON c'è il nome — usa formulazioni generali: "un giocatore", "questo eroe", "il vincitore"
+⚠️ Il nome del giocatore NON è disponibile — usa SEMPRE formulazioni generali:
+• "un giocatore", "questo eroe", "il vincitore", "un tipo", "un fortunato"
+• NON inventare nomi di giocatori!
 
 🚫 VIETATO INDICARE IL TEMPO:
 ❌ MAI indicare: "oggi", "ieri", "stamattina", "recentemente"
@@ -800,7 +807,7 @@ Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 ✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -866,6 +873,9 @@ Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 ❌ VIETATO usare russo, inglese o altre lingue nel testo
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
+
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
 
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
@@ -968,8 +978,9 @@ Sei il narratore. La storia succede a qualcun altro («Un coraggioso», «Un for
 Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con una domanda 🤔
 
 🎭 LA VINCITA È LA PROTAGONISTA DEL POST!
-⚠️ Se il nome del giocatore ({streamer}) è indicato — USALO 1 VOLTA!
-• Se NON c'è il nome — usa formulazioni generali: "un giocatore", "questo eroe", "il vincitore"
+⚠️ Il nome del giocatore NON è disponibile — usa SEMPRE formulazioni generali:
+• "un giocatore", "questo eroe", "il vincitore", "un tipo", "un fortunato"
+• NON inventare nomi di giocatori!
 
 🚫 VIETATO INDICARE IL TEMPO:
 ❌ MAI indicare: "oggi", "ieri", "stamattina", "recentemente"
@@ -983,7 +994,7 @@ Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con un
 ✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -1048,6 +1059,9 @@ Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con un
 ❌ VIETATO usare russo, inglese o altre lingue nel testo
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
+
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
 
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
@@ -1158,8 +1172,9 @@ Volume ottico: Il post ideale — 7-15 righe su Telegram. Obiettivo — completo
 Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «stratega», «vincitore anonimo».
 
 🎭 LA VINCITA È LA PROTAGONISTA DEL POST!
-⚠️ Se il nome del giocatore ({streamer}) è indicato — USALO 1 VOLTA!
-• Se NON c'è il nome — usa formulazioni generali: "un giocatore", "questo eroe", "il vincitore"
+⚠️ Il nome del giocatore NON è disponibile — usa SEMPRE formulazioni generali:
+• "un giocatore", "questo eroe", "il vincitore", "un tipo", "un fortunato"
+• NON inventare nomi di giocatori!
 
 🚫 VIETATO INDICARE IL TEMPO:
 ❌ MAI indicare: "oggi", "ieri", "stamattina", "recentemente"
@@ -1173,7 +1188,7 @@ Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «s
 ✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -1236,6 +1251,9 @@ Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «s
 ❌ VIETATO usare russo, inglese o altre lingue nel testo
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
+
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
 
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
@@ -1334,8 +1352,9 @@ Volume: Compatto ma sostanzioso.
 LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, numero, link, storia.
 
 🎭 LA VINCITA È LA PROTAGONISTA DEL POST!
-⚠️ Se il nome del giocatore ({streamer}) è indicato — USALO 1 VOLTA!
-• Se NON c'è il nome — usa formulazioni generali: "un giocatore", "questo eroe", "il vincitore"
+⚠️ Il nome del giocatore NON è disponibile — usa SEMPRE formulazioni generali:
+• "un giocatore", "questo eroe", "il vincitore", "un tipo", "un fortunato"
+• NON inventare nomi di giocatori!
 
 🚫 VIETATO INDICARE IL TEMPO:
 ❌ MAI indicare: "oggi", "ieri", "stamattina", "recentemente"
@@ -1349,7 +1368,7 @@ LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, num
 ✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -1411,6 +1430,9 @@ LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, num
 ❌ VIETATO usare russo, inglese o altre lingue nel testo
 ✅ PERMESSO in inglese: nomi delle slot (Gates of Olympus, Sweet Bonanza)
 ❌ TUTTO IL RESTO SOLO IN ITALIANO
+
+🚫 PUNTEGGIATURA: NON usare i segni spagnoli ¡ e ¿ — in italiano NON esistono!
+✅ Usa solo: ! e ? (normali, senza capovolgerli all'inizio della frase)
 
 🚨🚨🚨 REGOLA #0 PRIMA DI TUTTO! 🚨🚨🚨
 ⛔⛔⛔ USD, EUR ⛔⛔⛔
@@ -1558,7 +1580,7 @@ VARIANTI (alterna!):
 ✅ <a href="URL">Riscuoti il pacchetto di benvenuto adesso</a> — OK!
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (¡CRÍTICO!)
+🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
@@ -1703,15 +1725,17 @@ Scrivi in modo VIVO! Aggiungi reazioni, dettagli del momento!"""
     # ═══════════════════════════════════════════════════════════════════
     
     VIDEO_POST_PROMPTS = [
-        # Prompt universale - AI sceglie stile e struttura
+        # Prompt universale - AI sceglie stile e struttura (senza streamer)
         """Crea un post UNICO su una vincita.
 
 DATI:
-• Giocatore: {streamer} (se indicato - usalo 1 volta con la maiuscola, se NON c'è - usa "un giocatore", "questo eroe", "il vincitore")
 • Slot: {slot}
 • Scommessa: {bet}{currency}
 • Vincita: {win}{currency}
 • Moltiplicatore: x{multiplier}
+
+⚠️ NON c'è il nome del giocatore — usa formulazioni generali: "un giocatore", "un tipo", "un fortunato", "il vincitore"
+⚠️ NON inventare nomi di giocatori!
 
 LINK (obbligatorio!):
 • Link: {url1} — {bonus1} (DESCRIVI IL BONUS IN MODO ATTRAENTE E MOTIVANTE!)
@@ -2450,13 +2474,13 @@ REGOLE HTML:
     # ═══════════════════════════════════════════════════════════════════
     
     PERSON_VARIANTS = [
-        "un giocatore", "qualcuno nello stream", "uno scommettitore", "questo tipo",
+        "un giocatore", "qualcuno", "uno scommettitore", "questo tipo",
         "un giocatore casuale", "un tipo qualunque", 
-        "un tipo", "il nostro eroe", "un tipo nello stream", "questo giocatore",
+        "un tipo", "il nostro eroe", "questo giocatore",
         "un coraggioso", "un tipo audace", "un fortunato", "un tipo fortunato",
-        "un temerario", "un ragazzo", "uno scommettitore nello stream", "un tizio",
-        "un audace", "un giocatore nello stream", "questo fortunato", "il vincitore",
-        "qualcuno", "il protagonista", "questo utente", "un utente"
+        "un temerario", "un ragazzo", "un tizio",
+        "un audace", "questo fortunato", "il vincitore",
+        "il protagonista", "questo utente", "un utente"
     ]
     
     def _get_random_person(self) -> str:
@@ -2582,8 +2606,8 @@ REGOLE HTML:
             # <a href="url">описание</a>
             # Короткий текст для гиперссылки (ITALIANO)
             short_texts = [
-                "🔥 ¡Reclama tu bono!", "👉 Obtener", "💰 Activar bono", 
-                "🎁 ¡Reclamar regalo!", "🎰 Jugar con bono", "⚡ ¡Obtener ahora!"
+                "🔥 Riscuoti il tuo bonus!", "👉 Ottieni", "💰 Attiva bonus", 
+                "🎁 Riscuoti il regalo!", "🎰 Gioca con il bonus", "⚡ Ottieni ora!"
             ]
             return f'<a href="{url}">{random.choice(short_texts)}</a> — {bonus_desc}'
         
@@ -2734,33 +2758,30 @@ REGOLE HTML:
         Удаляет типичные фразы-ответы AI, которые иногда попадают в начало поста.
         
         УДАЛЯЕТ:
-        - "Aquí te va...", "Aquí tienes...", "Claro, aquí..."
-        - "Por supuesto...", "Here is...", "Listo, aquí..."
-        - "¡Claro!", "¡Por supuesto!"
+        - "Ecco il...", "Ecco a te...", "Certo, ecco..."
+        - "Naturalmente...", "Here is...", "Pronto, ecco..."
         - Любые вводные фразы AI
+        - Перевёрнутые испанские знаки ¡ и ¿
         """
         import re
         
-        # Фразы которые нужно удалить в начале текста
+        # Фразы которые нужно удалить в начале текста (итальянские + английские)
         ai_intro_patterns = [
-            r'^¡?Aquí te va[:\.]?\s*',
-            r'^¡?Aquí tienes[:\.]?\s*',
-            r'^¡?Claro[,!]?\s*(?:aquí\s+)?',
-            r'^¡?Por supuesto[,!]?\s*(?:aquí\s+)?',
-            r'^¡?Listo[,!]?\s*(?:aquí\s+)?',
+            r'^Ecco (?:il|la|a te|qui)[:\.]?\s*',
+            r'^Certo[,!]?\s*(?:ecco\s+)?',
+            r'^Naturalmente[,!]?\s*(?:ecco\s+)?',
+            r'^Pronto[,!]?\s*(?:ecco\s+)?',
             r'^Here is[:\.]?\s*',
             r'^Here\'s[:\.]?\s*',
-            r'^Te presento[:\.]?\s*',
-            r'^Voy a[:\.]?\s*',
-            r'^¡?Perfecto[,!]?\s*',
-            r'^¡?Entendido[,!]?\s*',
-            r'^¡?Ok[,!]?\s*',
-            r'^¡?Muy bien[,!]?\s*',
-            r'^¡?De acuerdo[,!]?\s*',
+            r'^Ti presento[:\.]?\s*',
+            r'^Perfetto[,!]?\s*',
+            r'^Capito[,!]?\s*',
+            r'^Ok[,!]?\s*',
+            r'^Molto bene[,!]?\s*',
+            r'^D\'accordo[,!]?\s*',
             r'^Il post[:\.]?\s*',
-            r'^El post[:\.]?\s*',
-            r'^Aquí está[:\.]?\s*',
-            r'^¡?Excelente[,!]?\s*',
+            r'^Eccolo[:\.]?\s*',
+            r'^Eccellente[,!]?\s*',
             r'^Sure[,!]?\s*',
             r'^Certainly[,!]?\s*',
         ]
@@ -2827,42 +2848,43 @@ REGOLE HTML:
     def _remove_template_phrases(self, text: str) -> str:
         """
         Удаляет/заменяет шаблонные фразы на более оригинальные.
+        Также удаляет испанские перевёрнутые знаки ¡ и ¿ (в итальянском НЕ используются).
         """
         import re
         
-        # Заменяем шаблонные фразы
+        # 🚨 КРИТИЧНО: Убираем перевёрнутые испанские знаки (¡ и ¿)
+        # В итальянском языке НЕ используются перевёрнутые ! и ?
+        text = text.replace('¡', '')
+        text = text.replace('¿', '')
+        
+        # Заменяем шаблонные фразы (итальянские аналоги)
         replacements = [
-            (r'экран взорвался', 'результат впечатлил'),
-            (r'взорвался экран', 'результат впечатлил'),
-            (r'мурашки по коже', 'это впечатляет'),
-            (r'мурашки по телу', 'это впечатляет'),
-            (r'чашка кофе', 'небольшая сумма'),
-            (r'дешевле чашки кофе', 'небольшая сумма'),
-            (r'заварил кофе', 'начал сессию'),
-            (r'\bя играю\b', 'игрок играет'),
-            (r'\bя кручу\b', 'игрок крутит'),
-            (r'\bя зашёл\b', 'игрок зашёл'),
-            (r'\bя зашел\b', 'игрок зашёл'),
-            (r'\bя поставил\b', 'игрок поставил'),
-            (r'\bя выиграл\b', 'игрок выиграл'),
+            (r'lo schermo è esploso', 'il risultato ha impressionato'),
+            (r'brividi su tutto il corpo', 'questo impressiona'),
+            (r'brividi per il corpo', 'questo impressiona'),
+            (r'tazza di caffè', 'piccola somma'),
+            (r'\bio gioco\b', 'il giocatore gioca'),
+            (r'\bio giro\b', 'il giocatore gira'),
+            (r'\bio sono entrato\b', 'il giocatore è entrato'),
+            (r'\bio ho scommesso\b', 'il giocatore ha scommesso'),
+            (r'\bio ho vinto\b', 'il giocatore ha vinto'),
         ]
         
         for pattern, replacement in replacements:
             text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
         
-        # Удаляем указания времени
+        # Удаляем указания времени (итальянские)
         time_patterns = [
-            r'\bсегодня\b',
-            r'\bвчера\b',
-            r'\bзавтра\b',
-            r'\bутром\b',
-            r'\bднём\b',
-            r'\bднем\b',
-            r'\bвечером\b',
-            r'\bночью\b',
-            r'\bнедавно\b',
-            r'\bтолько что\b',
-            r'\bтолько сейчас\b',
+            r'\boggi\b',
+            r'\bieri\b',
+            r'\bdomani\b',
+            r'\bstamattina\b',
+            r'\bnel pomeriggio\b',
+            r'\bstasera\b',
+            r'\bdi notte\b',
+            r'\brecentemente\b',
+            r'\bpoco fa\b',
+            r'\bproprio ora\b',
         ]
         
         for pattern in time_patterns:
@@ -3142,10 +3164,10 @@ REGOLE HTML:
                 
                 # КРИТИЧНО: Если слот неизвестен - ЗАПРЕЩАЕМ придумывать название!
                 if slot_unknown:
-                    base_prompt = base_prompt + "\n\n🚨🚨🚨 ¡MUY IMPORTANTE! 🚨🚨🚨\n" \
-                                                "El nombre de la slot es DESCONOCIDO — ¡NO INVENTES un nombre específico como 'Gates of Olympus', 'Big Bass', etc.!\n" \
-                                                "USA SOLO frases generales: 'una slot', 'un juego', 'la máquina', 'los rodillos'.\n" \
-                                                "PROHIBIDO inventar nombres de slots que no están en los datos originales!"
+                    base_prompt = base_prompt + "\n\n🚨🚨🚨 MOLTO IMPORTANTE! 🚨🚨🚨\n" \
+                                                "Il nome della slot è SCONOSCIUTO — NON INVENTARE un nome specifico come 'Gates of Olympus', 'Big Bass', ecc.!\n" \
+                                                "USA SOLO frasi generali: 'una slot', 'un gioco', 'la macchina', 'i rulli'.\n" \
+                                                "VIETATO inventare nomi di slot che non sono nei dati originali!"
 
                 streamer_info = streamer_name if has_real_streamer else "без ника (общие формулировки)"
                 print(f"🤖 Генерация поста #{index} (regen {regen}/{max_regens}) для {streamer_info} на {video.slot}...")
