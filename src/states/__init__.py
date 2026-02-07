@@ -109,9 +109,43 @@ class SpanishPostsStates(StatesGroup):
     regenerating_duplicates = State()  # Перегенерация дублей
 
 
+class ItalianPostsStates(StatesGroup):
+    """Состояния для сценария '100 постов на итальянском'"""
+    # 1. Ввод ссылки и бонуса
+    waiting_for_url1 = State()  # Ввод URL бонуса
+    waiting_for_bonus1 = State()  # Описание бонуса
+    # 2. Выбор канала для публикации
+    waiting_for_target_channel = State()  # Выбор канала для публикации
+    # 3. Выбор источника видео
+    choosing_video_source = State()  # Выбор источника видео
+    waiting_for_source_channel = State()  # Ввод канала-источника видео
+    waiting_for_post_link = State()  # Ввод ссылки на конкретный пост
+    waiting_for_post_count = State()  # Ввод количества постов
+    choosing_ai_model = State()  # Выбор AI модели для генерации
+    scanning_source_channel = State()  # Сканирование канала
+    waiting_for_scan_direction = State()  # Выбор направления сканирования
+    waiting_for_video_range = State()  # Диапазон видео из канала
+    waiting_for_videos = State()  # Получение видео файлов
+    waiting_for_video_metadata = State()  # Ввод метаданных видео
+    entering_metadata_for_channel = State()  # Ввод метаданных для видео из канала
+    # 4. Картинки
+    waiting_for_images = State()  # Получение картинок
+    choosing_image_source = State()  # Выбор источника картинок
+    waiting_for_image_channel = State()  # Канал с картинками
+    # 5. Генерация и публикация
+    preview_and_publish = State()  # Превью и кнопка публикации
+    confirming = State()  # Подтверждение
+    processing = State()  # Публикация
+    # 6. Проверка уникальности (Сторожевой AI)
+    waiting_for_uniqueness_check = State()  # Выбор модели проверки
+    showing_uniqueness_results = State()  # Показ результатов проверки
+    regenerating_duplicates = State()  # Перегенерация дублей
+
+
 # Экспортируем все классы
 __all__ = [
     'StreamerPostsStates',
     'ImagePostsStates',
     'SpanishPostsStates',
+    'ItalianPostsStates',
 ]
