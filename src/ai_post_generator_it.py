@@ -3904,105 +3904,191 @@ IMPORTANTE:
                     # Сохраняем оригинальный ответ для отладки
                     original_content = content
                     
-                    # Парсим JSON из ответа
-                    # Убираем возможные markdown обертки
-                    content = content.strip()
-                    if content.startswith("```json"):
-                        content = content[7:]
-                    if content.startswith("```"):
-                        content = content[3:]
-                    if content.endswith("```"):
-                        content = content[:-3]
-                    content = content.strip()
-                    
-                    # Дополнительная очистка: убираем комментарии и trailing commas
+                    # ═══════════════════════════════════════════════════
+                    # РОБАСТНЫЙ ПАРСИНГ JSON ОТ GEMINI
+                    # ═══════════════════════════════════════════════════
                     import re
-                    # Убираем однострочные комментарии //
-                    content = re.sub(r'//.*?$', '', content, flags=re.MULTILINE)
-                    # Убираем trailing commas перед } и ]
-                    content = re.sub(r',(\s*[}\]])', r'\1', content)
                     
-                    # КРИТИЧНО: Убираем невалидные управляющие символы внутри строк
-                    # "Invalid control character" возникает когда \n, \t и т.д. не экранированы
-                    # Заменяем непечатные символы на пробелы (кроме \n между элементами JSON)
-                    def clean_json_strings(match):
-                        """Очищаем содержимое JSON строк от управляющих символов"""
-                        s = match.group(0)
-                        # Заменяем неэкранированные управляющие символы
-                        s = s.replace('\n', '\\n')
-                        s = s.replace('\r', '\\r')
-                        s = s.replace('\t', '\\t')
-                        # Убираем другие управляющие символы (0x00-0x1F кроме уже обработанных)
-                        s = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', s)
-                        return s
+                    def repair_json(text):
+                        """
+                        Комплексное восстановление невалидного JSON от AI.
+                        Обрабатывает: markdown обёртки, комментарии, trailing commas,
+                        control characters, переносы в строках, одинарные кавычки,
+                        ключи без кавычек, Python True/False/None.
+                        """
+                        # 1. Убираем markdown обёртки
+                        text = text.strip()
+                        if text.startswith("```json"):
+                            text = text[7:]
+                        elif text.startswith("```"):
+                            text = text[3:]
+                        if text.endswith("```"):
+                            text = text[:-3]
+                        text = text.strip()
+                        
+                        # 2. Убираем однострочные комментарии //
+                        text = re.sub(r'//.*?$', '', text, flags=re.MULTILINE)
+                        
+                        # 3. Убираем trailing commas перед } и ]
+                        text = re.sub(r',(\s*[}\]])', r'\1', text)
+                        
+                        # 4. Убираем невалидные control characters (кроме \n, \r, \t)
+                        cleaned = []
+                        for char in text:
+                            code = ord(char)
+                            if code >= 32 or code in (9, 10, 13):
+                                cleaned.append(char)
+                        text = ''.join(cleaned)
+                        
+                        # 5. Заменяем literal \n внутри JSON строк на пробелы
+                        result_chars = []
+                        in_string = False
+                        escape = False
+                        for char in text:
+                            if escape:
+                                result_chars.append(char)
+                                escape = False
+                                continue
+                            if char == '\\':
+                                escape = True
+                                result_chars.append(char)
+                                continue
+                            if char == '"':
+                                in_string = not in_string
+                                result_chars.append(char)
+                                continue
+                            if in_string and char == '\n':
+                                result_chars.append(' ')
+                            else:
+                                result_chars.append(char)
+                        text = ''.join(result_chars)
+                        
+                        # 6. Заменяем Python-стиль True/False/None на JSON true/false/null
+                        text = re.sub(r'\bTrue\b', 'true', text)
+                        text = re.sub(r'\bFalse\b', 'false', text)
+                        text = re.sub(r'\bNone\b', 'null', text)
+                        
+                        # 7. Заменяем одинарные кавычки на двойные (ключи и значения)
+                        text = re.sub(r"(?<=[\[{,:\s])\s*'([^']*?)'\s*(?=\s*[:,\]}])", r'"\1"', text)
+                        
+                        # 8. Ключи без кавычек: {key: "value"} → {"key": "value"}
+                        text = re.sub(r'(?<=[{,])\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r' "\1":', text)
+                        
+                        return text
                     
-                    # Находим все строки в JSON и очищаем их
-                    content = re.sub(r'"(?:[^"\\]|\\.)*"', clean_json_strings, content)
+                    def try_fix_truncated(text):
+                        """Попытка починить оборванный JSON с учётом порядка вложенности"""
+                        text = re.sub(r'"[^"]*$', '', text)
+                        text = re.sub(r',\s*"[^"]*"\s*:\s*$', '', text)
+                        text = re.sub(r',\s*\{[^}]*$', '', text)
+                        text = re.sub(r'"[^"]*"\s*:\s*$', '', text)
+                        text = text.rstrip().rstrip(',').rstrip()
+                        
+                        stack = []
+                        in_string = False
+                        escape = False
+                        for char in text:
+                            if escape:
+                                escape = False
+                                continue
+                            if char == '\\':
+                                escape = True
+                                continue
+                            if char == '"':
+                                in_string = not in_string
+                                continue
+                            if in_string:
+                                continue
+                            if char == '{':
+                                stack.append('}')
+                            elif char == '[':
+                                stack.append(']')
+                            elif char in ('}', ']') and stack and stack[-1] == char:
+                                stack.pop()
+                        
+                        text += ''.join(reversed(stack))
+                        return text
                     
+                    content = repair_json(content)
+                    
+                    result = None
+                    parse_error = None
+                    
+                    # Попытка 1: прямой парсинг после repair_json
                     try:
                         result = json.loads(content)
                     except json.JSONDecodeError as e:
-                        # Попытка починить оборванную строку
-                        if "Unterminated string" in str(e):
-                            # Находим позицию ошибки
-                            error_pos = e.pos if hasattr(e, 'pos') else -1
-                            if error_pos > 0:
-                                # Обрезаем до последней валидной запятой или закрывающей скобки
-                                # и пытаемся закрыть JSON
-                                fixed_content = content[:error_pos]
-                                # Убираем незавершенную строку
-                                fixed_content = re.sub(r'"[^"]*$', '', fixed_content)
-                                # Закрываем массивы и объекты
-                                fixed_content = fixed_content.rstrip(',').rstrip()
-                                # Добавляем закрывающие скобки
-                                open_braces = fixed_content.count('{') - fixed_content.count('}')
-                                open_brackets = fixed_content.count('[') - fixed_content.count(']')
-                                fixed_content += ']' * open_brackets + '}' * open_braces
-                                
-                                try:
-                                    result = json.loads(fixed_content)
-                                    # Успешно починили! Добавляем warning
-                                    if not isinstance(result, dict):
-                                        result = {"duplicates": [], "warnings": []}
-                                    result.setdefault("warnings", [])
-                                    result["warnings"].append("⚠️ JSON был оборван, автоматически исправлено")
-                                except json.JSONDecodeError:
-                                    pass  # Продолжаем к следующему блоку обработки
-                        # Пытаемся найти JSON в ответе
-                        import re
+                        parse_error = e
+                    
+                    # Попытка 2: починить оборванный JSON
+                    if result is None:
+                        try:
+                            fixed = try_fix_truncated(content)
+                            result = json.loads(fixed)
+                            if isinstance(result, dict):
+                                result.setdefault("warnings", [])
+                                result["warnings"].append("⚠️ JSON был оборван, автоматически исправлено")
+                        except json.JSONDecodeError:
+                            pass
+                    
+                    # Попытка 3: извлечь JSON регексом
+                    if result is None:
                         json_match = re.search(r'\{[\s\S]*\}', content)
                         if json_match:
+                            extracted = json_match.group()
                             try:
-                                result = json.loads(json_match.group())
+                                result = json.loads(extracted)
                             except json.JSONDecodeError:
-                                # JSON всё равно невалидный - возвращаем ошибку
-                                return {
-                                    "is_unique": True,  # По умолчанию считаем уникальными
-                                    "duplicates": [],
-                                    "warnings": [],
-                                    "total_unique": len(posts),
-                                    "total_duplicates": 0,
-                                    "summary": "⚠️ Проверка завершена с ошибкой парсинга JSON. Посты считаются уникальными по умолчанию.",
-                                    "error": f"Ошибка парсинга JSON: {str(e)}. AI вернул невалидный JSON.",
-                                    "model_used": model_info["name"],
-                                    "raw_response": original_content[:1000],  # Увеличено до 1000 символов
-                                    "error_details": {
-                                        "error_type": type(e).__name__,
-                                        "error_msg": str(e),
-                                        "content_length": len(original_content)
-                                    }
+                                try:
+                                    fixed = try_fix_truncated(extracted)
+                                    result = json.loads(fixed)
+                                    if isinstance(result, dict):
+                                        result.setdefault("warnings", [])
+                                        result["warnings"].append("⚠️ JSON извлечён и восстановлен из ответа AI")
+                                except json.JSONDecodeError:
+                                    pass
+                    
+                    # Попытка 4: построить минимальный ответ из текста
+                    if result is None:
+                        try:
+                            dup_matches = re.findall(
+                                r'\{\s*"post1"\s*:\s*(\d+)\s*,\s*"post2"\s*:\s*(\d+)\s*,\s*"reason"\s*:\s*"([^"]*)"',
+                                content
+                            )
+                            if dup_matches:
+                                duplicates = [
+                                    {"post1": int(m[0]), "post2": int(m[1]), "reason": m[2], "similarity": 70}
+                                    for m in dup_matches
+                                ]
+                                result = {
+                                    "duplicates": duplicates,
+                                    "warnings": ["⚠️ JSON восстановлен частично из ответа AI"],
+                                    "total_unique": len(posts) - len(duplicates),
+                                    "total_duplicates": len(duplicates),
+                                    "summary": f"Найдено {len(duplicates)} пар похожих постов (JSON восстановлен частично)"
                                 }
-                        else:
-                            return {
-                                "is_unique": True,  # По умолчанию считаем уникальными
-                                "duplicates": [],
-                                "warnings": [],
-                                "total_unique": len(posts),
-                                "total_duplicates": 0,
-                                "summary": "⚠️ Проверка завершена с ошибкой. Посты считаются уникальными по умолчанию.",
-                                "error": f"Не удалось найти JSON в ответе AI: {content[:200]}",
-                                "model_used": model_info["name"]
+                        except Exception:
+                            pass
+                    
+                    # Все попытки провалились — возвращаем ошибку
+                    if result is None:
+                        e = parse_error
+                        return {
+                            "is_unique": True,
+                            "duplicates": [],
+                            "warnings": [],
+                            "total_unique": len(posts),
+                            "total_duplicates": 0,
+                            "summary": "⚠️ Проверка завершена с ошибкой парсинга JSON. Посты считаются уникальными по умолчанию.",
+                            "error": f"Ошибка парсинга JSON: {str(e)}. AI вернул невалидный JSON.",
+                            "model_used": model_info["name"],
+                            "raw_response": original_content[:1000],
+                            "error_details": {
+                                "error_type": type(e).__name__ if e else "Unknown",
+                                "error_msg": str(e) if e else "Unknown",
+                                "content_length": len(original_content)
                             }
+                        }
                     
                     # Добавляем мета-информацию
                     result["is_unique"] = len(result.get("duplicates", [])) == 0
