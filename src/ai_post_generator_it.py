@@ -3419,29 +3419,42 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         
         text = '\n'.join(lines)
         
-        # 5. Если всё ещё длинный — обрезаем НО сохраняем последние строки со ссылками
+        # 5. Если всё ещё длинный — обрезаем НО сохраняем ссылки + описания бонусов
         if len(text) > max_length:
-            # Находим последнюю ссылку
-            last_link_pos = max(
-                text.rfind('http'),
-                text.rfind('href='),
-                text.rfind('cutt.ly')
-            )
+            # Находим ПЕРВУЮ ссылку (в итальянском сценарии она одна)
+            first_link_pos = len(text)  # по умолчанию - конец текста
+            for marker in ['http', 'href=', 'cutt.ly']:
+                pos = text.find(marker)
+                if pos >= 0:
+                    first_link_pos = min(first_link_pos, pos)
             
-            if last_link_pos > 0:
-                # Сохраняем всё от последней ссылки до конца
-                link_block = text[last_link_pos:]
-                # Находим начало абзаца с ссылкой
-                start_of_link_block = text.rfind('\n', 0, last_link_pos)
-                if start_of_link_block > 0:
-                    link_block = text[start_of_link_block:]
+            if first_link_pos < len(text):
+                # Находим начало АБЗАЦА (параграфа) с ссылкой — ищем пустую строку перед ней
+                # Это захватит и подводку к ссылке, и описание бонуса
+                search_area = text[:first_link_pos]
+                
+                # Ищем последнюю пустую строку (границу абзаца) перед ссылкой
+                paragraph_break = search_area.rfind('\n\n')
+                
+                if paragraph_break > 0:
+                    # Защищаем весь абзац со ссылкой (от пустой строки до конца)
+                    link_block = text[paragraph_break:]
+                else:
+                    # Нет пустой строки — берём от предыдущего \n
+                    line_break = search_area.rfind('\n')
+                    if line_break > 0:
+                        link_block = text[line_break:]
+                    else:
+                        link_block = text[first_link_pos:]
+                
+                start_of_link_block = len(text) - len(link_block)
                 
                 # Сколько символов осталось для текста
-                available_for_text = max_length - len(link_block) - 50  # запас
+                available_for_text = max_length - len(link_block) - 20  # запас
                 
-                if available_for_text > 200:
-                    # Обрезаем текст до ссылок
-                    text_before_links = text[:start_of_link_block] if start_of_link_block > 0 else text[:last_link_pos]
+                if available_for_text > 150:
+                    # Обрезаем текст до блока ссылок
+                    text_before_links = text[:start_of_link_block]
                     
                     # Обрезаем текст на последнем полном предложении
                     if len(text_before_links) > available_for_text:
@@ -3456,9 +3469,9 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                         if last_sentence > available_for_text // 2:
                             cut_text = cut_text[:last_sentence + 1]
                         
-                        text = cut_text.strip() + '\n' + link_block.strip()
+                        text = cut_text.strip() + '\n\n' + link_block.strip()
                     else:
-                        text = text_before_links.strip() + '\n' + link_block.strip()
+                        text = text_before_links.strip() + '\n\n' + link_block.strip()
         
         return text.strip()
     
@@ -3745,7 +3758,7 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                     sys.stdout.flush()
                     continue
                 
-                # КРИТИЧНАЯ ПРОВЕРКА: Текст должен быть ТОЛЬКО на РУССКОМ языке!
+                # КРИТИЧНАЯ ПРОВЕРКА: Текст должен быть ТОЛЬКО на ИТАЛЬЯНСКОМ языке!
                 # Список частых английских ФРАЗ которые недопустимы
                 # ВАЖНО: Отдельные слова как "wild", "gate" НЕ проверяем - они могут быть в названиях слотов!
                 english_phrases = [
