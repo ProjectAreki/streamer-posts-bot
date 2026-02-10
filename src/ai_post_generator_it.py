@@ -2377,22 +2377,149 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
     
     def _get_random_bonus_variation(self, original: str, is_bonus1: bool = True) -> str:
         """
-        Возвращает оригинальное описание бонуса БЕЗ модификаций.
+        Генерирует УНИКАЛЬНУЮ вариацию описания бонуса для итальянского сценария.
         
-        ВАЖНО: Для итальянского сценария мы передаём бонус напрямую в AI,
-        и AI сам парафразирует его согласно инструкциям в промпте.
-        
-        Это гарантирует, что бонус от пользователя используется как есть,
-        без замены на hardcoded примеры.
+        Парсит бонус на компоненты (EUR, %, giri) и генерирует вариации
+        с отслеживанием использованных для анти-повтора.
         
         Args:
             original: Оригинальное описание бонуса от пользователя
-            is_bonus1: True если это bonus1, False если bonus2
+            is_bonus1: True если это bonus1
         
         Returns:
-            Оригинальный бонус без изменений
+            Уникальная вариация описания бонуса на итальянском
         """
-        # Просто возвращаем оригинал - AI сам парафразирует в промпте
+        import re
+        
+        used_list = self._used_bonus1_variations if is_bonus1 else self._used_bonus2_variations
+        
+        max_attempts = 50
+        
+        for attempt in range(max_attempts):
+            parts = []
+            
+            # Ищем EUR (1.500€, 1500 EUR, 1 500 euro и т.д.)
+            eur_match = re.search(r'(\d[\d\.\s,]*)\s*(?:€|EUR|euro|euros)', original, re.IGNORECASE)
+            if eur_match:
+                amount_str = eur_match.group(1).replace('.', '').replace(',', '').replace(' ', '')
+                try:
+                    amount = int(amount_str)
+                    if amount >= 1000:
+                        money_variations = [
+                            f"{amount:,}€".replace(',', '.'),
+                            f"fino a {amount:,} EUR".replace(',', '.'),
+                            f"{amount:,} euro di bonus".replace(',', '.'),
+                            f"bonus fino a {amount:,}€".replace(',', '.'),
+                            f"{amount:,} EUR sul conto".replace(',', '.'),
+                            f"fino a {amount:,}€ sul deposito".replace(',', '.'),
+                            f"{amount:,} euro di benvenuto".replace(',', '.'),
+                            f"pacchetto da {amount:,}€".replace(',', '.'),
+                            f"fino a {amount:,}€ extra".replace(',', '.'),
+                            f"{amount:,} EUR in regalo".replace(',', '.'),
+                            f"bonus di {amount:,}€".replace(',', '.'),
+                            f"fino a {amount:,} euro per iniziare".replace(',', '.'),
+                            f"{amount:,}€ sul primo deposito".replace(',', '.'),
+                            f"partenza con {amount:,}€".replace(',', '.'),
+                            f"{amount:,}€ di partenza".replace(',', '.'),
+                            f"boost fino a {amount:,}€".replace(',', '.'),
+                            f"welcome {amount:,}€".replace(',', '.'),
+                            f"sblocca {amount:,}€".replace(',', '.'),
+                            f"{amount:,}€ per il debutto".replace(',', '.'),
+                            f"fino a {amount:,}€ in omaggio".replace(',', '.'),
+                        ]
+                    else:
+                        money_variations = [
+                            f"{amount}€ di bonus",
+                            f"fino a {amount} EUR",
+                            f"{amount} euro sul conto",
+                            f"bonus di {amount}€",
+                        ]
+                    parts.append(random.choice(money_variations))
+                except Exception:
+                    pass
+            
+            # Ищем проценты (150%, 100%)
+            percent_match = re.search(r'(\d+)\s*%', original)
+            if percent_match:
+                percent = int(percent_match.group(1))
+                multiplier = round(1 + percent / 100, 1)
+                percent_variations = [
+                    f"{percent}% sul deposito",
+                    f"+{percent}% al primo deposito",
+                    f"boost del {percent}%",
+                    f"bonus {percent}%",
+                    f"{percent}% di benvenuto",
+                    f"x{multiplier} sul bilancio",
+                    f"moltiplicatore x{multiplier}",
+                    f"deposito x{multiplier}",
+                    f"+{percent}% per iniziare",
+                    f"{percent}% welcome",
+                    f"primo deposito +{percent}%",
+                    f"start +{percent}%",
+                    f"deposito +{percent}%",
+                    f"{percent}% in più",
+                    f"aumento del {percent}%",
+                    f"+{percent}% extra",
+                    f"raddoppio fino al {percent}%",
+                ]
+                parts.append(random.choice(percent_variations))
+            
+            # Ищем giri/spins (250 giri, 100 free spins и т.д.)
+            spin_match = re.search(r'(\d+)\s*(?:giri|spin|round|free\s*spin|FS|giocate|turni)', original, re.IGNORECASE)
+            if spin_match:
+                count = spin_match.group(1)
+                spin_variations = [
+                    f"{count} giri gratuiti",
+                    f"{count} giri gratis",
+                    f"{count} round gratuiti",
+                    f"pacchetto di {count} giri",
+                    f"{count} giri in regalo",
+                    f"{count} giri di benvenuto",
+                    f"{count} free spin",
+                    f"{count} giocate gratuite",
+                    f"{count} turni gratis",
+                    f"{count} giri bonus",
+                    f"fino a {count} giri gratuiti",
+                    f"{count} giri per iniziare",
+                    f"{count} giri senza deposito",
+                    f"pacchetto {count} giri gratis",
+                    f"{count} giri in omaggio",
+                    f"{count} giri di partenza",
+                    f"regalo di {count} giri",
+                    f"{count} giri extra",
+                    f"{count} tentativi gratuiti",
+                    f"set di {count} giri gratis",
+                ]
+                parts.append(random.choice(spin_variations))
+            
+            # Соединяем компоненты
+            if len(parts) >= 2:
+                connectors = [
+                    " + ", " e ", " più ", ", oltre a ", " — ", " & ",
+                    " insieme a ", " con in più ", " bonus ",
+                    ", più ", " + ancora ", " e anche ",
+                    " | ", " ➕ ", " // ",
+                ]
+                random.shuffle(parts)
+                k = 2 if len(parts) == 2 else random.choice([2, 3])
+                chosen = parts[:k]
+                variation = random.choice(connectors).join(chosen)
+            elif len(parts) == 1:
+                variation = parts[0]
+            else:
+                # Fallback - возвращаем оригинал
+                variation = original
+            
+            # Проверяем уникальность
+            if variation not in used_list:
+                used_list.append(variation)
+                if len(used_list) > 100:
+                    used_list.pop(0)
+                return variation
+        
+        # Если все 50 попыток исчерпаны — сбрасываем и генерируем
+        print(f"   ⚠️ Все вариации бонуса использованы, сбрасываем список...")
+        used_list.clear()
         return original
     
     # ═══════════════════════════════════════════════════════════════════
