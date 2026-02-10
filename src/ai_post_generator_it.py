@@ -257,7 +257,7 @@ class VideoData:
     bet: int
     win: int
     multiplier: float = 0.0
-    currency: str = "RUB"  # Валюта: RUB, USD, EUR и т.д.
+    currency: str = "EUR"  # Валюта: EUR, USD и т.д.
     
     def __post_init__(self):
         if self.bet > 0 and self.win > 0 and self.multiplier == 0:
@@ -302,8 +302,8 @@ class VideoData:
         """
         Возвращает случайный формат валюты для разнообразия в постах (ИТАЛЬЯНСКИЙ).
         
-        Для долларов: $, " dólares", " USD"
-        Для евро: €, " euros", " EUR"
+        Для долларов: $, " dollari", " USD"
+        Для евро: €, " euro", " EUR"
         Для песо (CLP, MXN, ARS, COP): $, " pesos", " [код валюты]"
         
         ВАЖНО: Словесные форматы начинаются с пробела
@@ -311,21 +311,21 @@ class VideoData:
         currency = self.currency.upper()
         
         if currency == "USD":
-            formats = ["$", " dólares", " USD"]
+            formats = ["$", " dollari", " USD"]
         elif currency == "EUR":
-            formats = ["€", " euros", " EUR"]
+            formats = ["€", " euro", " EUR"]
         elif currency == "CLP":
-            formats = ["$", " pesos chilenos", " CLP"]
+            formats = ["$", " pesos cileni", " CLP"]
         elif currency == "MXN":
-            formats = ["$", " pesos mexicanos", " MXN"]
+            formats = ["$", " pesos messicani", " MXN"]
         elif currency == "ARS":
-            formats = ["$", " pesos argentinos", " ARS"]
+            formats = ["$", " pesos argentini", " ARS"]
         elif currency == "COP":
-            formats = ["$", " pesos colombianos", " COP"]
+            formats = ["$", " pesos colombiani", " COP"]
         elif currency == "PEN":
             formats = ["S/", " soles", " PEN"]
         elif currency == "UYU":
-            formats = ["$", " pesos uruguayos", " UYU"]
+            formats = ["$", " pesos uruguaiani", " UYU"]
         else:
             formats = [self.get_currency_symbol(), f" {currency}"]
         
@@ -612,7 +612,7 @@ Variabilità delle introduzioni (ROTAZIONE obbligatoria!):
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -629,30 +629,30 @@ Variabilità delle introduzioni (ROTAZIONE obbligatoria!):
 • Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -820,7 +820,7 @@ Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -837,30 +837,30 @@ Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 • Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -1022,7 +1022,7 @@ Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con un
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -1039,30 +1039,30 @@ Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con un
 • Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -1231,7 +1231,7 @@ Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «s
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -1248,30 +1248,30 @@ Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «s
 • Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -1426,7 +1426,7 @@ LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, num
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -1443,30 +1443,30 @@ LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, num
 • Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -1655,30 +1655,30 @@ VARIANTI (alterna!):
 ✅ <a href="URL">Riscuoti il pacchetto di benvenuto adesso</a> — OK!
 
 ═══════════════════════════════════════════════════════════════
-🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
+🔥 INTRODUZIONE AL LINK — BLOCCO MOTIVAZIONALE (CRITICO!)
 ═══════════════════════════════════════════════════════════════
 
-⚠️ ПЕРЕД ССЫЛКОЙ ОБЯЗАТЕЛЬНО ДОБАВЬ ПОДВОДКУ:
-Это 1-2 предложения которые ПОДОГРЕВАЮТ читателя и МОТИВИРУЮТ перейти по ссылке.
+⚠️ PRIMA DEL LINK AGGIUNGI OBBLIGATORIAMENTE UN'INTRODUZIONE:
+Sono 1-2 frasi che RISCALDANO il lettore e lo MOTIVANO a cliccare sul link.
 
-📌 ЧТО ДОЛЖНА ДЕЛАТЬ ПОДВОДКА:
-• Связать историю победы с ВОЗМОЖНОСТЬЮ читателя повторить этот опыт
-• Создать ощущение что ЧИТАТЕЛЬ тоже может выиграть
-• Вызвать желание ПОПРОБОВАТЬ прямо сейчас
-• Использовать эмоции из истории для перехода к действию
+📌 COSA DEVE FARE L'INTRODUZIONE:
+• Collegare la storia della vincita con la POSSIBILITÀ del lettore di ripetere l'esperienza
+• Creare la sensazione che anche il LETTORE possa vincere
+• Suscitare il desiderio di PROVARE subito
+• Usare le emozioni della storia per passare all'azione
 
-📌 СТРУКТУРА ПОДВОДКИ:
-• Отсылка к победе из поста → твой шанс тоже попробовать
-• Вопрос-интрига → ответ в виде ссылки
-• Призыв к действию на основе истории
+📌 STRUTTURA DELL'INTRODUZIONE:
+• Riferimento alla vincita del post → la tua occasione di provare anche tu
+• Domanda-intrigo → risposta sotto forma di link
+• Invito all'azione basato sulla storia
 
-📌 ТОНАЛЬНОСТЬ:
-• Дружеская, без давления
-• С азартом и энтузиазмом  
-• Как будто делишься секретом с другом
+📌 TONALITÀ:
+• Amichevole, senza pressione
+• Con entusiasmo e adrenalina
+• Come se condividessi un segreto con un amico
 
-❌ НЕ ПИШИ подводку отдельно — она должна ПЛАВНО переходить в ссылку!
-✅ Подводка + ссылка = единый блок мотивации
+❌ NON scrivere l'introduzione separatamente — deve FLUIRE naturalmente nel link!
+✅ Introduzione + link = un unico blocco motivazionale
 
 ═══════════════════════════════════════════════════════════════
 ⚠️ FORMATO DEL LINK CON BONUS (SOLO 1 LINK!)
@@ -1718,7 +1718,7 @@ VARIANTI (alterna!):
 
 ❌ VIETATO: **grassetto**, `codice`, __corsivo__, [testo](url) — questo è Markdown!
 
-📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+📝 HTML TAG (usa TUTTI, non solo uno!):
 • <b>grassetto</b> — slot, nomi, accenti, titoli
 • <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
 • <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
@@ -3168,7 +3168,7 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
     def _randomize_currency_format(self, text: str, video: VideoData) -> str:
         """
         Заменяет символы валюты в тексте на случайные форматы для разнообразия (ITALIANO).
-        Например: 500$ → 500 dólares, 1000€ → 1000 euros
+        Esempio: 500$ → 500 dollari, 1000€ → 1000 euro
         """
         import re
         
@@ -3177,36 +3177,36 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         # Определяем форматы для каждой валюты (итальянские)
         if currency == "USD":
             # Заменяем $ на случайный формат
-            formats = ["$", " dólares", " USD"]
+            formats = ["$", " dollari", " USD"]
             # Находим все вхождения $ после чисел
             def replace_usd(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)\$', replace_usd, text)
             # Также заменяем $ перед числами
-            text = re.sub(r'\$([\d\s,\.]+)', lambda m: random.choice(["$", ""]) + m.group(1) + random.choice(["", " dólares", " USD"]), text)
+            text = re.sub(r'\$([\d\s,\.]+)', lambda m: random.choice(["$", ""]) + m.group(1) + random.choice(["", " dollari", " USD"]), text)
         elif currency == "EUR":
             # Заменяем € на случайный формат
-            formats = ["€", " euros", " EUR"]
+            formats = ["€", " euro", " EUR"]
             def replace_eur(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)€', replace_eur, text)
         elif currency == "CLP":
-            formats = ["$", " pesos chilenos", " CLP"]
+            formats = ["$", " pesos cileni", " CLP"]
             def replace_clp(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)\$', replace_clp, text)
         elif currency == "MXN":
-            formats = ["$", " pesos mexicanos", " MXN"]
+            formats = ["$", " pesos messicani", " MXN"]
             def replace_mxn(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)\$', replace_mxn, text)
         elif currency == "ARS":
-            formats = ["$", " pesos argentinos", " ARS"]
+            formats = ["$", " pesos argentini", " ARS"]
             def replace_ars(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)\$', replace_ars, text)
         elif currency == "COP":
-            formats = ["$", " pesos colombianos", " COP"]
+            formats = ["$", " pesos colombiani", " COP"]
             def replace_cop(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,\.]+)\$', replace_cop, text)
@@ -3551,14 +3551,14 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                     # Берем 3 случайных поста как примеры стиля
                     example_posts = random.sample(self._existing_posts, min(3, len(self._existing_posts)))
                     examples_text = "\n\n═══════════════════════════════════════════════════════════════\n"
-                    examples_text += "📚 ПРИМЕРЫ ТВОИХ СУЩЕСТВУЮЩИХ ПОСТОВ (изучи стиль!):\n"
+                    examples_text += "📚 ESEMPI DEI TUOI POST ESISTENTI (studia lo stile!):\n"
                     examples_text += "═══════════════════════════════════════════════════════════════\n\n"
                     for i, post in enumerate(example_posts, 1):
                         # Обрезаем до 500 символов
                         post_preview = post[:500] + "..." if len(post) > 500 else post
-                        examples_text += f"ПРИМЕР {i}:\n{post_preview}\n\n"
-                    examples_text += "⚠️ ВАЖНО: Изучи структуру, тон, форматирование этих постов.\n"
-                    examples_text += "НО делай НОВЫЕ посты - НЕ копируй фразы и конструкции!\n"
+                        examples_text += f"ESEMPIO {i}:\n{post_preview}\n\n"
+                    examples_text += "⚠️ IMPORTANTE: Studia la struttura, il tono, la formattazione di questi post.\n"
+                    examples_text += "MA crea post NUOVI - NON copiare frasi e costruzioni!\n"
                     examples_text += "═══════════════════════════════════════════════════════════════\n"
                     
                     raw_system_prompt = raw_system_prompt + examples_text
