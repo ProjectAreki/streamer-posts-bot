@@ -2273,6 +2273,11 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         self._used_bonus1_variations: List[str] = []  # Отслеживание использованных вариаций bonus1
         self._used_bonus2_variations: List[str] = []  # Отслеживание использованных вариаций bonus2
         self._link_format_counter = 0  # Счётчик для строгой ротации форматов ссылок (1-6)
+        
+        # Система форматов блоков цифр (как в русском)
+        self._number_formats: List[dict] = []
+        self._used_number_format_ids: List[int] = []
+        self._load_number_formats()
     
     def set_link_format_counter(self, counter: int):
         """Устанавливает счетчик форматов ссылок (для ротации между генераторами)"""
@@ -2316,6 +2321,65 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         self._used_bonus1_variations.clear()
         self._used_bonus2_variations.clear()
         print("   🔄 Списки использованных вариаций бонусов сброшены")
+    
+    def _load_number_formats(self):
+        """Загружает форматы блоков цифр из JSON файла"""
+        import json, os
+        formats_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'number_formats_italian.json')
+        try:
+            with open(formats_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            self._number_formats = data.get('formats', [])
+            print(f"   ✅ Загружено {len(self._number_formats)} форматов блоков цифр (IT)")
+        except FileNotFoundError:
+            print(f"   ⚠️ Файл {formats_path} не найден, используем дефолтные форматы")
+            self._number_formats = []
+        except Exception as e:
+            print(f"   ⚠️ Ошибка загрузки форматов: {e}")
+            self._number_formats = []
+    
+    def _get_random_number_format(self, bet: float, win: float, multiplier: float) -> str:
+        """
+        Выбирает случайный неиспользованный формат блока цифр и заполняет его данными.
+        Ротация: не повторяет последние 30 использованных форматов.
+        """
+        if not self._number_formats:
+            return f"💸 Puntata: {bet:.0f}€\n💰 Vincita: {win:.0f}€\n⚡ Moltiplicatore: x{multiplier}"
+        
+        # Находим форматы, которые не использовались недавно
+        available_ids = [f['id'] for f in self._number_formats]
+        recent_used = self._used_number_format_ids[-30:] if len(self._used_number_format_ids) > 30 else self._used_number_format_ids
+        unused_ids = [id for id in available_ids if id not in recent_used]
+        
+        if not unused_ids:
+            self._used_number_format_ids = []
+            unused_ids = available_ids
+        
+        chosen_id = random.choice(unused_ids)
+        self._used_number_format_ids.append(chosen_id)
+        
+        chosen_format = next((f for f in self._number_formats if f['id'] == chosen_id), None)
+        
+        if not chosen_format:
+            return f"💸 Puntata: {bet:.0f}€\n💰 Vincita: {win:.0f}€\n⚡ Moltiplicatore: x{multiplier}"
+        
+        def format_amount(amount: float) -> str:
+            if amount >= 1000:
+                return f"{amount:,.0f}".replace(",", " ")
+            else:
+                return f"{amount:.0f}"
+        
+        template = chosen_format['template']
+        result = template.replace('{bet}', format_amount(bet))
+        result = result.replace('{win}', format_amount(win))
+        result = result.replace('{multiplier}', f"{multiplier:.1f}" if multiplier != int(multiplier) else f"{int(multiplier)}")
+        
+        return result
+    
+    def reset_number_formats(self):
+        """Сбрасывает историю использованных форматов блоков цифр"""
+        self._used_number_format_ids.clear()
+        print("   🔄 История форматов блоков цифр сброшена (IT)")
     
     def load_existing_posts(self, posts: List[str]):
         """
@@ -2963,11 +3027,26 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                         text = text.replace(pattern, slot_title)
         
         # 6. СЛУЧАЙНО убираем .0 из целых чисел (50/50 для разнообразия)
-        # Иногда: 800.0₽ → 800₽, иногда оставляем как 800.0₽
+        # Иногда: 800.0€ → 800€, иногда оставляем как 800.0€
         if random.choice([True, False]):
-            text = re.sub(r'(\d)\.0([₽\s,])', r'\1\2', text)
+            text = re.sub(r'(\d)\.0([€\s,])', r'\1\2', text)
             text = re.sub(r'(\d)\.0</code>', r'\1</code>', text)
             text = re.sub(r'(\d)\.0</b>', r'\1</b>', text)
+        
+        # 7. Замена литеральных \n на реальные переносы строк
+        text = text.replace('\\n', '\n')
+        
+        # 8. Удаляем спам-сепараторы (10+ повторяющихся символов → 3)
+        text = re.sub(r'([═━─—~•◈☆★]{4,})', lambda m: m.group(1)[:3], text)
+        
+        # 9. Удаляем символы, прилипшие к URL (┃, │, ｜, |)
+        text = re.sub(r'[┃│｜|]\s*(<a\s)', r'\1', text)
+        text = re.sub(r'[┃│｜|]\s*(https?://)', r'\1', text)
+        
+        # 10. Добавляем пустые строки между ссылками (если нет)
+        text = re.sub(r'(</a>)\s*\n\s*(<a\s)', r'\1\n\n\2', text)
+        text = re.sub(r'(</a>)\s*\n\s*(https?://)', r'\1\n\n\2', text)
+        text = re.sub(r'(https?://\S+)\s*\n\s*(<a\s)', r'\1\n\n\2', text)
         
         return text
     
@@ -3500,6 +3579,27 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                 anti_repetition = self._get_anti_repetition_instruction()
                 length_note = ""
                 text = None
+                
+                # Генерируем инструкцию с форматом блока цифр (как в русском)
+                number_format_instruction = ""
+                if self._number_formats:
+                    chosen_format = self._get_random_number_format(video.bet, video.win, video.multiplier)
+                    number_format_instruction = f"""
+
+🚨🚨🚨 BLOCCO NUMERI OBBLIGATORIO — COPIALO NEL POST! 🚨🚨🚨
+
+{chosen_format}
+
+⛔ DIVIETO ASSOLUTO:
+❌ NON SCRIVERE le cifre di puntata/vincita/moltiplicatore con parole tue!
+❌ NON CREARE il tuo formato del blocco numeri!
+❌ NON USARE i dati bet/win/multiplier dalla sezione DATI per creare il tuo blocco!
+
+✅ COPIA SEMPLICEMENTE il blocco sopra UNA VOLTA nel post!
+✅ Puoi posizionarlo all'inizio, a metà o alla fine del post.
+
+🚨🚨🚨 SE SCRIVI I NUMERI IN MODO DIVERSO — IL POST SARÀ RIFIUTATO! 🚨🚨🚨
+"""
 
                 # Генерируем до 3 попыток внутри одной регенерации (короткий/длинный)
                 for attempt in range(3):
@@ -3512,7 +3612,7 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                         print(f"   📝 Промпт (первые 200 символов): {base_prompt[:200]}...")
                         sys.stdout.flush()
 
-                    user_prompt = base_prompt + length_note + anti_repetition
+                    user_prompt = base_prompt + number_format_instruction + length_note + anti_repetition
 
                     api_params = {
                         "model": self.model,

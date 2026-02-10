@@ -1,0 +1,406 @@
+{
+  "description": "80 формати blocchi numerici per rotazione nei post italiani",
+  "total_formats": 80,
+  "formats": [
+    {
+      "id": 1,
+      "category": "vertical_3_lines",
+      "template": "💸 Puntata: {bet}€\n💰 Vincita: {win}€\n⚡ Moltiplicatore: x{multiplier}"
+    },
+    {
+      "id": 2,
+      "category": "vertical_3_lines",
+      "template": "📉 Scommessa: {bet}€\n📈 Risultato: {win}€\n🔥 X: x{multiplier}"
+    },
+    {
+      "id": 3,
+      "category": "vertical_3_lines",
+      "template": "🎯 Entrata: {bet}€\n🏆 Uscita: {win}€\n💥 x{multiplier}"
+    },
+    {
+      "id": 4,
+      "category": "vertical_3_lines",
+      "template": "💰 Puntata: {bet}€\n💰 Vincita: {win}€\n💰 Moltiplicatore: x{multiplier}"
+    },
+    {
+      "id": 5,
+      "category": "vertical_3_lines",
+      "template": "🎰 Giocata: {bet} EUR\n💎 Risultato: {win} EUR\n🚀 x{multiplier}"
+    },
+    {
+      "id": 6,
+      "category": "vertical_3_lines",
+      "template": "📊 Entrata: {bet}€\n📊 Vincita: {win}€\n📊 Fattore: x{multiplier}"
+    },
+    {
+      "id": 7,
+      "category": "vertical_3_lines",
+      "template": "⚡ Scommessa: {bet} EUR\n🔥 Vincita: {win} EUR\n💎 Moltiplicatore: x{multiplier}"
+    },
+    {
+      "id": 8,
+      "category": "vertical_3_lines",
+      "template": "🎲 Puntata: {bet}€\n🏅 Incasso: {win}€\n✨ x{multiplier}"
+    },
+    {
+      "id": 9,
+      "category": "vertical_2_lines",
+      "template": "📉 Puntata: {bet}€\n📈 Risultato: {win}€ 💰"
+    },
+    {
+      "id": 10,
+      "category": "vertical_2_lines",
+      "template": "💸 Entrata: {bet}€\n💰 Uscita: {win}€"
+    },
+    {
+      "id": 11,
+      "category": "vertical_2_lines",
+      "template": "📌 Investito: {bet}€\n📌 Ritirato: {win}€ 🔥"
+    },
+    {
+      "id": 12,
+      "category": "vertical_2_lines",
+      "template": "🎰 Scommessa: {bet}€\n💵 Pagamento: {win}€"
+    },
+    {
+      "id": 13,
+      "category": "vertical_2_lines",
+      "template": "💸 Puntata: {bet} EUR\n💰 Vincita: {win} EUR 🎉"
+    },
+    {
+      "id": 14,
+      "category": "vertical_2_lines",
+      "template": "🎯 Giocata: {bet}€\n🏆 Incassato: {win}€"
+    },
+    {
+      "id": 15,
+      "category": "inline_separator",
+      "template": "💸 {bet}€ entrata | 💰 {win}€ vincita | 🔥 x{multiplier}"
+    },
+    {
+      "id": 16,
+      "category": "inline_separator",
+      "template": "🎯 x{multiplier} | 💰 Sul conto: {win}€"
+    },
+    {
+      "id": 17,
+      "category": "inline_separator",
+      "template": "💰 Vincita: {win}€ | X: x{multiplier}"
+    },
+    {
+      "id": 18,
+      "category": "inline_separator",
+      "template": "{bet}€ entrata | {win}€ vincita | x{multiplier} 🔥"
+    },
+    {
+      "id": 19,
+      "category": "inline_separator",
+      "template": "⚡ {bet}€ → {win}€ | x{multiplier} 💎"
+    },
+    {
+      "id": 20,
+      "category": "inline_separator",
+      "template": "🎰 Puntata {bet}€ | Vincita {win}€ | x{multiplier} 🏆"
+    },
+    {
+      "id": 21,
+      "category": "inline_arrow",
+      "template": "Entrata {bet}€ → vincita {win}€ con x{multiplier} 🔥"
+    },
+    {
+      "id": 22,
+      "category": "inline_arrow",
+      "template": "{bet}€ → {win}€ (x{multiplier})"
+    },
+    {
+      "id": 23,
+      "category": "inline_arrow",
+      "template": "🚀 {bet}€ → {win}€"
+    },
+    {
+      "id": 24,
+      "category": "inline_arrow",
+      "template": "{bet}€ → {win}€ 💰"
+    },
+    {
+      "id": 25,
+      "category": "inline_arrow",
+      "template": "{bet} EUR → {win} EUR (x{multiplier}) 🔥"
+    },
+    {
+      "id": 26,
+      "category": "inline_arrow",
+      "template": "💸 {bet}€ → 💰 {win}€"
+    },
+    {
+      "id": 27,
+      "category": "result_simple",
+      "template": "Risultato: {win}€ 🏆"
+    },
+    {
+      "id": 28,
+      "category": "result_simple",
+      "template": "Sul conto: {win}€ 💰"
+    },
+    {
+      "id": 29,
+      "category": "result_simple",
+      "template": "Ritirato: {win}€ 💸"
+    },
+    {
+      "id": 30,
+      "category": "result_simple",
+      "template": "Risultato: {win}€ da {bet}€!"
+    },
+    {
+      "id": 31,
+      "category": "result_simple",
+      "template": "vincita {win}€ 💰"
+    },
+    {
+      "id": 32,
+      "category": "result_simple",
+      "template": "ha vinto {win}€ 💰"
+    },
+    {
+      "id": 33,
+      "category": "result_simple",
+      "template": "incassato {win}€ 💸🚀"
+    },
+    {
+      "id": 34,
+      "category": "result_simple",
+      "template": "sul conto: {win}€ 🤑"
+    },
+    {
+      "id": 35,
+      "category": "result_simple",
+      "template": "totale: {win}€ in tasca 🤑💸"
+    },
+    {
+      "id": 36,
+      "category": "result_simple",
+      "template": "VINCITA: {win}€!"
+    },
+    {
+      "id": 37,
+      "category": "result_simple",
+      "template": "Vincita: {win}€ netti!"
+    },
+    {
+      "id": 38,
+      "category": "result_simple",
+      "template": "Risultato: {win} EUR 💰"
+    },
+    {
+      "id": 39,
+      "category": "result_emoji",
+      "template": "💎 Risultato: {win}€"
+    },
+    {
+      "id": 40,
+      "category": "result_emoji",
+      "template": "🏆 Vincita: {win}€"
+    },
+    {
+      "id": 41,
+      "category": "result_emoji",
+      "template": "💰 Incassato: {win}€"
+    },
+    {
+      "id": 42,
+      "category": "result_emoji",
+      "template": "💸 Profitto: {win}€"
+    },
+    {
+      "id": 43,
+      "category": "result_emoji",
+      "template": "🔥 In uscita: {win}€"
+    },
+    {
+      "id": 44,
+      "category": "result_emoji",
+      "template": "😱 Totale: {win}€"
+    },
+    {
+      "id": 45,
+      "category": "result_question",
+      "template": "Risultato? {win}€!"
+    },
+    {
+      "id": 46,
+      "category": "result_question",
+      "template": "Vincita? {win}€!"
+    },
+    {
+      "id": 47,
+      "category": "result_question",
+      "template": "Quanto ha incassato? {win}€! 💰"
+    },
+    {
+      "id": 48,
+      "category": "result_question",
+      "template": "Cosa è uscito? {win}€ 🔥"
+    },
+    {
+      "id": 49,
+      "category": "result_question",
+      "template": "Indovina il risultato? {win}€! 😱"
+    },
+    {
+      "id": 50,
+      "category": "multiplier_live",
+      "template": "x{multiplier}! Sul conto già {win}€ 💸"
+    },
+    {
+      "id": 51,
+      "category": "multiplier_live",
+      "template": "Moltiplicatore x{multiplier} — {win}€ in tasca!"
+    },
+    {
+      "id": 52,
+      "category": "multiplier_live",
+      "template": "x{multiplier}!!! totale {win}€ 💸💸💸"
+    },
+    {
+      "id": 53,
+      "category": "multiplier_live",
+      "template": "x{multiplier} e {win}€ sul bilancio 🔥"
+    },
+    {
+      "id": 54,
+      "category": "multiplier_live",
+      "template": "Moltiplicatore x{multiplier}, incassato {win}€"
+    },
+    {
+      "id": 55,
+      "category": "multiplier_live",
+      "template": "x{multiplier} — vincita {win}€ 💰"
+    },
+    {
+      "id": 56,
+      "category": "multiplier_live",
+      "template": "X di x{multiplier}, sul conto {win}€"
+    },
+    {
+      "id": 57,
+      "category": "bet_to_win",
+      "template": "Puntata {bet}€, vincita {win}€ 💰"
+    },
+    {
+      "id": 58,
+      "category": "bet_to_win",
+      "template": "Entrato con {bet}€, uscito con {win}€ 💰"
+    },
+    {
+      "id": 59,
+      "category": "bet_to_win",
+      "template": "Ha rischiato {bet}€, ha vinto {win}€ 💰"
+    },
+    {
+      "id": 60,
+      "category": "bet_to_win",
+      "template": "Scommesso {bet}€, ottenuto {win}€!"
+    },
+    {
+      "id": 61,
+      "category": "bet_to_win",
+      "template": "Giocato {bet}€, incassato {win}€ 🔥"
+    },
+    {
+      "id": 62,
+      "category": "bet_to_win",
+      "template": "Entrata {bet}€, uscita {win}€ 💸"
+    },
+    {
+      "id": 63,
+      "category": "bet_to_win",
+      "template": "Da {bet}€ a {win}€ 🚀"
+    },
+    {
+      "id": 64,
+      "category": "bet_to_win",
+      "template": "Puntata {bet} EUR, vincita {win} EUR!"
+    },
+    {
+      "id": 65,
+      "category": "bet_to_win_multiplier",
+      "template": "Da {bet}€ a {win}€ (x{multiplier}) 🎯"
+    },
+    {
+      "id": 66,
+      "category": "bet_to_win_multiplier",
+      "template": "{bet}€ scommessi → {win}€ vinti | x{multiplier} 💎"
+    },
+    {
+      "id": 67,
+      "category": "bet_to_win_multiplier",
+      "template": "💸 {bet}€ → 💰 {win}€ (x{multiplier})"
+    },
+    {
+      "id": 68,
+      "category": "bet_to_win_multiplier",
+      "template": "Con {bet}€ ha fatto {win}€ — x{multiplier}! 🔥"
+    },
+    {
+      "id": 69,
+      "category": "bet_to_win_multiplier",
+      "template": "Entrata: {bet}€ | Vincita: {win}€ | x{multiplier} 🏆"
+    },
+    {
+      "id": 70,
+      "category": "code_block",
+      "template": "<code>{bet}€</code> → <code>{win}€</code> 💰"
+    },
+    {
+      "id": 71,
+      "category": "code_block",
+      "template": "vincita — <code>{win}€</code> con scommessa di <code>{bet}€</code>"
+    },
+    {
+      "id": 72,
+      "category": "code_block",
+      "template": "<code>{bet}€</code> → <code>{win}€</code> (x{multiplier})"
+    },
+    {
+      "id": 73,
+      "category": "code_block",
+      "template": "<code>x{multiplier}</code> | <code>{win}€</code> sul conto 💰"
+    },
+    {
+      "id": 74,
+      "category": "code_block",
+      "template": "<code>Puntata: {bet}€ | Vincita: {win}€</code>"
+    },
+    {
+      "id": 75,
+      "category": "bold_format",
+      "template": "<b>{win}€</b> da una puntata di <b>{bet}€</b> 💰"
+    },
+    {
+      "id": 76,
+      "category": "bold_format",
+      "template": "Vincita: <b>{win} EUR</b> | Moltiplicatore: <b>x{multiplier}</b>"
+    },
+    {
+      "id": 77,
+      "category": "bold_format",
+      "template": "<b>{bet}€ → {win}€</b> 🔥"
+    },
+    {
+      "id": 78,
+      "category": "italic_format",
+      "template": "<i>Da {bet}€ a {win}€... x{multiplier} volte tanto!</i>"
+    },
+    {
+      "id": 79,
+      "category": "italic_format",
+      "template": "<i>Puntata: {bet}€. Vincita: {win}€. Assurdo.</i> 😱"
+    },
+    {
+      "id": 80,
+      "category": "italic_format",
+      "template": "<i>x{multiplier}... {win}€ sul bilancio.</i> 🤯"
+    }
+  ]
+}
