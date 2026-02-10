@@ -2192,8 +2192,19 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 🎁 [parafrasa {bonus1} con <code>cifre</code> e <b>accenti</b>]""",
     ]
     
-    # BONUS_VARIATIONS убраны - теперь используем ТОЛЬКО оригинальный бонус пользователя {bonus1}
-    BONUS_VARIATIONS = []  # Пустой список - НЕ используется
+    # Вариации описания бонуса (фоллбэк если текст слишком короткий)
+    BONUS_VARIATIONS = [
+        "fino a 1.500€ di bonus sul deposito e 250 giri gratuiti in regalo!",
+        "pacchetto di benvenuto fino a 1.500 EUR + 250 giri gratis per iniziare",
+        "bonus fino a 1.500 euro sul primo deposito più 250 giri gratuiti",
+        "sblocca fino a 1.500€ extra e ottieni 250 giri gratuiti per partire",
+        "pacchetto iniziale fino a 1.500 EUR e 250 giri gratuiti in omaggio",
+        "fino a 1.500€ sul conto e 250 giri gratis per il tuo debutto",
+        "bonus di benvenuto fino a 1.500 euro + pacchetto di 250 giri gratuiti",
+        "raddoppia il deposito fino a 1.500€ e ricevi 250 giri gratis",
+        "fino a 1.500 EUR sul bilancio più 250 giri gratuiti di benvenuto",
+        "ottieni fino a 1.500€ extra e 250 giri gratuiti per iniziare alla grande",
+    ]
     
     # Форматы размещения ссылок (для разнообразия)
     # Распределение: ~35% гиперссылки, ~65% plain URL форматы (как в русском!)
@@ -2389,22 +2400,22 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
     # ═══════════════════════════════════════════════════════════════════
     
     STRUCTURE_TEMPLATES = [
-        # Классические
-        ["HOOK", "FACTS", "LINK1", "LINK2", "CTA"],           # Стандарт
-        ["HOOK", "FACTS", "CTA", "LINK1", "LINK2"],           # CTA перед ссылками
-        ["FACTS", "HOOK", "LINK1", "LINK2", "CTA"],           # Факты вперёд
-        # Агрессивные (ссылки раньше)
-        ["HOOK", "LINK1", "FACTS", "LINK2", "CTA"],           # Ссылка в середине
-        ["LINK1", "HOOK", "FACTS", "LINK2", "CTA"],           # Начинаем со ссылки
-        ["HOOK", "LINK1", "LINK2", "FACTS", "CTA"],           # Обе ссылки рано
+        # Классические (1 ссылка для итальянского!)
+        ["HOOK", "FACTS", "LINK1", "CTA"],                    # Стандарт
+        ["HOOK", "FACTS", "CTA", "LINK1"],                    # CTA перед ссылкой
+        ["FACTS", "HOOK", "LINK1", "CTA"],                    # Факты вперёд
+        # Агрессивные (ссылка раньше)
+        ["HOOK", "LINK1", "FACTS", "CTA"],                    # Ссылка в середине
+        ["LINK1", "HOOK", "FACTS", "CTA"],                    # Начинаем со ссылки
         # Минималистичные
-        ["FACTS", "LINK1", "LINK2"],                          # Без хука и CTA
-        ["HOOK", "FACTS", "LINK1", "LINK2"],                  # Без CTA
-        ["FACTS", "CTA", "LINK1", "LINK2"],                   # Без хука
+        ["FACTS", "LINK1"],                                    # Только факты и ссылка
+        ["HOOK", "FACTS", "LINK1"],                            # Без CTA
+        ["FACTS", "CTA", "LINK1"],                             # Без хука
         # Нестандартные
-        ["CTA", "HOOK", "FACTS", "LINK1", "LINK2"],           # CTA вначале (вопрос)
-        ["HOOK", "CTA", "LINK1", "FACTS", "LINK2"],           # Перемешанные
-        ["FACTS", "LINK1", "CTA", "LINK2"],                   # Компактный
+        ["CTA", "HOOK", "FACTS", "LINK1"],                    # CTA вначале (вопрос)
+        ["HOOK", "CTA", "LINK1", "FACTS"],                    # Перемешанные
+        ["FACTS", "LINK1", "CTA"],                             # Компактный
+        ["HOOK", "LINK1", "CTA"],                              # Короткий с хуком
     ]
     
     def _parse_blocks(self, text: str) -> Dict[str, str]:
@@ -2416,7 +2427,7 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         import re
         
         blocks = {}
-        block_names = ["HOOK", "FACTS", "LINK1", "LINK2", "CTA"]
+        block_names = ["HOOK", "FACTS", "LINK1", "CTA"]  # Итальянский: 1 ссылка
         
         for block_name in block_names:
             pattern = rf'\[{block_name}\](.*?)\[/{block_name}\]'
@@ -2732,8 +2743,9 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         """
         link_format = random.choice(self.LINK_FORMATS)
         
-        # НЕ заменяем бонус пользователя - используем как есть
-        # AI сам парафразирует бонус в промпте
+        # Если описание бонуса слишком короткое - используем фоллбэк вариацию
+        if len(bonus_desc) < 40 and self.BONUS_VARIATIONS:
+            bonus_desc = random.choice(self.BONUS_VARIATIONS)
         
         if link_format == "url_dash_text":
             # https://url - описание бонуса
@@ -2745,13 +2757,11 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
             return f"{url}\n{bonus_desc}"
         
         elif link_format == "hyperlink":
-            # <a href="url">описание</a>
-            # Короткий текст для гиперссылки (ITALIANO)
-            short_texts = [
-                "🔥 Riscuoti il tuo bonus!", "👉 Ottieni", "💰 Attiva bonus", 
-                "🎁 Riscuoti il regalo!", "🎰 Gioca con il bonus", "⚡ Ottieni ora!"
-            ]
-            return f'<a href="{url}">{random.choice(short_texts)}</a> — {bonus_desc}'
+            # <a href="url">ПОЛНОЕ описание бонуса ВНУТРИ ссылки</a>
+            # Описание бонуса должно быть ВНУТРИ тега <a>, не снаружи! (как в русском)
+            emojis = ["🎁", "🔥", "💰", "⚡", "💎", "🚀", "✨", "🎯"]
+            emoji = random.choice(emojis)
+            return f'{emoji} <a href="{url}">{bonus_desc}</a>'
         
         elif link_format == "text_dash_url":
             # описание бонуса - https://url
