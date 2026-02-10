@@ -611,7 +611,22 @@ Variabilità delle introduzioni (ROTAZIONE obbligatoria!):
 12. 👑 VIP: Ricevimento reale, lusso | 👑💎👑
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
-✅ SOLO HTML: <b>, <i>, <code>, <a href>
+
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
 🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
@@ -804,7 +819,22 @@ Volume: Via di mezzo. Né «lenzuolo», né telegramma.
 ✅ SCRIVI IN MODO ORIGINALE, evita i cliché!
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
-✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
+
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
 🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
@@ -991,7 +1021,22 @@ Inizia sempre in modo inaspettato: A volte con il risultato 🏆, a volte con un
 ✅ SCRIVI IN MODO ORIGINALE, evita i cliché!
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
-✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
+
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
 🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
@@ -1185,7 +1230,22 @@ Punto di vista: La narrazione è in terza persona. Personaggio — «eroe», «s
 ✅ SCRIVI IN MODO ORIGINALE, evita i cliché!
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
-✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
+
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
 🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
@@ -1365,7 +1425,22 @@ LA STRUTTURA DEVE «CAMMINARE»: Rompi gli schemi. Inizi variabili: domanda, num
 ✅ SCRIVI IN MODO ORIGINALE, evita i cliché!
 
 ❌ VIETATO: **markdown**, `codice`, [link](url)
-✅ SOLO HTML: <b>, <i>, <u>, <code>, <a href>
+
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
 
 ═══════════════════════════════════════════════════════════════
 🔥 ПОДВОДКА К ССЫЛКЕ — МОТИВАЦИОННЫЙ БЛОК (CRITICO!)
@@ -1643,6 +1718,22 @@ VARIANTI (alterna!):
 
 ❌ VIETATO: **grassetto**, `codice`, __corsivo__, [testo](url) — questo è Markdown!
 
+📝 HTML-ТЕГИ (usa TUTTI, non solo uno!):
+• <b>grassetto</b> — slot, nomi, accenti, titoli
+• <i>corsivo</i> — citazioni, pensieri, commenti emotivi, spiegazioni
+• <u>sottolineato</u> — titoli di blocchi, cose importanti, domande
+• <code>monospaziato</code> — TUTTE le cifre, importi, moltiplicatori
+• <b><i>grassetto corsivo</i></b> — accenti speciali
+
+💬 PENSIERI E REAZIONI (usa nei post!):
+• <i>«Non ho mai visto niente del genere!»</i> — i tuoi pensieri
+• <i>La serie è partita piano piano...</i> — spiegazioni
+• <i>Mi si è mozzato il fiato...</i> — emozioni
+
+⚠️ CRITICO: USA <i> e <u> IN OGNI POST! Non solo <b> e <code>!
+• Almeno 2-3 frasi in <i>corsivo</i> per post
+• Almeno 1 frase in <u>sottolineato</u> per post
+
 ═══════════════════════════════════════════════════════════════
 ✅ GENERA POST UNICO SENZA TEMPLATE!
 ═══════════════════════════════════════════════════════════════
@@ -1748,9 +1839,22 @@ LINK (obbligatorio!):
 
 🎨 TEMATICA: Puoi interpretare il nome della slot {slot} liberamente, ma NON inventare un tema NON CORRELATO!
 
+📝 FORMATTAZIONE TESTO (CRITICO! USA TUTTI I TAG!):
+• <b>grassetto</b> — slot, vincita, accenti forti
+• <i>corsivo</i> — pensieri, emozioni, commenti («Mi si è mozzato il fiato...»)
+• <u>sottolineato</u> — domande retoriche, titoli, frasi importanti
+• <code>monospaziato</code> — cifre, importi, moltiplicatori
+⚠️ OBBLIGATORIO: almeno 2-3 frasi in <i>corsivo</i> + almeno 1 in <u>sottolineato</u>!
+
+🔗 FORMATO DEL LINK CON BONUS (ALTERNA tra questi!):
+1️⃣ HYPERLINK: 🎁 <a href="{url1}">[parafrasa {bonus1} in modo attraente]</a>
+2️⃣ URL + TRATTINO: 🔥 {url1} — <code>[cifre dal bonus]</code> [parafrasa resto]
+3️⃣ URL + NUOVA RIGA: {url1}\n💰 [parafrasa {bonus1} con <b>grassetto</b> e <code>cifre</code>]
+4️⃣ DESCRIZIONE + URL: [parafrasa {bonus1}] 👉 {url1}
+⚠️ DESCRIVI IL BONUS IN MODO ATTRAENTE CON FORMATTAZIONE: usa <b>, <code> nelle cifre!
+
 📏 Lunghezza: MINIMO 650, MASSIMO 800 caratteri
-✅ Solo HTML: <b>, <i>, <u>, <code>, <a href>
-❌ Vietato: casinò"""
+❌ Vietato: casinò, markdown"""
     ]
     
     IMAGE_POST_PROMPTS = [
@@ -1777,6 +1881,9 @@ REGOLE:
 - Inizia con 🎁 o 💎
 - Bonus in <code>tags</code>: <code>[usa {bonus1}]</code>
 - Tanti emoji 🍒🔥💰🚀
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per pensieri e commenti (ALMENO 2 frasi!)
+- <u>sottolineato</u> per frasi importanti (ALMENO 1!)
 - SENZA la parola "casinò" (usa: piattaforma, sito, club)
 - Termina con una nota motivazionale positiva
 - Scrivi descrizioni COMPLETE e ATTRAENTI dei bonus!""",
@@ -1800,7 +1907,9 @@ FORMATO DEL LINK:
 REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
 - Inizia con una domanda ❓
-- <b>Grassetto</b> per gli accenti
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per pensieri e commenti (ALMENO 2 frasi!)
+- <u>sottolineato</u> per frasi importanti (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò"
 - Finale: positivo e motivante
@@ -1825,6 +1934,9 @@ REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
 - Inizia con 💡
 - Passaggi 1. 2. 3.
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per pensieri e consigli (ALMENO 2 frasi!)
+- <u>sottolineato</u> per frasi importanti (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò" (sostituisci: piattaforma, portale)
 - Termina con un pensiero motivante
@@ -1849,6 +1961,9 @@ REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
 - Titolo «Cosa scegliere?» 🤔
 - Vantaggi con ▸
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per opinioni e consigli (ALMENO 2 frasi!)
+- <u>sottolineato</u> per il verdetto finale (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò"
 - Finale positivo e motivante
@@ -1872,7 +1987,9 @@ FORMATO DEL LINK:
 REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
 - Inizia con 🔔 o ⚡
-- <b>Grassetto</b> per le cose importanti
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per commenti e emozioni (ALMENO 2 frasi!)
+- <u>sottolineato</u> per l'annuncio principale (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò"
 - Finale motivante
@@ -1897,6 +2014,9 @@ REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
 - Citazione tra «virgolette»
 - Emoji di esperienza: 💬✅
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per citazioni e impressioni (ALMENO 2 frasi!)
+- <u>sottolineato</u> per il verdetto o raccomandazione (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò" (usa: sito, risorsa, servizio)
 - Raccomandazione positiva
@@ -1919,6 +2039,9 @@ FORMATO DEL LINK:
 
 REGOLE:
 - MINIMO 500, MASSIMO 700 caratteri
+- USA TUTTI I TAG HTML: <b>, <i>, <u>, <code>!
+- <i>corsivo</i> per pensieri e commenti (ALMENO 2 frasi!)
+- <u>sottolineato</u> per frasi chiave (ALMENO 1!)
 - Bonus in <code>tags</code>
 - SENZA la parola "casinò" (sostituisci: piattaforma, club di gioco)
 - Termina in modo positivo
@@ -1940,18 +2063,20 @@ USA ESATTAMENTE LE CIFRE INDICATE SOPRA:
 - Moltiplicatore: x{multiplier}
 NON CAMBIARE, NON ARROTONDARE, NON INVENTARE ALTRI NUMERI!
 
-REGOLE HTML:
-- Importi: <b>grassetto</b> o <code>monospazio</code>
-- Slot: <b>Con Maiuscola</b>
-- Hyperlink: <a href="URL">testo</a> — descrizione del bonus LUNGA (50+ caratteri!)
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
+- <b>grassetto</b> — slot, vincita, accenti forti
+- <i>corsivo</i> — pensieri, emozioni, commenti personali (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — domande retoriche, frasi importanti (ALMENO 1!)
+- <code>monospaziato</code> — cifre, importi, moltiplicatori
 - Emoji 🔥💰🍒
 - MINIMO 500, MASSIMO 700 caratteri!
 
-⚠️ FORMATO DEI LINK (scegli uno):
+⚠️ FORMATO DEI LINK (scegli uno, ALTERNA!):
 🚨 USA SOLO {bonus1} - NON inventare altri bonus!
-1) {url1} - 🎁 [parafrasa {bonus1}]
-2) {url1}\n🔥 [parafrasa {bonus1}]
-3) <a href="{url1}">🚀 RISCUOTI IL TUO BONUS!</a> — [parafrasa {bonus1}]""",
+1) {url1} — 🎁 [parafrasa {bonus1} con <code>cifre</code> e <b>accenti</b>]
+2) {url1}\n🔥 [parafrasa {bonus1} con formattazione]
+3) 🎁 <a href="{url1}">[parafrasa {bonus1} in modo attraente]</a>
+4) [parafrasa {bonus1}] 👉 {url1}""",
 
         """Scrivi un reportage (SENZA nome).
 {slot}, <b>{bet}{currency}</b> → <b>{win}{currency}</b>, x{multiplier}.
@@ -1963,14 +2088,18 @@ Link: {url1}.
 Scommessa: {bet}{currency} | Vincita: {win}{currency} | x{multiplier}
 NON CAMBIARE E NON INVENTARE ALTRI NUMERI!
 
-REGOLE HTML:
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 - Inizia con 🔴 o ⚡
-- Importi in <b>grassetto</b>
-- Slot: <b>Con Maiuscola</b>
+- <b>grassetto</b> — slot, vincita, accenti
+- <i>corsivo</i> — pensieri, reazioni, emozioni (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — domande, frasi chiave (ALMENO 1!)
+- <code>monospaziato</code> — cifre, importi
 - MINIMO 500, MASSIMO 700 caratteri!
 
-⚠️ FORMATO DEI LINK: URL - [parafrasa {bonus1}] 
-🚨 USA SOLO {bonus1} - NON inventare altri bonus!""",
+⚠️ FORMATO DEI LINK (ALTERNA tra!): 
+🚨 USA SOLO {bonus1} - NON inventare altri bonus!
+1) {url1} — [parafrasa {bonus1} con <code>cifre</code>]
+2) 🔥 <a href="{url1}">[parafrasa {bonus1}]</a>""",
 
         """Scrivi un post con DOMANDA (senza nome del giocatore).
 {slot}, entrata <b>{bet}{currency}</b>, uscita <b>{win}{currency}</b>, x{multiplier}.
@@ -1981,16 +2110,19 @@ Link: {url1}.
 🚨 USA ESATTAMENTE: {bet}{currency} (entrata) → {win}{currency} (uscita) | x{multiplier}
 NON CAMBIARE I NUMERI!
 
-REGOLE HTML:
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 - Inizia con ❓
-- Importi: <b>grassetto</b> o <code>mono</code>
+- <b>grassetto</b> — cifre chiave, slot
+- <i>corsivo</i> — pensieri, dubbi, emozioni (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — la domanda principale, frasi importanti (ALMENO 1!)
+- <code>monospaziato</code> — cifre, importi
 - Intrigo → risposta
-- Link con 👇
 - MINIMO 500, MASSIMO 700 caratteri!
 
 ⚠️ FORMATO DEI LINK (MOTIVA A CLICCARE!):
-👇 {url1}
-🎁 [parafrasa {bonus1}] - 🚨 USA SOLO {bonus1}!""",
+🚨 USA SOLO {bonus1} - NON inventare altri bonus!
+1) 👇 {url1}\n🎁 [parafrasa {bonus1} con <code>cifre</code> e <b>accenti</b>]
+2) 🎁 <a href="{url1}">[parafrasa {bonus1} in modo attraente]</a>""",
 
         """Scrivi un post EMOZIONALE (senza nome).
 {slot}, <b>{bet}{currency}</b> è diventato <b>{win}{currency}</b> (x{multiplier}).
@@ -2001,13 +2133,15 @@ Link: {url1}.
 🚨 NUMERI ESATTI: {bet}{currency} → {win}{currency} (x{multiplier})
 NON INVENTARE ALTRE CIFRE!
 
-REGOLE HTML:
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 - Emoji: 🔥💰😱🍋🍒
-- Importi in <b>grassetto</b>
-- Slot <b>Con Maiuscola</b>
+- <b>grassetto</b> — vincita, slot, accenti emotivi
+- <i>corsivo</i> — pensieri, emozioni forti, commenti (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — frasi chiave, momento clou (ALMENO 1!)
+- <code>monospaziato</code> — cifre, importi, moltiplicatori
 - MINIMO 500, MASSIMO 700 caratteri!
 
-⚠️ FORMATO DEI LINK: [parafrasa {bonus1}] PRIMA, poi URL
+⚠️ FORMATO DEI LINK: [parafrasa {bonus1} con <b>grassetto</b> e <code>cifre</code>] PRIMA, poi URL
 🚨 USA SOLO {bonus1} - NON inventare altri bonus!
 📲 👉 {url1} 👈""",
 
@@ -2019,14 +2153,19 @@ Link: {url1}.
 
 🚨 CIFRE ESATTE: {bet}{currency} → {win}{currency}, x{multiplier} - NON CAMBIARLE!
 
-REGOLE HTML:
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 - Inizia con "Guarda," o "Senti," o "Ascolta,"
 - Emoji: 💪😎🤙
-- Importi in <b>grassetto</b>
+- <b>grassetto</b> — vincita, slot
+- <i>corsivo</i> — pensieri casuali, battute (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — punto chiave, frase importante (ALMENO 1!)
+- <code>monospaziato</code> — cifre
 - MINIMO 500, MASSIMO 700 caratteri!
 
-⚠️ FORMATO DEI LINK: 👉 URL - [parafrasa {bonus1}]
-🚨 USA SOLO {bonus1} - NON inventare altri bonus!""",
+⚠️ FORMATO DEI LINK (ALTERNA!):
+🚨 USA SOLO {bonus1} - NON inventare altri bonus!
+1) 👉 {url1} — [parafrasa {bonus1} con <code>cifre</code>]
+2) <a href="{url1}">🤙 [parafrasa {bonus1}]</a>""",
 
         """Scrivi un post con NUMERI (senza nome).
 {slot}, entrata <b>{bet}{currency}</b>, risultato <b>{win}{currency}</b>, x{multiplier}.
@@ -2037,31 +2176,34 @@ Link: {url1}.
 🚨 USA QUESTI NUMERI ESATTI NEL TESTO: {bet}{currency}, {win}{currency}, x{multiplier}
 VIETATO cambiare o inventare altre cifre!
 
-REGOLE HTML:
+FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
 - Prima riga: <b>{win}{currency}</b>!
-- Importi in <b>grassetto</b> o <code>monospazio</code>
-- Moltiplicatore: <b>x{multiplier}</b>
+- <b>grassetto</b> — vincita, slot
+- <i>corsivo</i> — commenti, analisi, emozioni (ALMENO 2-3 frasi!)
+- <u>sottolineato</u> — titolo o frase riassuntiva (ALMENO 1!)
+- <code>monospaziato</code> — cifre, importi, moltiplicatori
 - Link dopo ━━━
 - MINIMO 500, MASSIMO 700 caratteri!
 
 ⚠️ FORMATO DEI LINK dopo il separatore:
+🚨 USA SOLO {bonus1} - NON inventare altri bonus!
 ━━━━━━━━━━
 ➡️ {url1}
-🎁 [parafrasa {bonus1}] - 🚨 USA SOLO {bonus1}!""",
+🎁 [parafrasa {bonus1} con <code>cifre</code> e <b>accenti</b>]""",
     ]
     
     # BONUS_VARIATIONS убраны - теперь используем ТОЛЬКО оригинальный бонус пользователя {bonus1}
     BONUS_VARIATIONS = []  # Пустой список - НЕ используется
     
     # Форматы размещения ссылок (для разнообразия)
-    # Распределение: ~12% гиперссылки, ~88% plain URL форматы
+    # Распределение: ~35% гиперссылки, ~65% plain URL форматы (как в русском!)
     LINK_FORMATS = [
-        "hyperlink", "hyperlink",  # 2/17 = ~12% гиперссылки
-        "emoji_url_text", "emoji_url_text", "emoji_url_text",  # 3/17 = ~18%
+        "hyperlink", "hyperlink", "hyperlink", "hyperlink", "hyperlink", "hyperlink",  # 6/17 = ~35% гиперссылки
+        "emoji_url_text", "emoji_url_text",  # 2/17 = ~12%
         "url_dash_text", "url_dash_text", "url_dash_text",  # 3/17 = ~18%
-        "arrow_url_text", "arrow_url_text", "arrow_url_text",  # 3/17 = ~18%
-        "text_dash_url", "text_dash_url", "text_dash_url",  # 3/17 = ~18%
-        "url_newline_text", "url_newline_text", "url_newline_text",  # 3/17 = ~18%
+        "arrow_url_text", "arrow_url_text",  # 2/17 = ~12%
+        "text_dash_url", "text_dash_url",  # 2/17 = ~12%
+        "url_newline_text", "url_newline_text",  # 2/17 = ~12%
     ]
     
     # Синонимы для "giri/FS" (ITALIANO)
@@ -2632,11 +2774,21 @@ REGOLE HTML:
     def _postprocess_text(self, text: str, slot_name: str = "") -> str:
         """
         Постобработка сгенерированного текста:
+        - Очистка сломанного HTML
         - Замена бэктиков на HTML <code>
         - Замена Markdown на HTML
         - Форматирование названия слота
         """
         import re
+        
+        # 0. Очистка сломанного HTML от AI
+        # Убираем дублированные/сломанные href конструкции
+        # Пример: <a href="url">"">text → <a href="url">text
+        text = re.sub(r'(<a\s+href="[^"]*">)\s*"[^"]*">', r'\1', text)
+        # Убираем HTML-entities в ссылках: &quot;&gt; → ничего
+        text = re.sub(r'&quot;\s*&gt;', '', text)
+        # Убираем двойные закрывающие теги ссылок
+        text = re.sub(r'</a>\s*</a>', '</a>', text)
         
         # 1. Замена бэктиков на <code>
         # `текст` → <code>текст</code>
@@ -3546,8 +3698,7 @@ REGOLE HTML:
                 # 4.5. Исправляем сломанные/обрезанные ссылки
                 text = self._fix_broken_urls(text)
                 
-                # 4.6. Фильтруем не-русские символы
-                text = self._filter_non_russian(text)
+                # 4.6. _filter_non_russian НЕ используем для итальянского - она для русского
                 
                 # 4.7. Удаляем упоминания чата
                 text = self._remove_chat_mentions(text)
