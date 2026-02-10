@@ -3335,7 +3335,7 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         
         return result
     
-    def _smart_trim_text(self, text: str, max_length: int = 950) -> str:
+    def _smart_trim_text(self, text: str, max_length: int = 800) -> str:
         """
         Умное сокращение текста с СОХРАНЕНИЕМ ссылок и их описаний.
         
@@ -3389,15 +3389,19 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         if len(text) <= max_length:
             return text
         
-        # 4. Сокращаем "воду" в незащищённых строках
+        # 4. Сокращаем "воду" в незащищённых строках (итальянские фразы-филлеры)
         lines = text.split('\n')
         water_phrases = [
-            'Никто не ожидал!', 'Это просто нечто!', 'Тот случай, когда',
-            'Вот это да!', 'Просто вдумайся', 'Это не шутка',
-            'Красота, на которую можно смотреть вечно',
-            'смотришь и думаешь', 'а потом экран', 'Представь себе',
-            'Такие моменты цепляют', 'Такой заход запоминается',
-            'Двигайся уверенно', 'удача сама подтянется',
+            'Nessuno se lo aspettava!', 'Questo è semplicemente incredibile!',
+            'Quel momento in cui', 'Ma dai!', 'Pensaci un attimo',
+            'Non è uno scherzo', 'Una bellezza da guardare per sempre',
+            'Guardi e pensi', 'E poi lo schermo', 'Immagina',
+            'Questi momenti ti catturano', 'Un ingresso così si ricorda',
+            'Muoviti con sicurezza', 'La fortuna arriverà da sola',
+            'Non ci crederai!', 'Assurdo!', 'Roba da pazzi!',
+            'Chi se lo sarebbe mai immaginato', 'Incredibile ma vero',
+            'Che spettacolo!', 'Guardate questo!', 'Pazzesco!',
+            'Semplicemente wow!', 'Da non credere!',
         ]
         
         for i, line in enumerate(lines):
@@ -3670,36 +3674,40 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                     sys.stdout.flush()
 
                     # Telegram лимит caption = 1024 символа
-                    # С учётом HTML тегов целимся в 500-750 символов
-                    if 500 <= len(candidate) <= 750:
+                    # Допустимый диапазон: 500-1000 (как в русском сценарии)
+                    # Жёсткий trim стоит после постобработки на 1020→1000
+                    if 500 <= len(candidate) <= 1000:
                         text = candidate
                         break
 
-                    if len(candidate) > 750:
+                    if len(candidate) > 1000:
                         # следующая попытка просим короче
-                        length_note = "\n\n⚠️ Пост слишком длинный! Сократи до максимум 700 символов, но СОХРАНИ ссылку и её описание."
-                        text = candidate  # на всякий случай запомним
-                    elif len(candidate) < 500:
-                        # пост слишком короткий - просим длиннее
-                        length_note = "\n\n⚠️ Пост слишком КОРОТКИЙ! Добавь больше деталей, эмоций, описания. Минимум 550 символов!"
-                        text = candidate
+                        length_note = "\n\n⚠️ Il post è troppo lungo! Riducilo a massimo 800-900 caratteri, ma CONSERVA il link e la sua descrizione."
+                        text = candidate  # запомним на случай если все попытки провалятся
                         continue
 
-                    # слишком короткий - эта ветка больше не должна срабатывать т.к. мы обрабатываем это выше
-                    length_note = "\n\n⚠️ Пост слишком короткий! Добавь больше деталей, эмоций, описания. Минимум 650 символов!"
+                    # слишком короткий (< 500)
+                    length_note = "\n\n⚠️ Il post è troppo CORTO! Aggiungi più dettagli, emozioni, descrizione. Minimo 550 caratteri!"
                     text = candidate
 
                 if text is None or len(text) < 300:
                     raise Exception("Не удалось получить валидный текст от API")
 
                 # Постобработка
-                text = self._filter_ai_responses(text)  # Убираем ответы AI типа "Aquí tienes..."
+                text = self._filter_ai_responses(text)  # Убираем ответы AI типа "Ecco il post..."
                 text = self._postprocess_text(text, video.slot)
                 text = self._fix_broken_urls(text)
                 # _filter_non_russian НЕ используем для итальянского - она для русского
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
                 text = self._randomize_currency_format(text, video)
+                
+                # 🚨 ЖЁСТКИЙ ЛИМИТ: Telegram caption = 1024 символа
+                if len(text) > 1020:
+                    print(f"   ✂️ Текст слишком длинный ({len(text)}), сокращаем...")
+                    text = self._smart_trim_text(text, 1000)
+                    print(f"   ✅ После сокращения: {len(text)}")
+                    sys.stdout.flush()
 
                 # Проверка упоминания стримера (если есть)
                 if has_real_streamer and streamer_name:
@@ -3942,12 +3950,16 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                 
                 # 4.8. Проверяем слово "casino" (единственное запрещенное)
                 if "casino" in text.lower():
-                    print(f"   ⚠️ Image post contiene palabra 'casino', regenerando...")
+                    print(f"   ⚠️ Image пост содержит слово 'casino', регенерируем...")
                     sys.stdout.flush()
                     continue
                 
-                # ВАЖНО: НЕ ОБРЕЗАЕМ текст! Пользователь запретил обрезку.
-                # AI должен сам создавать посты оптимальной длины согласно промпту.
+                # 🚨 ЖЁСТКИЙ ЛИМИТ: Telegram caption = 1024 символа
+                if len(text) > 1020:
+                    print(f"   ✂️ Image пост слишком длинный ({len(text)}), сокращаем...")
+                    text = self._smart_trim_text(text, 1000)
+                    print(f"   ✅ После сокращения: {len(text)}")
+                    sys.stdout.flush()
                 
                 # КРИТИЧЕСКАЯ ПРОВЕРКА: Ссылка должна присутствовать в финальном тексте!
                 url1_present = self.bonus_data.url1 in text or (self.bonus_data.url1.replace('https://', '') in text)
