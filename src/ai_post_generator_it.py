@@ -2972,6 +2972,156 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
         else:
             return f"{url} - {bonus_desc}"
     
+    # ═══════════════════════════════════════════════════════════════════
+    # ФОРМАТИРОВАНИЕ ОПИСАНИЙ БОНУСОВ (HTML-стили)
+    # ═══════════════════════════════════════════════════════════════════
+    
+    # 8 стилей форматирования (без plain — всегда форматируем)
+    BONUS_DESC_STYLES = [
+        "bold",                  # <b>текст</b>
+        "italic",                # <i>текст</i>
+        "bold_italic",           # <b><i>текст</i></b>
+        "underline",             # <u>текст</u>
+        "underline_bold",        # <u><b>текст</b></u>
+        "underline_italic",      # <u><i>текст</i></u>
+        "underline_bold_italic", # <u><b><i>текст</i></b></u>
+        "blockquote",            # <blockquote>текст</blockquote>
+    ]
+    
+    def _wrap_desc_in_style(self, text: str, style: str) -> str:
+        """Оборачивает текст в указанный HTML-стиль."""
+        if style == "bold":
+            return f"<b>{text}</b>"
+        elif style == "italic":
+            return f"<i>{text}</i>"
+        elif style == "bold_italic":
+            return f"<b><i>{text}</i></b>"
+        elif style == "underline":
+            return f"<u>{text}</u>"
+        elif style == "underline_bold":
+            return f"<u><b>{text}</b></u>"
+        elif style == "underline_italic":
+            return f"<u><i>{text}</i></u>"
+        elif style == "underline_bold_italic":
+            return f"<u><b><i>{text}</i></b></u>"
+        elif style == "blockquote":
+            return f"<blockquote>{text}</blockquote>"
+        return text
+    
+    def _is_desc_already_formatted(self, text: str, desc: str) -> bool:
+        """Проверяет, обёрнуто ли описание бонуса в HTML-теги."""
+        pos = text.find(desc)
+        if pos < 0:
+            return False
+        before = text[max(0, pos - 20):pos]
+        return any(tag in before for tag in ['<b>', '<i>', '<u>', '<blockquote>', '<code>'])
+    
+    def _format_desc_near_url(self, text: str, url: str, style: str) -> str:
+        """
+        Находит описание бонуса рядом с URL и оборачивает его в HTML-стиль.
+        """
+        import re
+        
+        lines = text.split('\n')
+        url_line_idx = None
+        
+        for i, line in enumerate(lines):
+            if url in line:
+                url_line_idx = i
+                break
+        
+        if url_line_idx is None:
+            return text
+        
+        url_line = lines[url_line_idx]
+        
+        # === ПАТТЕРН 1: URL — описание (на одной строке) ===
+        match_after = re.search(
+            rf'{re.escape(url)}\s*[—–\-:]\s*(.+?)$',
+            url_line
+        )
+        if match_after:
+            desc_text = match_after.group(1).strip()
+            clean = re.sub(r'<[^>]+>', '', desc_text)
+            clean = re.sub(r'[\U0001F300-\U0001F9FF]', '', clean).strip()
+            if len(clean) >= 5 and not self._is_desc_already_formatted(text, desc_text):
+                formatted = self._wrap_desc_in_style(desc_text, style)
+                lines[url_line_idx] = url_line.replace(desc_text, formatted, 1)
+                return '\n'.join(lines)
+        
+        # === ПАТТЕРН 2: описание — URL (на одной строке) ===
+        match_before = re.search(
+            rf'^(.*?)\s*[—–\-]\s*{re.escape(url)}',
+            url_line
+        )
+        if match_before:
+            desc_text = match_before.group(1).strip()
+            clean = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│]+', '', desc_text)
+            clean = re.sub(r'<[^>]+>', '', clean).strip()
+            if len(clean) >= 5 and not self._is_desc_already_formatted(text, desc_text):
+                formatted = self._wrap_desc_in_style(desc_text, style)
+                lines[url_line_idx] = url_line.replace(desc_text, formatted, 1)
+                return '\n'.join(lines)
+        
+        # === ПАТТЕРН 3: URL на строке, описание на СЛЕДУЮЩЕЙ ===
+        if url_line_idx + 1 < len(lines):
+            next_line = lines[url_line_idx + 1]
+            next_clean = next_line.strip()
+            if (next_clean and 'http' not in next_clean 
+                and len(next_clean) >= 5 
+                and not self._is_desc_already_formatted(text, next_clean)):
+                desc_part = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│👉🔥💰🎁⚡💎🚀🎯✨]+', '', next_clean)
+                if len(desc_part) >= 5:
+                    prefix = next_clean[:len(next_clean) - len(next_clean.lstrip())]
+                    leading_symbols = next_clean[:next_clean.find(desc_part)] if desc_part in next_clean else ""
+                    formatted = leading_symbols + self._wrap_desc_in_style(desc_part, style)
+                    lines[url_line_idx + 1] = prefix + formatted
+                    return '\n'.join(lines)
+        
+        # === ПАТТЕРН 4: описание на ПРЕДЫДУЩЕЙ строке, URL один на строке ===
+        url_only = url_line.strip()
+        url_stripped = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│👉🔥💰🎁⚡💎🚀🎯✨]+', '', url_only)
+        if url_stripped == url and url_line_idx > 0:
+            prev_line = lines[url_line_idx - 1]
+            prev_clean = prev_line.strip()
+            if (prev_clean and 'http' not in prev_clean 
+                and len(prev_clean) >= 5 
+                and not self._is_desc_already_formatted(text, prev_clean)):
+                formatted = self._wrap_desc_in_style(prev_clean, style)
+                lines[url_line_idx - 1] = prev_line.replace(prev_clean, formatted, 1)
+                return '\n'.join(lines)
+        
+        return text
+    
+    def _apply_bonus_desc_formatting(self, text: str) -> str:
+        """
+        Применяет случайное HTML-форматирование к описанию бонуса.
+        
+        Правила:
+        - Работает только для plain URL (НЕ гиперссылок)
+        - Не дублирует форматирование
+        - 8 стилей: жирный, курсив, жирный курсив, подчёркивание,
+          подчёркнутый жирный, подчёркнутый курсив, подчёркнутый жирный курсив, цитата
+        """
+        if not self.bonus_data:
+            return text
+        
+        # Проверяем: если ссылка оформлена как гиперссылка — пропускаем
+        url = self.bonus_data.url1
+        if url and (f'<a href="{url}"' in text or f"<a href='{url}'" in text):
+            return text
+        
+        # Выбираем стиль
+        style = random.choice(self.BONUS_DESC_STYLES)
+        
+        print(f"   🎨 Стиль описания бонуса: {style}")
+        
+        # Форматируем описание для ссылки
+        if url:
+            text = self._format_desc_near_url(text, url, style)
+        
+        return text
+    
     def _postprocess_text(self, text: str, slot_name: str = "") -> str:
         """
         Постобработка сгенерированного текста:
@@ -3714,6 +3864,9 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
                 text = self._randomize_currency_format(text, video)
+
+                # 🎨 Рандомное HTML-форматирование описания бонуса
+                text = self._apply_bonus_desc_formatting(text)
                 
                 # 🚨 ЖЁСТКИЙ ЛИМИТ: Telegram caption = 1024 символа
                 if len(text) > 1020:
