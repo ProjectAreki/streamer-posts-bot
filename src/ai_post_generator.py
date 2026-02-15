@@ -2371,7 +2371,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         self._existing_posts: List[str] = []  # База существующих постов для обучения AI
         self._used_bonus1_variations: List[str] = []  # Отслеживание использованных вариаций bonus1
         self._used_bonus2_variations: List[str] = []  # Отслеживание использованных вариаций bonus2
-        self._link_format_counter = 0  # Счётчик для строгой ротации форматов ссылок (1-6)
+        self._link_format_counter = 0  # Счётчик для строгой ротации форматов ссылок
+        self._last_link_prestyled = False  # Флаг: ссылки уже стилизованы (категории 13-20)
         
         # Загрузка шаблонов блоков цифр для ротации
         self._number_formats: List[dict] = []
@@ -3297,6 +3298,374 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             return f"{url} - {bonus_desc}"
     
     # ═══════════════════════════════════════════════════════════════════
+    # ПРОГРАММНАЯ РОТАЦИЯ 20 КАТЕГОРИЙ ФОРМАТОВ ССЫЛОК
+    # ═══════════════════════════════════════════════════════════════════
+    
+    # 20 визуально различимых категорий оформления ссылок
+    # Внутри каждой — sub-варианты (разные эмодзи, стрелки, CTA и т.д.)
+    LINK_FORMAT_CATEGORIES = {
+        # === Группа A: URL первый, одна строка ===
+        1: {
+            "type": "inline_url_first",
+            "prefixes": ["👉 ", "🔥 ", "💰 ", "🎁 ", "⚡ ", "💎 ", "🚀 ", "🎯 "],
+            "separator": " — ",
+        },
+        2: {
+            "type": "inline_url_first",
+            "prefixes": ["🔥🔥 ", "💰💰 ", "🎁🎁 ", "⚡⚡ ", "💎💎 "],
+            "separator": " — ",
+        },
+        3: {
+            "type": "inline_url_first",
+            "prefixes": ["→ ", "⟹ ", "↳ ", "▶ ", "☛ "],
+            "separator": " — ",
+        },
+        4: {
+            "type": "inline_url_first",
+            "prefixes": ["┃ ", "│ ", "▸ ", "• ", "◆ ", "► "],
+            "separator": " — ",
+        },
+        5: {
+            "type": "inline_url_first",
+            "prefixes": ["1️⃣ ", "▪️ ", "✦ ", "◇ ", "★ "],
+            "separator": " — ",
+        },
+        # === Группа B: URL первый, две строки ===
+        6: {
+            "type": "url_above_desc",
+            "url_prefixes": [""],
+            "desc_prefixes": [""],
+        },
+        7: {
+            "type": "url_above_desc",
+            "url_prefixes": ["👉 ", "🔥 ", "💰 ", "🎁 ", "⚡ "],
+            "desc_prefixes": [""],
+        },
+        8: {
+            "type": "url_above_desc",
+            "url_prefixes": [""],
+            "desc_prefixes": ["→ ", "👉 ", "🔥 ", "💰 ", "⚡ "],
+        },
+        # === Группа C: Описание первое ===
+        9: {
+            "type": "inline_desc_first",
+            "separators": [" — ", " – ", " - "],
+            "prefixes": [""],
+        },
+        10: {
+            "type": "desc_above_url",
+            "url_prefixes": [""],
+            "desc_prefixes": [""],
+        },
+        11: {
+            "type": "desc_above_url",
+            "url_prefixes": ["👉 ", "🔥 ", "➡️ ", "▶️ ", "⬇️ "],
+            "desc_prefixes": [""],
+        },
+        12: {
+            "type": "inline_desc_first",
+            "separators": [" — ", " – "],
+            "prefixes": ["Забирай: ", "Держи: ", "Бонус: ", "Твоё: ", "Лови: ", "Жми: "],
+        },
+        # === Группа D: Гиперссылки ===
+        13: {
+            "type": "hyperlink",
+            "prefixes": [""],
+        },
+        14: {
+            "type": "hyperlink",
+            "prefixes": ["🎁 ", "🔥 ", "💰 ", "⚡ ", "💎 ", "🚀 ", "✨ ", "🎯 "],
+        },
+        # === Группа E: HTML-стилизованное описание ===
+        15: {
+            "type": "styled_desc_above_url",
+            "tag_open": "<b>", "tag_close": "</b>",
+            "url_prefixes": ["", "👉 "],
+        },
+        16: {
+            "type": "styled_inline_desc_first",
+            "tag_open": "<i>", "tag_close": "</i>",
+            "separators": [" — ", " – "],
+        },
+        17: {
+            "type": "styled_desc_above_url",
+            "tag_open": "<u>", "tag_close": "</u>",
+            "url_prefixes": ["", "👉 "],
+        },
+        18: {
+            "type": "styled_inline_desc_first",
+            "tag_open": "<b><i>", "tag_close": "</i></b>",
+            "separators": [" — ", " – "],
+        },
+        19: {
+            "type": "styled_desc_above_url",
+            "tag_open": "<code>", "tag_close": "</code>",
+            "url_prefixes": [""],
+        },
+        20: {
+            "type": "blockquote_desc",
+            "url_prefixes": ["", "👉 "],
+        },
+    }
+    
+    def _extract_link_block_info(self, text: str, url: str) -> dict:
+        """
+        Находит URL и его описание бонуса в тексте.
+        
+        Возвращает dict:
+            'desc'       — текст описания бонуса (очищенный от HTML-тегов стилизации)
+            'start_line' — индекс первой строки блока ссылки
+            'end_line'   — индекс последней строки блока ссылки
+            'found'      — True если URL найден
+        Или {'found': False} если URL не найден.
+        """
+        import re
+        
+        lines = text.split('\n')
+        
+        for i, line in enumerate(lines):
+            if url not in line:
+                continue
+            
+            # --- Гиперссылка: <a href="URL">описание</a> ---
+            hyper = re.search(rf'<a\s+href="{re.escape(url)}"[^>]*>([^<]+)</a>', line)
+            if hyper:
+                return {
+                    'desc': hyper.group(1).strip(),
+                    'start_line': i,
+                    'end_line': i,
+                    'found': True,
+                    'is_hyperlink': True,
+                }
+            
+            # --- URL — описание (на одной строке) ---
+            after = re.search(rf'{re.escape(url)}\s*[—–\-:]\s*(.+?)$', line)
+            if after:
+                desc = after.group(1).strip()
+                # Очищаем от HTML-тегов стилизации для чистого описания
+                clean = re.sub(r'</?(?:b|i|u|strong|em|code)>', '', desc).strip()
+                if len(clean) >= 5:
+                    return {
+                        'desc': clean,
+                        'start_line': i,
+                        'end_line': i,
+                        'found': True,
+                        'is_hyperlink': False,
+                    }
+            
+            # --- описание — URL (на одной строке) ---
+            before = re.search(rf'^(.*?)\s*[—–\-]\s*{re.escape(url)}', line)
+            if before:
+                raw_desc = before.group(1).strip()
+                # Убираем ведущие эмодзи/символы для чистого текста
+                clean = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│▪️◇★🔥💰🎁⚡💎🚀🎯✨👉]+', '', raw_desc)
+                clean = re.sub(r'</?(?:b|i|u|strong|em|code)>', '', clean).strip()
+                # Убираем CTA-префиксы
+                clean = re.sub(r'^(?:Забирай|Держи|Бонус|Твоё|Лови|Жми)\s*:\s*', '', clean).strip()
+                if len(clean) >= 5:
+                    return {
+                        'desc': clean,
+                        'start_line': i,
+                        'end_line': i,
+                        'found': True,
+                        'is_hyperlink': False,
+                    }
+            
+            # --- URL на строке, описание на СЛЕДУЮЩЕЙ ---
+            if i + 1 < len(lines):
+                next_line = lines[i + 1].strip()
+                if next_line and 'http' not in next_line and len(next_line) >= 5:
+                    clean = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│▪️◇★🔥💰🎁⚡💎🚀🎯✨👉]+', '', next_line)
+                    clean = re.sub(r'</?(?:b|i|u|strong|em|code|blockquote)>', '', clean).strip()
+                    if len(clean) >= 5:
+                        return {
+                            'desc': clean,
+                            'start_line': i,
+                            'end_line': i + 1,
+                            'found': True,
+                            'is_hyperlink': False,
+                        }
+            
+            # --- описание на ПРЕДЫДУЩЕЙ строке, URL один на этой ---
+            url_only = re.sub(r'^[\U0001F300-\U0001F9FF\s▸•◆►→⟹↳▶☛✦┃│▪️◇★🔥💰🎁⚡💎🚀🎯✨👉]+', '', line.strip())
+            if url_only == url and i > 0:
+                prev_line = lines[i - 1].strip()
+                if prev_line and 'http' not in prev_line and len(prev_line) >= 5:
+                    clean = re.sub(r'</?(?:b|i|u|strong|em|code|blockquote)>', '', prev_line).strip()
+                    if len(clean) >= 5:
+                        return {
+                            'desc': clean,
+                            'start_line': i - 1,
+                            'end_line': i,
+                            'found': True,
+                            'is_hyperlink': False,
+                        }
+            
+            # URL найден, но описания нет
+            return {
+                'desc': '',
+                'start_line': i,
+                'end_line': i,
+                'found': True,
+                'is_hyperlink': False,
+            }
+        
+        return {'found': False}
+    
+    def _build_link_block(self, url: str, desc: str, category_id: int) -> str:
+        """
+        Строит блок ссылки по указанной категории.
+        
+        Args:
+            url: URL ссылки
+            desc: чистый текст описания бонуса (без HTML)
+            category_id: номер категории (1-20)
+        
+        Returns:
+            Отформатированный блок ссылки
+        """
+        cat = self.LINK_FORMAT_CATEGORIES.get(category_id)
+        if not cat:
+            return f"{url} — {desc}"
+        
+        fmt_type = cat["type"]
+        
+        if fmt_type == "inline_url_first":
+            # prefix URL — desc
+            prefix = random.choice(cat["prefixes"])
+            sep = cat["separator"]
+            return f"{prefix}{url}{sep}{desc}"
+        
+        elif fmt_type == "url_above_desc":
+            # [prefix]URL
+            # [desc_prefix]desc
+            url_pfx = random.choice(cat["url_prefixes"])
+            desc_pfx = random.choice(cat["desc_prefixes"])
+            return f"{url_pfx}{url}\n{desc_pfx}{desc}"
+        
+        elif fmt_type == "inline_desc_first":
+            # [prefix]desc — URL
+            prefix = random.choice(cat["prefixes"])
+            sep = random.choice(cat["separators"])
+            return f"{prefix}{desc}{sep}{url}"
+        
+        elif fmt_type == "desc_above_url":
+            # desc
+            # [url_prefix]URL
+            url_pfx = random.choice(cat["url_prefixes"])
+            desc_pfx = random.choice(cat["desc_prefixes"])
+            return f"{desc_pfx}{desc}\n{url_pfx}{url}"
+        
+        elif fmt_type == "hyperlink":
+            # [prefix]<a href="URL">desc</a>
+            prefix = random.choice(cat["prefixes"])
+            return f'{prefix}<a href="{url}">{desc}</a>'
+        
+        elif fmt_type == "styled_desc_above_url":
+            # <tag>desc</tag>
+            # [url_prefix]URL
+            tag_o = cat["tag_open"]
+            tag_c = cat["tag_close"]
+            url_pfx = random.choice(cat["url_prefixes"])
+            return f"{tag_o}{desc}{tag_c}\n{url_pfx}{url}"
+        
+        elif fmt_type == "styled_inline_desc_first":
+            # <tag>desc</tag> — URL
+            tag_o = cat["tag_open"]
+            tag_c = cat["tag_close"]
+            sep = random.choice(cat["separators"])
+            return f"{tag_o}{desc}{tag_c}{sep}{url}"
+        
+        elif fmt_type == "blockquote_desc":
+            # <blockquote>desc</blockquote>
+            # [url_prefix]URL
+            url_pfx = random.choice(cat["url_prefixes"])
+            return f"<blockquote>{desc}</blockquote>\n{url_pfx}{url}"
+        
+        return f"{url} — {desc}"
+    
+    def _reformat_link_blocks(self, text: str) -> str:
+        """
+        Программно переформатирует блоки ссылок для визуального разнообразия.
+        
+        Алгоритм:
+        1. Находит каждый URL и его описание бонуса в тексте AI
+        2. Выбирает категорию формата (ротация по счётчику)
+        3. Перестраивает блок ссылки кодом
+        4. Оба URL получают ОДИНАКОВЫЙ формат (одна категория)
+        
+        20 категорий × sub-варианты = 100+ визуальных комбинаций.
+        Для 80 постов: каждая категория появляется 4 раза.
+        """
+        if not self.bonus_data:
+            return text
+        
+        urls = []
+        if self.bonus_data.url1:
+            urls.append(self.bonus_data.url1)
+        if self.bonus_data.url2:
+            urls.append(self.bonus_data.url2)
+        
+        if not urls:
+            return text
+        
+        # Извлекаем информацию о блоках ссылок
+        blocks = []
+        for url in urls:
+            info = self._extract_link_block_info(text, url)
+            if info.get('found'):
+                info['url'] = url
+                blocks.append(info)
+        
+        if not blocks:
+            return text
+        
+        # Выбираем категорию (ротация по счётчику)
+        # _link_format_counter уже инкрементируется в _get_anti_repetition_instruction
+        category_id = (self._link_format_counter % 20) + 1
+        
+        cat = self.LINK_FORMAT_CATEGORIES.get(category_id, {})
+        cat_type = cat.get("type", "")
+        is_hyperlink = cat_type == "hyperlink"
+        is_prestyled = cat_type in ("styled_desc_above_url", "styled_inline_desc_first", "blockquote_desc")
+        
+        print(f"   🔗 Формат ссылок: категория #{category_id} ({cat_type})")
+        
+        # Заменяем блоки — снизу вверх чтобы индексы не сбивались
+        lines = text.split('\n')
+        
+        # Сортируем блоки по start_line в обратном порядке
+        blocks_sorted = sorted(blocks, key=lambda b: b['start_line'], reverse=True)
+        
+        for block in blocks_sorted:
+            url = block['url']
+            desc = block.get('desc', '')
+            start = block['start_line']
+            end = block['end_line']
+            
+            # Если описания нет — пропускаем переформатирование
+            if not desc or len(desc) < 5:
+                continue
+            
+            # Строим новый блок
+            new_block = self._build_link_block(url, desc, category_id)
+            
+            # Заменяем строки
+            new_lines = new_block.split('\n')
+            lines[start:end + 1] = new_lines
+        
+        result = '\n'.join(lines)
+        
+        # Флаг для _apply_bonus_desc_formatting: пропустить если уже стилизовано
+        if is_hyperlink or is_prestyled:
+            # Помечаем что стили уже применены (через атрибут экземпляра)
+            self._last_link_prestyled = True
+        else:
+            self._last_link_prestyled = False
+        
+        return result
+    
+    # ═══════════════════════════════════════════════════════════════════
     # ФОРМАТИРОВАНИЕ ОПИСАНИЙ БОНУСОВ (HTML-стили)
     # ═══════════════════════════════════════════════════════════════════
     
@@ -3440,15 +3809,18 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         Правила:
         - Оба описания (url1 и url2) получают ОДИНАКОВЫЙ стиль
         - Работает только для plain URL (НЕ гиперссылок)
-        - Не дублирует форматирование (пропускает уже отформатированные)
+        - Пропускает если _reformat_link_blocks() уже применил стиль (категории 13-20)
         - 8 стилей: жирный, курсив, жирный курсив, подчёркивание,
           подчёркнутый жирный, подчёркнутый курсив, подчёркнутый жирный курсив, цитата
         """
         if not self.bonus_data:
             return text
         
+        # Если _reformat_link_blocks() уже стилизовал (гиперссылки или HTML-категории 15-20)
+        if getattr(self, '_last_link_prestyled', False):
+            return text
+        
         # Проверяем: если ссылки оформлены как гиперссылки — пропускаем
-        # (описание уже внутри <a> тега)
         for url in [self.bonus_data.url1, self.bonus_data.url2]:
             if url and (f'<a href="{url}"' in text or f"<a href='{url}'" in text):
                 return text
@@ -4201,7 +4573,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 text = self._remove_template_phrases(text)
                 text = self._randomize_currency_format(text, video)
 
-                # 🎨 Рандомное HTML-форматирование описаний бонусов
+                # 🔗 Программная ротация формата ссылок (20 категорий)
+                text = self._reformat_link_blocks(text)
+
+                # 🎨 HTML-стиль описаний бонусов (для категорий 1-12 без пре-стиля)
                 text = self._apply_bonus_desc_formatting(text)
 
                 # Проверка упоминания стримера (если есть)
