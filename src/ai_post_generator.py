@@ -308,11 +308,11 @@ class VideoData:
         if currency == "RUB":
             formats = ["₽", " рублей", " руб", " RUB"]
         elif currency == "USD":
-            formats = ["$", " долларов", " доллары", " USD"]
+            formats = ["$", " долларов", " USD"]
         elif currency == "EUR":
             formats = ["€", " евро", " EUR"]
         elif currency == "GBP":
-            formats = ["£", " фунтов", " фунты", " GBP"]
+            formats = ["£", " фунтов", " GBP"]
         else:
             formats = [self.get_currency_symbol(), f" {currency}"]
         
@@ -4027,26 +4027,41 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,]+)₽', replace_rub, text)
         elif currency == "USD":
-            # Заменяем $ на случайный формат
-            formats = ["$", "долларов", "доллары", "USD"]
-            # Находим все вхождения $ после чисел
+            formats = ["$", " долларов", " USD"]
             def replace_usd(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,]+)\$', replace_usd, text)
-            # Также заменяем $ перед числами
-            text = re.sub(r'\$([\d\s,]+)', lambda m: random.choice(["$", ""]) + m.group(1) + random.choice(["", " долларов", " доллары", " USD"]), text)
+            text = re.sub(r'\$([\d\s,]+)', lambda m: random.choice(["$", ""]) + m.group(1) + random.choice(["", " долларов", " USD"]), text)
         elif currency == "EUR":
-            # Заменяем € на случайный формат
-            formats = ["€", "евро", "EUR"]
+            formats = ["€", " евро", " EUR"]
             def replace_eur(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,]+)€', replace_eur, text)
         elif currency == "GBP":
-            # Заменяем £ на случайный формат
-            formats = ["£", "фунтов", "фунты", "GBP"]
+            formats = ["£", " фунтов", " GBP"]
             def replace_gbp(match):
                 return match.group(1) + random.choice(formats)
             text = re.sub(r'([\d\s,]+)£', replace_gbp, text)
+        
+        # Исправляем неправильные склонения валюты, которые мог написать AI
+        text = re.sub(r'(\d+)\s*доллары\b', r'\1 долларов', text)
+        text = re.sub(r'(\d+)\s*фунты\b', r'\1 фунтов', text)
+        text = re.sub(r'(\d+)\s*рубли\b', r'\1 рублей', text)
+        
+        # Исправляем смешивание валют: если валюта USD — убираем рублёвые символы
+        if currency == "USD":
+            text = re.sub(r'(\d[\d\s,.]*)\s*₽', r'\1$', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*рублей\b', r'\1 долларов', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*руб\b', r'\1$', text)
+        elif currency == "RUB":
+            text = re.sub(r'\$(\d[\d\s,.]*)', r'\1₽', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*\$', r'\1₽', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*долларов\b', r'\1 рублей', text)
+        elif currency == "EUR":
+            text = re.sub(r'(\d[\d\s,.]*)\s*₽', r'\1€', text)
+            text = re.sub(r'\$(\d[\d\s,.]*)', r'\1€', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*рублей\b', r'\1 евро', text)
+            text = re.sub(r'(\d[\d\s,.]*)\s*долларов\b', r'\1 евро', text)
         
         return text
     
@@ -4638,6 +4653,16 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     print(f"   ⚠️ Форматы ссылок не совпадают! Ссылка1: {link1_format}, Ссылка2: {link2_format}. Регенерируем...")
                     sys.stdout.flush()
                     continue
+                
+                # ПРОВЕРКА: описания гиперссылок не должны быть одинаковыми
+                if url1_is_hyperlink and url2_is_hyperlink:
+                    import re as re_hyper
+                    hyper1 = re_hyper.search(rf'<a\s+href="{re_hyper.escape(self.bonus_data.url1)}"[^>]*>([^<]+)</a>', text)
+                    hyper2 = re_hyper.search(rf'<a\s+href="{re_hyper.escape(self.bonus_data.url2)}"[^>]*>([^<]+)</a>', text)
+                    if hyper1 and hyper2 and hyper1.group(1).strip() == hyper2.group(1).strip():
+                        print(f"   ⚠️ Одинаковый текст в обеих гиперссылках: '{hyper1.group(1).strip()[:40]}...'. Регенерируем...")
+                        sys.stdout.flush()
+                        continue
                 
                 # КРИТИЧЕСКАЯ ПРОВЕРКА: РОВНО 2 ССЫЛКИ В ПОСТЕ (НЕ БОЛЬШЕ, НЕ МЕНЬШЕ!)
                 # Считаем количество URL-ов и гиперссылок в тексте
