@@ -308,15 +308,21 @@ class AIImagePostGenerator:
                 )
                 
                 # Генерируем текст
-                response = await self.client.chat.completions.create(
-                    model=self.model,
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": prompt}
-                    ],
-                    max_tokens=1500,
-                    temperature=0.9
-                )
+                try:
+                    response = await asyncio.wait_for(
+                        self.client.chat.completions.create(
+                            model=self.model,
+                            messages=[
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": prompt}
+                            ],
+                            max_tokens=1500,
+                            temperature=0.9
+                        ),
+                        timeout=120
+                    )
+                except asyncio.TimeoutError:
+                    raise Exception(f"Таймаут: модель {self.model} не ответила за 120с")
                 
                 text = response.choices[0].message.content.strip()
                 

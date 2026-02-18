@@ -13,6 +13,7 @@
 
 import json
 import os
+import asyncio
 import random
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
@@ -383,14 +384,17 @@ class TopicManager:
 Пиши только темы, без пояснений."""
 
         try:
-            response = await client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": "Ты генерируешь темы для постов о гемблинге."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=1000,
-                temperature=0.9
+            response = await asyncio.wait_for(
+                client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "Ты генерируешь темы для постов о гемблинге."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=1000,
+                    temperature=0.9
+                ),
+                timeout=120
             )
             
             generated_text = response.choices[0].message.content.strip()

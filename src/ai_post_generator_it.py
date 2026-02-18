@@ -4068,7 +4068,18 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                         api_params["presence_penalty"] = 0.7
                         api_params["frequency_penalty"] = 0.6
 
-                    response = await self.client.chat.completions.create(**api_params)
+                    try:
+                        response = await asyncio.wait_for(
+                            self.client.chat.completions.create(**api_params),
+                            timeout=120
+                        )
+                    except asyncio.TimeoutError:
+                        print(f"   ⏰ Таймаут 120с для модели {self.model}, попытка {attempt + 1}/3")
+                        sys.stdout.flush()
+                        if attempt == 2:
+                            raise Exception(f"Таймаут: модель {self.model} не ответила за 120с (3 попытки)")
+                        await asyncio.sleep(2)
+                        continue
 
                     if not response or not response.choices:
                         if attempt == 2:
@@ -4346,7 +4357,13 @@ FORMATTAZIONE (CRITICO! USA TUTTI I TAG!):
                     api_params["presence_penalty"] = 0.7
                     api_params["frequency_penalty"] = 0.6
                 
-                response = await self.client.chat.completions.create(**api_params)
+                try:
+                    response = await asyncio.wait_for(
+                        self.client.chat.completions.create(**api_params),
+                        timeout=120
+                    )
+                except asyncio.TimeoutError:
+                    raise Exception(f"Таймаут: модель {self.model} не ответила за 120с")
                 
                 raw_text = response.choices[0].message.content.strip()
                 
