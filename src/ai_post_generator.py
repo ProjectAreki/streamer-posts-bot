@@ -2579,10 +2579,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             # Парсим все компоненты бонуса
             parts = []
         
-        # Ищем рубли (100.000 рублей, 100000₽, 30к и т.д.)
-        rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
+        # Ищем рубли/доллары/евро (100 000 ₽, 100.000 рублей, 100000₽, 30к и т.д.)
+        rub_match = re.search(r'(\d{1,3}(?:[\s.,]\d{3})+|\d+)\s*(?:руб|₽|р\b|к\b|тыс|\$|доллар|евро|€)', original, re.IGNORECASE)
         if rub_match:
-            amount_str = rub_match.group(1).replace('.', '').replace(',', '')
+            amount_str = rub_match.group(1).replace('.', '').replace(',', '').replace(' ', '')
             try:
                 amount = int(amount_str)
                 # Если нашли "к" в оригинале - это тысячи
@@ -2664,8 +2664,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             ]
             parts.append(random.choice(percent_variations))
         
-        # Ищем спины/FS (100 фриспинов, 500 FS, 100 вращений) - 30+ вариантов
-        spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
+        # Ищем спины/FS (100 фриспинов, 500 FS, 100 халявных спинов) - 30+ вариантов
+        spin_match = re.search(r'(\d+)\s+(?:\S+\s+){0,2}(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
+        if not spin_match:
+            spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
         if spin_match:
             count = spin_match.group(1)
             spin_variations = [
@@ -2744,10 +2746,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         # Генерируем финальную вариацию (упрощённая логика)
         parts = []
         
-        # Ищем рубли
-        rub_match = re.search(r'(\d+[\.,]?\d*)\s*(?:000)?\s*(?:руб|₽|р\b|к\b|тыс)', original, re.IGNORECASE)
+        # Ищем рубли/доллары/евро
+        rub_match = re.search(r'(\d{1,3}(?:[\s.,]\d{3})+|\d+)\s*(?:руб|₽|р\b|к\b|тыс|\$|доллар|евро|€)', original, re.IGNORECASE)
         if rub_match:
-            amount_str = rub_match.group(1).replace('.', '').replace(',', '')
+            amount_str = rub_match.group(1).replace('.', '').replace(',', '').replace(' ', '')
             try:
                 amount = int(amount_str)
                 if 'к' in original.lower() and amount < 1000:
@@ -2767,7 +2769,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             parts.append(f"{percent}% бонус")
         
         # Ищем спины
-        spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
+        spin_match = re.search(r'(\d+)\s+(?:\S+\s+){0,2}(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
+        if not spin_match:
+            spin_match = re.search(r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к)', original, re.IGNORECASE)
         if spin_match:
             count = spin_match.group(1)
             parts.append(f"{count} вращений")
