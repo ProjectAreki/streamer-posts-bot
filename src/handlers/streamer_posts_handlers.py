@@ -1554,13 +1554,34 @@ def register_streamer_handlers(bot_instance):
         # Генерируем посты через AI
         ai_posts = []
     
+        # Генерируем AI-пул описаний бонусов (уникальное описание для каждого поста)
+        total_posts = len(video_data_list) + len(images)
+        bonus1_pool, bonus2_pool = [], []
+        try:
+            if is_rotation:
+                pool_gen = create_generator(rotation_models[0][0], rotation_models[0][1])
+            else:
+                pool_gen = generator
+            pool_gen.set_bonus_data(
+                url1=data['url1'], bonus1=data['bonus1'],
+                url2=data['url2'], bonus2=data['bonus2']
+            )
+            
+            await status_msg.edit_text(
+                "🎯 <b>Генерация уникальных описаний бонусов...</b>\n\n"
+                f"📝 Создаём {total_posts} уникальных описаний для каждой ссылки",
+                parse_mode="HTML"
+            )
+            await pool_gen.generate_bonus_descriptions_pool(count=total_posts)
+            bonus1_pool, bonus2_pool = pool_gen.get_bonus_pool()
+            logger.info(f"AI-пул описаний бонусов: {len(bonus1_pool)} + {len(bonus2_pool)}")
+        except Exception as pool_err:
+            logger.warning(f"⚠️ Ошибка генерации пула бонусов: {pool_err}. Фоллбек на программные вариации.")
+            bonus1_pool, bonus2_pool = [], []
+        
         if is_rotation:
             # РОТАЦИЯ: каждый пост - разная модель
-            # ВАЖНО: используем локальные переменные rotation_models и rotation_type,
-            # т.к. они уже определены выше (строки 26216-26224)
-            # НЕ используем data.get() — там старые данные до update_data()
-            rotation_models_list = rotation_models  # локальная переменная
-            # rotation_type и rotation_label уже определены выше
+            rotation_models_list = rotation_models
             
             # КРИТИЧНО: глобальный счетчик для ротации форматов ссылок
             link_format_counter = 0
@@ -1591,6 +1612,11 @@ def register_streamer_handlers(bot_instance):
                     url2=data['url2'],
                     bonus2=data['bonus2']
                 )
+                # Передаём AI-пул описаний бонусов
+                if bonus1_pool and bonus2_pool:
+                    rot_generator.set_bonus_pool(bonus1_pool, bonus2_pool)
+                    rot_generator._bonus1_pool_index = i
+                    rot_generator._bonus2_pool_index = i
                 # КРИТИЧНО: передаем текущий счетчик форматов
                 rot_generator.set_link_format_counter(link_format_counter)
             
@@ -1611,6 +1637,10 @@ def register_streamer_handlers(bot_instance):
                             url2=data['url2'],
                             bonus2=data['bonus2']
                         )
+                        if bonus1_pool and bonus2_pool:
+                            fallback_gen.set_bonus_pool(bonus1_pool, bonus2_pool)
+                            fallback_gen._bonus1_pool_index = i
+                            fallback_gen._bonus2_pool_index = i
                         # КРИТИЧНО: передаем счетчик форматов в fallback
                         fallback_gen.set_link_format_counter(link_format_counter)
                         post = await fallback_gen.generate_video_post(video, i)
@@ -1631,6 +1661,10 @@ def register_streamer_handlers(bot_instance):
                     url2=data['url2'],
                     bonus2=data['bonus2']
                 )
+                if bonus1_pool and bonus2_pool:
+                    img_generator.set_bonus_pool(bonus1_pool, bonus2_pool)
+                    img_generator._bonus1_pool_index = len(video_data_list)
+                    img_generator._bonus2_pool_index = len(video_data_list)
                 # КРИТИЧНО: продолжаем ротацию форматов для картинок
                 img_generator.set_link_format_counter(link_format_counter)
                 for j in range(len(images)):

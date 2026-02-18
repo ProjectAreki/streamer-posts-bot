@@ -2384,6 +2384,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         self._existing_posts: List[str] = []  # База существующих постов для обучения AI
         self._used_bonus1_variations: List[str] = []  # Отслеживание использованных вариаций bonus1
         self._used_bonus2_variations: List[str] = []  # Отслеживание использованных вариаций bonus2
+        self._bonus1_pool: List[str] = []  # AI-пул описаний для bonus1
+        self._bonus2_pool: List[str] = []  # AI-пул описаний для bonus2
+        self._bonus1_pool_index = 0  # Текущий индекс в пуле bonus1
+        self._bonus2_pool_index = 0  # Текущий индекс в пуле bonus2
         self._link_format_counter = 0  # Счётчик для строгой ротации форматов ссылок
         self._last_link_prestyled = False  # Флаг: ссылки уже стилизованы (категории 13-20)
         
@@ -2506,7 +2510,273 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         """Сбрасывает списки использованных вариаций бонусов"""
         self._used_bonus1_variations.clear()
         self._used_bonus2_variations.clear()
+        self._bonus1_pool.clear()
+        self._bonus2_pool.clear()
+        self._bonus1_pool_index = 0
+        self._bonus2_pool_index = 0
         print("   🔄 Списки использованных вариаций бонусов сброшены")
+    
+    def _extract_bonus_key_facts(self, desc: str) -> dict:
+        """Извлекает ключевые факты из описания бонуса: суммы, проценты, спины."""
+        import re
+        facts = {
+            'money_amounts': [],
+            'percentages': [],
+            'spin_count': None,
+        }
+        
+        money_match = re.search(
+            r'(\d{1,3}(?:[\s.,]\d{3})+|\d+)\s*(?:руб|₽|р\b|тыс|\$|доллар|евро|€|rub)',
+            desc, re.IGNORECASE
+        )
+        if money_match:
+            amount_str = money_match.group(1).replace('.', '').replace(',', '').replace(' ', '')
+            try:
+                amount = int(amount_str)
+                if amount > 0:
+                    facts['money_amounts'].append(amount)
+            except Exception:
+                pass
+        
+        k_match = re.search(r'(\d+)\s*к\b', desc, re.IGNORECASE)
+        if k_match:
+            try:
+                k_val = int(k_match.group(1))
+                if k_val < 1000:
+                    facts['money_amounts'].append(k_val * 1000)
+            except Exception:
+                pass
+        
+        for m in re.finditer(r'(\d+)\s*%', desc):
+            facts['percentages'].append(int(m.group(1)))
+        
+        spin_match = re.search(
+            r'(\d+)\s*(?:\S+\s+){0,2}(?:fs|фриспин|спин|вращени|freespin|круто?к|фрибет|раунд|попыт|заход)',
+            desc, re.IGNORECASE
+        )
+        if not spin_match:
+            spin_match = re.search(
+                r'(\d+)\s*(?:fs|фриспин|спин|вращени|freespin|круто?к|фрибет)',
+                desc, re.IGNORECASE
+            )
+        if spin_match:
+            facts['spin_count'] = int(spin_match.group(1))
+        
+        return facts
+    
+    def _validate_bonus_desc(self, ai_desc: str, original_desc: str) -> bool:
+        """Проверяет что AI сохранил ключевые факты (цифры, валюту, спины)."""
+        import re
+        
+        orig = self._extract_bonus_key_facts(original_desc)
+        ai = self._extract_bonus_key_facts(ai_desc)
+        
+        for pct in orig['percentages']:
+            if pct not in ai['percentages']:
+                return False
+        
+        if orig['spin_count'] is not None:
+            if ai['spin_count'] is None:
+                all_nums = [int(m.group()) for m in re.finditer(r'\d+', ai_desc)]
+                if orig['spin_count'] not in all_nums:
+                    return False
+            elif ai['spin_count'] != orig['spin_count']:
+                return False
+        
+        for amount in orig['money_amounts']:
+            found = False
+            for ai_amount in ai['money_amounts']:
+                if ai_amount == amount:
+                    found = True
+                    break
+            if not found:
+                has_k_notation = bool(re.search(r'\d+\s*к\b', ai_desc, re.IGNORECASE))
+                has_tys_notation = bool(re.search(r'\d+\s*тыс', ai_desc, re.IGNORECASE))
+                if has_k_notation or has_tys_notation:
+                    for ai_amount in ai['money_amounts']:
+                        if ai_amount == amount // 1000 or ai_amount * 1000 == amount:
+                            found = True
+                            break
+            if not found:
+                clean_nums = []
+                for n_str in re.findall(r'\d[\d\s]*\d|\d+', ai_desc):
+                    clean = n_str.replace(' ', '')
+                    try:
+                        clean_nums.append(int(clean))
+                    except Exception:
+                        pass
+                if amount not in clean_nums:
+                    return False
+        
+        orig_rub = bool(re.search(r'руб|₽|р\b|rub', original_desc, re.IGNORECASE))
+        orig_usd = bool(re.search(r'\$|доллар|usd', original_desc, re.IGNORECASE))
+        ai_rub = bool(re.search(r'руб|₽|р\b|rub', ai_desc, re.IGNORECASE))
+        ai_usd = bool(re.search(r'\$|доллар|usd', ai_desc, re.IGNORECASE))
+        
+        if orig_rub and not ai_rub and ai_usd:
+            return False
+        if orig_usd and not ai_usd and ai_rub:
+            return False
+        
+        return True
+    
+    async def generate_bonus_descriptions_pool(self, count: int = 80):
+        """
+        Генерирует пул уникальных описаний бонусов через AI.
+        
+        Делает 2 запроса: по одному для каждого бонуса.
+        Каждое описание валидируется (цифры, валюта, спины).
+        Невалидные заменяются программными вариациями.
+        """
+        if not self.client or not self.bonus_data:
+            print("   ⚠️ AI клиент или bonus_data не установлены, пул не создан")
+            return
+        
+        self._bonus1_pool = await self._request_bonus_pool(
+            self.bonus_data.bonus1_desc, count, is_bonus1=True
+        )
+        self._bonus1_pool_index = 0
+        
+        self._bonus2_pool = await self._request_bonus_pool(
+            self.bonus_data.bonus2_desc, count, is_bonus1=False
+        )
+        self._bonus2_pool_index = 0
+        
+        print(f"   ✅ Пул описаний создан: {len(self._bonus1_pool)} для бонуса 1, {len(self._bonus2_pool)} для бонуса 2")
+    
+    async def _request_bonus_pool(self, original_desc: str, count: int, is_bonus1: bool) -> List[str]:
+        """Запрашивает у AI пул уникальных описаний для одного бонуса."""
+        import json
+        
+        bonus_label = "бонус 1" if is_bonus1 else "бонус 2"
+        print(f"   🎯 Генерация пула описаний для {bonus_label}: \"{original_desc}\"...")
+        
+        prompt = f"""Сгенерируй {count} УНИКАЛЬНЫХ коротких описаний для рекламного бонуса.
+
+ОРИГИНАЛ: "{original_desc}"
+
+ПРАВИЛА:
+1. Каждое описание — УНИКАЛЬНАЯ перефразировка оригинала (5-20 слов)
+2. СОХРАНИ ВСЕ цифры ТОЧНО: суммы денег, проценты, количество спинов/вращений
+3. СОХРАНИ валюту: если в оригинале рубли — пиши рубли (₽, руб, тыс), если доллары — доллары ($)
+4. НЕ добавляй данные которых нет в оригинале
+5. Пиши РАЗГОВОРНЫМ русским языком, как живой человек
+6. Чередуй стили: деловой, дружеский, энергичный, спокойный, интригующий
+7. БЕЗ HTML-тегов, БЕЗ эмодзи, только чистый текст
+8. НЕ начинай каждое описание одинаково — максимальное разнообразие!
+
+ФОРМАТ ОТВЕТА — JSON массив строк, без нумерации:
+[
+  "описание 1",
+  "описание 2",
+  ...
+]
+
+Верни ТОЛЬКО JSON массив, без комментариев."""
+
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                new_models = ["gpt-4.1-nano", "gpt-4.1-mini"]
+                api_params = {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": "Ты генератор уникальных рекламных текстов. Отвечай ТОЛЬКО JSON массивом строк."},
+                        {"role": "user", "content": prompt}
+                    ]
+                }
+                if self.model in new_models:
+                    api_params["max_completion_tokens"] = 8000
+                elif self.use_openrouter:
+                    api_params["max_tokens"] = 16000
+                    api_params["temperature"] = 0.95
+                else:
+                    api_params["max_tokens"] = 8000
+                    api_params["temperature"] = 0.95
+                
+                response = await self.client.chat.completions.create(**api_params)
+                raw = response.choices[0].message.content.strip()
+                
+                if raw.startswith("```"):
+                    raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+                    if raw.endswith("```"):
+                        raw = raw[:-3]
+                    raw = raw.strip()
+                
+                descriptions = json.loads(raw)
+                
+                if not isinstance(descriptions, list):
+                    print(f"      ⚠️ AI вернул не массив, попытка {attempt + 1}/{max_retries}")
+                    continue
+                
+                valid = []
+                invalid_count = 0
+                for d in descriptions:
+                    if not isinstance(d, str) or len(d.strip()) < 5:
+                        invalid_count += 1
+                        continue
+                    d = d.strip()
+                    if self._validate_bonus_desc(d, original_desc):
+                        valid.append(d)
+                    else:
+                        invalid_count += 1
+                
+                print(f"      ✅ Валидных: {len(valid)}, отброшено: {invalid_count}")
+                
+                while len(valid) < count:
+                    fallback = self._get_random_bonus_variation(original_desc, is_bonus1=is_bonus1)
+                    valid.append(fallback)
+                
+                import random
+                random.shuffle(valid)
+                return valid[:count]
+                
+            except json.JSONDecodeError as e:
+                print(f"      ⚠️ Ошибка парсинга JSON (попытка {attempt + 1}/{max_retries}): {e}")
+                if attempt == max_retries - 1:
+                    break
+                import asyncio
+                await asyncio.sleep(1)
+            except Exception as e:
+                print(f"      ❌ Ошибка запроса к AI (попытка {attempt + 1}/{max_retries}): {e}")
+                if attempt == max_retries - 1:
+                    break
+                import asyncio
+                await asyncio.sleep(2)
+        
+        print(f"      ⚠️ Фоллбек на программные вариации для {bonus_label}")
+        fallback_pool = []
+        for _ in range(count):
+            fallback_pool.append(self._get_random_bonus_variation(original_desc, is_bonus1=is_bonus1))
+        return fallback_pool
+    
+    def set_bonus_pool(self, bonus1_pool: List[str], bonus2_pool: List[str]):
+        """Устанавливает готовый пул описаний бонусов (для передачи между генераторами)."""
+        self._bonus1_pool = bonus1_pool
+        self._bonus2_pool = bonus2_pool
+    
+    def get_bonus_pool(self) -> tuple:
+        """Возвращает текущие пулы описаний."""
+        return (self._bonus1_pool, self._bonus2_pool)
+    
+    def _get_pool_bonus_desc(self, is_bonus1: bool) -> str:
+        """Берёт следующее описание из AI-пула. Если пул пуст — фоллбек на программную вариацию."""
+        if is_bonus1:
+            if self._bonus1_pool and self._bonus1_pool_index < len(self._bonus1_pool):
+                desc = self._bonus1_pool[self._bonus1_pool_index]
+                self._bonus1_pool_index += 1
+                return desc
+            return self._get_random_bonus_variation(
+                self.bonus_data.bonus1_desc, is_bonus1=True
+            )
+        else:
+            if self._bonus2_pool and self._bonus2_pool_index < len(self._bonus2_pool):
+                desc = self._bonus2_pool[self._bonus2_pool_index]
+                self._bonus2_pool_index += 1
+                return desc
+            return self._get_random_bonus_variation(
+                self.bonus_data.bonus2_desc, is_bonus1=False
+            )
     
     def load_existing_posts(self, posts: List[str]):
         """
@@ -3645,13 +3915,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             if not desc or len(desc) < 5:
                 continue
             
-            # Принудительно заменяем описание на вариацию из генератора
-            # чтобы ИИ не мог подменить валюту/суммы/количество спинов
+            # Берём описание из AI-пула (уникальное для каждого поста)
             is_url1 = (url == self.bonus_data.url1)
-            if is_url1:
-                desc = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
-            else:
-                desc = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
+            desc = self._get_pool_bonus_desc(is_bonus1=is_url1)
             
             # Строим новый блок
             new_block = self._build_link_block(url, desc, category_id)
@@ -4414,9 +4680,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     streamer_name = ""
                     used_structure_index = structure_index + 1000
 
-                # Генерируем уникальные описания бонусов
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
-                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
+                # Передаём оригиналы бонусов — AI перефразирует, пул подставится в _reformat_link_blocks
+                bonus1_var = self.bonus_data.bonus1_desc
+                bonus2_var = self.bonus_data.bonus2_desc
 
                 # Форматируем данные
                 formatted_bet = video.get_formatted_bet()
@@ -4818,9 +5084,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 # Выбираем случайный промпт
                 prompt_template = random.choice(self.IMAGE_POST_PROMPTS)
                 
-                # Генерируем уникальные описания
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
-                bonus2_var = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
+                # Передаём оригиналы бонусов — AI перефразирует, пул подставится в _reformat_link_blocks
+                bonus1_var = self.bonus_data.bonus1_desc
+                bonus2_var = self.bonus_data.bonus2_desc
                 
                 prompt = prompt_template.format(
                     url1=self.bonus_data.url1,
