@@ -3645,6 +3645,14 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             if not desc or len(desc) < 5:
                 continue
             
+            # Принудительно заменяем описание на вариацию из генератора
+            # чтобы ИИ не мог подменить валюту/суммы/количество спинов
+            is_url1 = (url == self.bonus_data.url1)
+            if is_url1:
+                desc = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
+            else:
+                desc = self._get_random_bonus_variation(self.bonus_data.bonus2_desc, is_bonus1=False)
+            
             # Строим новый блок
             new_block = self._build_link_block(url, desc, category_id)
             
