@@ -128,6 +128,14 @@ class CaptionParser:
         caption_clean = re.sub(r'`([^`]+)`', r'\1', caption_clean)
         caption_clean = re.sub(r'_([^_]+)_', r'\1', caption_clean)
         
+        # Замена кириллических символов-двойников на цифры (OCR/копирование)
+        # Только в контексте чисел: "З 641 490" -> "3 641 490", "О" рядом с цифрами -> "0"
+        caption_clean = re.sub(r'(?<=\d)[\sЗз](?=\d)', lambda m: ' ' if m.group().isspace() else '3', caption_clean)
+        caption_clean = re.sub(r'(?<=[\s:$₽€£])З(?=[\s\d])', '3', caption_clean)
+        caption_clean = re.sub(r'(?<=[\s:$₽€£])з(?=[\s\d])', '3', caption_clean)
+        caption_clean = re.sub(r'(?<=\d)О(?=\d)', '0', caption_clean)
+        caption_clean = re.sub(r'(?<=\d)о(?=\d)', '0', caption_clean)
+        
         text = caption_clean.lower()
         result = ParsedCaption()
         
