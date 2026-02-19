@@ -1289,30 +1289,32 @@ def register_spanish_handlers(bot_instance):
     
         # Создаём клавиатуру с моделями и ценами
         model_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            # Ротации
-            [InlineKeyboardButton(text="🔄 РОТАЦИЯ ВСЕХ", callback_data="ai_model:rotation:mixed")],
-            [InlineKeyboardButton(text="💰 Ротация дешёвых (~0.05₽)", callback_data="ai_model:rotation:cheap"),
-             InlineKeyboardButton(text="⚖️ Ротация средних (~0.3₽)", callback_data="ai_model:rotation:medium")],
-            [InlineKeyboardButton(text="💎 Ротация премиум (~1₽)", callback_data="ai_model:rotation:premium"),
-             InlineKeyboardButton(text="🔄 Ротация всех моделей", callback_data="ai_model:rotation:mixed")],
-            # Дешёвые (до 0.1₽/пост)
+            # Рекомендуемые ротации (A/B/C)
+            [InlineKeyboardButton(text="🅰️ Оптимальная (~$1 за 80)", callback_data="ai_model:rotation:optimal")],
+            [InlineKeyboardButton(text="🅱️ Макс. качество (~$1.50 за 80)", callback_data="ai_model:rotation:quality")],
+            [InlineKeyboardButton(text="🅲 Минимум затрат (~$0.25 за 80)", callback_data="ai_model:rotation:budget")],
+            # Старые ротации
+            [InlineKeyboardButton(text="💰 Дешёвые (~0.05₽)", callback_data="ai_model:rotation:cheap"),
+             InlineKeyboardButton(text="⚖️ Средние (~0.3₽)", callback_data="ai_model:rotation:medium")],
+            [InlineKeyboardButton(text="💎 Премиум (~1₽)", callback_data="ai_model:rotation:premium"),
+             InlineKeyboardButton(text="🔄 Все модели", callback_data="ai_model:rotation:mixed")],
+            # Отдельные модели — дешёвые
             [InlineKeyboardButton(text="🔥 Grok 4.1 Fast — ~0.1₽", callback_data="ai_model:grok-4.1-fast:openrouter"),
              InlineKeyboardButton(text="🎨 Mistral Creative — ~0.05₽", callback_data="ai_model:mistral-small-creative:openrouter")],
             [InlineKeyboardButton(text="🔍 Llama 4 Scout — ~0.05₽", callback_data="ai_model:llama-4-scout:openrouter"),
              InlineKeyboardButton(text="🐋 DeepSeek V3 — ~0.05₽", callback_data="ai_model:deepseek-v3:openrouter")],
             [InlineKeyboardButton(text="💨 Seed Flash — ~0.05₽", callback_data="ai_model:seed-1.6-flash:openrouter"),
              InlineKeyboardButton(text="🐲 Qwen 3 235B — ~0.03₽", callback_data="ai_model:qwen-3-235b:openrouter")],
-            # Средние (0.2-0.5₽/пост)
+            # Отдельные модели — средние
             [InlineKeyboardButton(text="⚡ Gemini 3 Flash — ~0.4₽", callback_data="ai_model:gemini-3-flash:openrouter"),
              InlineKeyboardButton(text="🤖 GPT-4.1 Mini — ~0.3₽", callback_data="ai_model:gpt-4.1-mini:openrouter")],
             [InlineKeyboardButton(text="🦙 Llama 4 Maverick — ~0.2₽", callback_data="ai_model:llama-4-maverick:openrouter"),
              InlineKeyboardButton(text="🌊 DeepSeek R1 — ~0.4₽", callback_data="ai_model:deepseek-r1:openrouter")],
-            # Премиум (0.8-3₽/пост)
+            # Отдельные модели — премиум
             [InlineKeyboardButton(text="🧠 GPT-5.2 — ~1.2₽", callback_data="ai_model:gpt-5.2:openrouter"),
              InlineKeyboardButton(text="💎 Gemini 3 Pro — ~1.2₽", callback_data="ai_model:gemini-3-pro:openrouter")],
             [InlineKeyboardButton(text="🎵 Claude Sonnet 4.5 — ~0.8₽", callback_data="ai_model:claude-sonnet-4.5:openrouter"),
              InlineKeyboardButton(text="🏔️ Mistral Large — ~0.8₽", callback_data="ai_model:mistral-large:openrouter")],
-            # Топ премиум
             [InlineKeyboardButton(text="🔮 Claude Opus 4.5 — ~2.8₽ [TOP]", callback_data="ai_model:claude-opus-4.5:openrouter")],
             [InlineKeyboardButton(text="❌ Отмена", callback_data="ai_model:cancel")]
         ])
@@ -1320,13 +1322,12 @@ def register_spanish_handlers(bot_instance):
         await message.answer(
             f"🤖 <b>Выбери модель для генерации {total_posts} постов</b>\n\n"
             f"📹 Видео: {len(videos)} | 🖼 Картинки: {len(images)}\n\n"
-            f"<b>🔄 Ротации (каждый пост — другая AI):</b>\n"
-            f"• ВСЕ — GPT + Gemini + Grok (разнообразие)\n"
-            f"• 💰 Дешёвые — 6 моделей (~0.05₽/пост)\n"
-            f"• ⚖️ Средние — 4 модели (~0.3₽/пост)\n\n"
-            f"<b>💰 Дешёвые (до 0.1₽):</b> Grok, Mistral, Llama, DeepSeek, Qwen\n"
-            f"<b>⚖️ Средние (0.2-0.5₽):</b> Gemini Flash, GPT-4.1 Mini\n"
-            f"<b>💎 Премиум (0.8-3₽):</b> GPT-5.2, Claude, Gemini Pro",
+            f"<b>⭐ Рекомендуемые ротации:</b>\n"
+            f"🅰️ <b>Оптимальная</b> — ~$1/80 постов, качество 90%\n"
+            f"🅱️ <b>Макс. качество</b> — ~$1.50/80, Sonnet+GPT-5.2\n"
+            f"🅲 <b>Минимум затрат</b> — ~$0.25/80, 6 дешёвых моделей\n\n"
+            f"<b>🔄 Другие ротации:</b> дешёвые, средние, премиум, все\n"
+            f"<b>👇 Или выбери одну модель:</b>",
             parse_mode="HTML",
             reply_markup=model_keyboard
         )
@@ -1427,9 +1428,46 @@ def register_spanish_handlers(bot_instance):
             ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
             ("mistral-large", "openrouter", "Mistral Large"),
         ]
+        rotation_optimal = [  # A: Оптимальная (~$0.80-1.00 за 80 постов)
+            ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
+            ("gpt-5.2", "openrouter", "GPT-5.2"),
+            ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
+            ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
+            ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
+            ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
+            ("deepseek-v3", "openrouter", "DeepSeek V3"),
+            ("seed-1.6-flash", "openrouter", "Seed Flash"),
+        ]
+        rotation_quality = [  # B: Максимальное качество (~$1.50 за 80 постов)
+            ("claude-sonnet-4.5", "openrouter", "Claude Sonnet 4.5"),
+            ("gpt-5.2", "openrouter", "GPT-5.2"),
+            ("gemini-2.5-pro", "openrouter", "Gemini 2.5 Pro"),
+            ("gemini-3-flash", "openrouter", "Gemini 3 Flash"),
+            ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
+            ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
+            ("deepseek-v3", "openrouter", "DeepSeek V3"),
+            ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
+        ]
+        rotation_budget = [  # C: Минимум затрат (~$0.20-0.30 за 80 постов)
+            ("grok-4.1-fast", "openrouter", "Grok 4.1 Fast"),
+            ("llama-4-maverick", "openrouter", "Llama 4 Maverick"),
+            ("qwen-3-235b", "openrouter", "Qwen 3 235B"),
+            ("deepseek-v3", "openrouter", "DeepSeek V3"),
+            ("seed-1.6-flash", "openrouter", "Seed Flash"),
+            ("llama-4-scout", "openrouter", "Llama 4 Scout"),
+        ]
     
         # Выбор набора
-        if rotation_type == "cheap":
+        if rotation_type == "optimal":
+            rotation_models = rotation_optimal
+            rotation_label = "🅰️ ОПТИМАЛЬНАЯ"
+        elif rotation_type == "quality":
+            rotation_models = rotation_quality
+            rotation_label = "🅱️ МАКС. КАЧЕСТВО"
+        elif rotation_type == "budget":
+            rotation_models = rotation_budget
+            rotation_label = "🅲 МИНИМУМ ЗАТРАТ"
+        elif rotation_type == "cheap":
             rotation_models = rotation_cheap
             rotation_label = "💰 ДЕШЁВЫЕ"
         elif rotation_type == "medium":

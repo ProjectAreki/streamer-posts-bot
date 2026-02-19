@@ -4144,6 +4144,64 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         
         return text
     
+    def _normalize_link_block_spacing(self, text: str) -> str:
+        """
+        Гарантирует ровно одну пустую строку между двумя блоками ссылок.
+        Работает с plain URL, гиперссылками и любыми форматами описаний.
+        """
+        if not self.bonus_data or not self.bonus_data.url1 or not self.bonus_data.url2:
+            return text
+        
+        import re
+        
+        url1 = re.escape(self.bonus_data.url1)
+        url2 = re.escape(self.bonus_data.url2)
+        
+        lines = text.split('\n')
+        
+        url1_end = -1
+        url2_start = -1
+        
+        url1_href = f'href="{self.bonus_data.url1}"'
+        url2_href = f'href="{self.bonus_data.url2}"'
+        
+        for i, line in enumerate(lines):
+            if self.bonus_data.url1 in line or url1_href in line:
+                url1_end = i
+            if self.bonus_data.url2 in line or url2_href in line:
+                if url2_start == -1:
+                    url2_start = i
+        
+        if url1_end < 0 or url2_start < 0 or url1_end >= url2_start:
+            return text
+        
+        block1_end = url1_end
+        for i in range(url1_end + 1, url2_start):
+            stripped = lines[i].strip()
+            stripped_clean = re.sub(r'<[^>]+>', '', stripped).strip()
+            if stripped_clean and not re.match(r'^https?://', stripped_clean):
+                block1_end = i
+            else:
+                break
+        
+        block2_start = url2_start
+        for i in range(url2_start - 1, block1_end, -1):
+            stripped = lines[i].strip()
+            stripped_clean = re.sub(r'<[^>]+>', '', stripped).strip()
+            if stripped_clean and not re.match(r'^https?://', stripped_clean):
+                block2_start = i
+            else:
+                break
+        
+        gap_lines = lines[block1_end + 1:block2_start]
+        non_empty_in_gap = [l for l in gap_lines if l.strip()]
+        
+        if non_empty_in_gap:
+            return text
+        
+        new_lines = lines[:block1_end + 1] + [''] + lines[block2_start:]
+        return '\n'.join(new_lines)
+    
     def _postprocess_text(self, text: str, slot_name: str = "") -> str:
         """
         Постобработка сгенерированного текста:
@@ -4911,6 +4969,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 # 🎨 HTML-стиль описаний бонусов (для категорий 1-12 без пре-стиля)
                 text = self._apply_bonus_desc_formatting(text)
 
+                # 📏 Нормализация: ровно 1 пустая строка между блоками ссылок
+                text = self._normalize_link_block_spacing(text)
+
                 # Проверка упоминания стримера (если есть)
                 if has_real_streamer and streamer_name:
                     streamer_mentions = text.lower().count(streamer_name.lower())
@@ -5217,6 +5278,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 
                 # 4.5. Исправляем сломанные/обрезанные ссылки
                 text = self._fix_broken_urls(text)
+                
+                # 📏 Нормализация: ровно 1 пустая строка между блоками ссылок
+                text = self._normalize_link_block_spacing(text)
                 
                 # 4.6. Фильтруем не-русские символы
                 text = self._filter_non_russian(text)
