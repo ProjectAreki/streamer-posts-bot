@@ -3886,6 +3886,149 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         
         return f"{url} — {desc}"
     
+    # ═══════════════════════════════════════════════════════════════════
+    # ПЕРЕМЕЩЕНИЕ ССЫЛОК ПО ТЕКСТУ (10 стратегий размещения)
+    # ═══════════════════════════════════════════════════════════════════
+    
+    LINK_PLACEMENT_STRATEGIES = [
+        "TOP_BOTTOM",       # Link1 самый верх, Link2 самый низ
+        "TOP_MID",          # Link1 самый верх, Link2 после середины
+        "TOP_AFTER1",       # Link1 самый верх, Link2 после 1-го абзаца
+        "AFTER1_BOTTOM",    # Link1 после 1-го абзаца, Link2 в конце
+        "AFTER1_MID",       # Link1 после 1-го абзаца, Link2 после середины
+        "AFTER1_AFTER2",    # Link1 после 1-го абзаца, Link2 после 2-го
+        "AFTER2_BOTTOM",    # Link1 после 2-го абзаца, Link2 в конце
+        "MID_BOTTOM",       # Link1 после середины, Link2 в конце
+        "MID_BEFORELAST",   # Link1 после середины, Link2 перед последним абзацем
+        "BOTTOM_BOTTOM",    # Обе в конце (традиционный CTA)
+    ]
+    
+    def _relocate_link_blocks(self, text: str) -> str:
+        """
+        Перемещает блоки ссылок в разные позиции поста.
+        10 стратегий размещения, ротация по счётчику.
+        Link1 всегда выше Link2.
+        """
+        if not self.bonus_data or not self.bonus_data.url1 or not self.bonus_data.url2:
+            return text
+        
+        import re
+        
+        url1 = self.bonus_data.url1
+        url2 = self.bonus_data.url2
+        
+        info1 = self._extract_link_block_info(text, url1)
+        info2 = self._extract_link_block_info(text, url2)
+        
+        if not info1.get('found') or not info2.get('found'):
+            return text
+        
+        lines = text.split('\n')
+        
+        blocks_to_remove = sorted(
+            [(info1['start_line'], info1['end_line'], url1),
+             (info2['start_line'], info2['end_line'], url2)],
+            key=lambda x: x[0], reverse=True
+        )
+        
+        extracted = {}
+        for start, end, url in blocks_to_remove:
+            block_lines = lines[start:end + 1]
+            extracted[url] = '\n'.join(block_lines)
+            del lines[start:end + 1]
+            if start > 0 and start < len(lines) and lines[start - 1].strip() == '' and (start >= len(lines) or lines[start].strip() == ''):
+                del lines[start]
+        
+        if url1 not in extracted or url2 not in extracted:
+            return text
+        
+        block1_text = extracted[url1]
+        block2_text = extracted[url2]
+        
+        clean_text = '\n'.join(lines).strip()
+        clean_text = re.sub(r'\n{3,}', '\n\n', clean_text)
+        
+        paragraphs = re.split(r'\n\n+', clean_text)
+        paragraphs = [p.strip() for p in paragraphs if p.strip()]
+        
+        if len(paragraphs) < 2:
+            return text
+        
+        strategy_idx = self._link_format_counter % len(self.LINK_PLACEMENT_STRATEGIES)
+        strategy = self.LINK_PLACEMENT_STRATEGIES[strategy_idx]
+        
+        n = len(paragraphs)
+        mid = n // 2
+        
+        if strategy == "TOP_BOTTOM":
+            pos1, pos2 = 0, n
+        elif strategy == "TOP_MID":
+            pos1, pos2 = 0, mid
+        elif strategy == "TOP_AFTER1":
+            pos1, pos2 = 0, min(1, n)
+        elif strategy == "AFTER1_BOTTOM":
+            pos1, pos2 = min(1, n), n
+        elif strategy == "AFTER1_MID":
+            pos1, pos2 = min(1, n), mid
+        elif strategy == "AFTER1_AFTER2":
+            pos1 = min(1, n)
+            pos2 = min(2, n)
+            if pos2 <= pos1:
+                pos2 = pos1 + 1
+        elif strategy == "AFTER2_BOTTOM":
+            pos1, pos2 = min(2, n), n
+        elif strategy == "MID_BOTTOM":
+            pos1, pos2 = mid, n
+        elif strategy == "MID_BEFORELAST":
+            pos1 = mid
+            pos2 = max(mid + 1, n - 1)
+        else:  # BOTTOM_BOTTOM
+            pos1, pos2 = n, n
+        
+        if pos1 > n:
+            pos1 = n
+        if pos2 > n:
+            pos2 = n
+        if pos2 <= pos1 and strategy != "BOTTOM_BOTTOM":
+            pos2 = min(pos1 + 1, n)
+        
+        result_parts = []
+        link1_inserted = False
+        link2_inserted = False
+        
+        for i, para in enumerate(paragraphs):
+            if i == pos1 and not link1_inserted:
+                result_parts.append(block1_text)
+                link1_inserted = True
+            if i == pos2 and not link2_inserted:
+                result_parts.append(block2_text)
+                link2_inserted = True
+            result_parts.append(para)
+        
+        if not link1_inserted:
+            if not link2_inserted:
+                result_parts.append(block1_text)
+                result_parts.append(block2_text)
+            else:
+                result_parts.insert(-1 if len(result_parts) > 0 else 0, block1_text)
+        elif not link2_inserted:
+            result_parts.append(block2_text)
+        
+        result = '\n\n'.join(result_parts)
+        
+        if url1 not in result or url2 not in result:
+            return text
+        
+        idx1 = result.find(url1)
+        idx2 = result.find(url2)
+        if idx1 > idx2:
+            return text
+        
+        print(f"   📍 Размещение ссылок: стратегия #{strategy_idx + 1} ({strategy})")
+        sys.stdout.flush()
+        
+        return result
+    
     def _reformat_link_blocks(self, text: str) -> str:
         """
         Программно переформатирует блоки ссылок для визуального разнообразия.
@@ -4962,6 +5105,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
                 text = self._randomize_currency_format(text, video)
+
+                # 📍 Перемещение ссылок по тексту (10 стратегий позиционирования)
+                text = self._relocate_link_blocks(text)
 
                 # 🔗 Программная ротация формата ссылок (20 категорий)
                 text = self._reformat_link_blocks(text)
