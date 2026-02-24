@@ -70,6 +70,8 @@ class CaptionParser:
             r'выигрыш[:\s]*[$₽€£\s]*([\d\s,.]+)',  # выигрыш $ 6609.50 или выигрыш 644580.00
             r'ganancia[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Ganancia: 498.095$ (испанский)
             r'[Vv]incita[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Vincita: 505 € (итальянский)
+            r'[Gg]agner[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Gagner: 360 € (французский)
+            r'[Gg]ain[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Gain: 360 € (французский)
             r'💰\s*[$₽€£\s]*([\d\s,.]+)',  # 💰 $ 89 000
             r'получил[:\s]*[$₽€£\s]*([\d\s,.]+)',  # получил $ 125000
             r'забрал[:\s]*[$₽€£\s]*([\d\s,.]+)',  # забрал $ 125000
@@ -82,6 +84,7 @@ class CaptionParser:
             r'[сc]тавка[:\s]*[$₽€£\s]*([\d\s,.]+)',  # ставка/cтавка 1 USD (кириллица/латиница)
             r'apuesta[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Apuesta: 100$ (испанский)
             r'[Pp]untata[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Puntata: 50 € (итальянский)
+            r'[Mm]ise[:\s]*[$₽€£\s]*([\d\s,.]+)',  # Mise: 10 € (французский)
             r'💵\s*[$₽€£\s]*([\d\s,.]+)',  # 💵 $ 200
             r'вход[:\s]*[$₽€£\s]*([\d\s,.]+)',  # вход: $ 500
             r'бет[:\s]*[$₽€£\s]*([\d\s,.]+)',  # бет: $ 500
@@ -139,13 +142,14 @@ class CaptionParser:
         text = caption_clean.lower()
         result = ParsedCaption()
         
-        # Извлекаем слот
+        # Извлекаем слот (из caption_clean для сохранения оригинального регистра)
         for pattern in cls.PATTERNS['slot']:
-            match = re.search(pattern, text, re.IGNORECASE)
+            match = re.search(pattern, caption_clean, re.IGNORECASE)
             if match:
                 result.slot = match.group(1).strip()
-                # Убираем лишние символы в конце
-                result.slot = re.sub(r'[₽рp\d\s]+$', '', result.slot).strip()
+                # Убираем лишние символы в конце (₽, русская р, цифры, пробелы)
+                # НЕ убираем английскую p — она может быть частью названия слота (Hop'N'Pop)
+                result.slot = re.sub(r'[₽р\d\s]+$', '', result.slot).strip()
                 break
         
         # Извлекаем выигрыш
@@ -178,6 +182,8 @@ class CaptionParser:
             'apuesta', 'ganancia', 'ranura',
             # Итальянские слова (чтобы не путать с никами)
             'puntata', 'vincita', 'scommessa', 'giocatore', 'slot',
+            # Французские слова (чтобы не путать с никами)
+            'gagner', 'gain', 'mise', 'joueur', 'pari', 'parieur', 'gagnant',
             # ⚠️ КРИТИЧНО: КОДЫ ВАЛЮТ НЕ МОГУТ БЫТЬ НИКАМИ!
             'clp', 'ars', 'mxn', 'pen', 'cop', 'uyu', 'gbp', 'rub',
             'usd', 'eur',  # дублируем в нижнем регистре для полной уверенности
@@ -233,9 +239,12 @@ class CaptionParser:
                         # Проверяем что это не похоже на число/валюту
                         if not re.match(r'^[\d\s₽$€£.,]+$', streamer_candidate):
                             # ⚠️ ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА: Убеждаемся что это не название слота
-                            # Если кандидат совпадает с уже найденным слотом - пропускаем
-                            if result.slot and streamer_candidate.lower() == result.slot.lower():
-                                continue  # Это название слота, пропускаем!
+                            # Если кандидат совпадает, является словом или подстрокой слота — пропускаем
+                            if result.slot:
+                                slot_lower = result.slot.lower()
+                                cand_lower = streamer_candidate.lower()
+                                if cand_lower == slot_lower or cand_lower in slot_lower.split() or cand_lower in slot_lower:
+                                    continue  # Это часть названия слота, пропускаем!
                             
                             result.streamer = streamer_candidate
                             break
@@ -264,44 +273,47 @@ class CaptionParser:
         # Также испанские: "Apuesta: 100$", "Ganancia: 498.095$"
         currency_found = False
         
-        # 1. Ищем USD (явное указание включая "доллар")
-        if re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption_for_currency, re.IGNORECASE):
+        # Общий паттерн для ключевых слов всех языков
+        _kw = r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|gagner|gain|mise|win|bet)'
+        
+        # 1. Ищем USD
+        if re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:USD|\$|доллар)', caption_for_currency, re.IGNORECASE):
             result.currency = 'USD'
             currency_found = True
-        # 2. Ищем EUR (явное указание включая "евро")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:EUR|€|евро)', caption_for_currency, re.IGNORECASE):
+        # 2. Ищем EUR
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:EUR|€|евро|euro)', caption_for_currency, re.IGNORECASE):
             result.currency = 'EUR'
             currency_found = True
-        # 3. Ищем GBP (явное указание включая "фунт")
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption_for_currency, re.IGNORECASE):
+        # 3. Ищем GBP
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:GBP|£|фунт)', caption_for_currency, re.IGNORECASE):
             result.currency = 'GBP'
             currency_found = True
-        # 4. Ищем CLP (чилийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:CLP)', caption_for_currency, re.IGNORECASE):
+        # 4. Ищем CLP
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:CLP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'CLP'
             currency_found = True
-        # 5. Ищем MXN (мексиканское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:MXN)', caption_for_currency, re.IGNORECASE):
+        # 5. Ищем MXN
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:MXN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'MXN'
             currency_found = True
-        # 6. Ищем ARS (аргентинское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption_for_currency, re.IGNORECASE):
+        # 6. Ищем ARS
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:ARS|ARG)', caption_for_currency, re.IGNORECASE):
             result.currency = 'ARS'
             currency_found = True
-        # 7. Ищем COP (колумбийское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:COP)', caption_for_currency, re.IGNORECASE):
+        # 7. Ищем COP
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:COP)', caption_for_currency, re.IGNORECASE):
             result.currency = 'COP'
             currency_found = True
-        # 8. Ищем PEN (перуанское соль)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:PEN)', caption_for_currency, re.IGNORECASE):
+        # 8. Ищем PEN
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:PEN)', caption_for_currency, re.IGNORECASE):
             result.currency = 'PEN'
             currency_found = True
-        # 9. Ищем UYU (уругвайское песо)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:UYU)', caption_for_currency, re.IGNORECASE):
+        # 9. Ищем UYU
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:UYU)', caption_for_currency, re.IGNORECASE):
             result.currency = 'UYU'
             currency_found = True
-        # 10. Ищем RUB (руб, р, RUB, ₽, рубл)
-        elif re.search(r'(?:выигрыш|ставка|ganancia|apuesta|vincita|puntata|win|bet)[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption_for_currency, re.IGNORECASE):
+        # 10. Ищем RUB
+        elif re.search(_kw + r'[:\s]*[\d\s,.]+\s*(?:руб|рубл|р\b|RUB|₽)', caption_for_currency, re.IGNORECASE):
             result.currency = 'RUB'
             currency_found = True
         
@@ -361,10 +373,18 @@ class CaptionParser:
         dot_count = s.count('.')
         comma_count = s.count(',')
         
-        # Случай 1: несколько точек (разделители тысяч) - удаляем их
-        # Пример: 17.086.780 или 19.000 (испанский формат)
+        # Случай 1: несколько точек — проверяем, есть ли десятичная часть
+        # Пример: 2.545.50 → 2545.50 (последняя группа 1-2 цифры = десятичная)
+        # Пример: 17.086.780 → 17086780 (все группы по 3 = разделители тысяч)
         if dot_count > 1:
-            s = s.replace('.', '')
+            parts = s.split('.')
+            last_group = parts[-1]
+            if len(last_group) <= 2:
+                # Последняя группа — десятичная часть, остальные точки — разделители тысяч
+                integer_part = ''.join(parts[:-1])
+                s = f"{integer_part}.{last_group}"
+            else:
+                s = s.replace('.', '')
         # Случай 2: одна точка и несколько запятых (точка - десятичная, запятые - тысячи)
         # Пример: 1,234,567.89
         elif dot_count == 1 and comma_count > 0:

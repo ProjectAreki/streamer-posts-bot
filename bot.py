@@ -19,6 +19,7 @@ from src.handlers.streamer_posts_handlers import register_streamer_handlers
 from src.handlers.image_posts_handlers import register_image_posts_handlers
 from src.handlers.spanish_posts_handlers import register_spanish_handlers
 from src.handlers.italian_posts_handlers import register_italian_handlers
+from src.handlers.french_posts_handlers import register_french_handlers
 
 
 class StreamerPostsBot:
@@ -51,6 +52,7 @@ class StreamerPostsBot:
         register_image_posts_handlers(self)
         register_spanish_handlers(self)
         register_italian_handlers(self)
+        register_french_handlers(self)
         
         self.logger.info("✅ Бот инициализирован")
     
@@ -62,6 +64,7 @@ class StreamerPostsBot:
                 [KeyboardButton(text="📹 100 постов стримеров")],
                 [KeyboardButton(text="📹ES 100 posteos")],
                 [KeyboardButton(text="📹IT 100 post italiani")],
+                [KeyboardButton(text="📹FR 100 posts francais")],
                 [KeyboardButton(text="🖼 Посты с картинками")],
                 [KeyboardButton(text="❓ Помощь")]
             ],
