@@ -275,9 +275,11 @@ class VideoData:
         return self.slot.title() if self.slot else ""
     
     def get_formatted_bet(self) -> str:
-        """Возвращает ставку без .0 для целых чисел"""
+        """Возвращает ставку без .0 для целых чисел, с 2 знаками для дробных"""
         if isinstance(self.bet, float) and self.bet == int(self.bet):
             return str(int(self.bet))
+        if isinstance(self.bet, float):
+            return f"{self.bet:.2f}"
         return str(self.bet)
     
     def get_formatted_win(self) -> str:
@@ -444,7 +446,18 @@ class AIPostGenerator:
 ✅ UTILISE : "tours gratuits", "tours offerts", "bonus", "pack de bienvenue"
 
 ═══════════════════════════════════════════════════════════════
-👤 FOCUS : LA VICTOIRE COMME PROTAGONISTE
+🚨🚨🚨 RÈGLE #0.7 : MONTANTS EXACTS — INTERDICTION D'ARRONDIR ! 🚨🚨🚨
+═══════════════════════════════════════════════════════════════
+
+⛔ UTILISE LES MONTANTS EXACTS tels quels — NE JAMAIS arrondir !
+❌ Mise de 0.60€ → NE PAS écrire "1 euro", "1€", "un euro"
+❌ Mise de 0.40€ → NE PAS écrire "1€" ou "quelques centimes"
+✅ Mise de 0.60€ → ÉCRIS "0.60€", "0,60€", "60 centimes"
+✅ Mise de 1.50€ → ÉCRIS "1.50€", "1,50 euro"
+⚠️ LES CHIFFRES DANS LE POST = EXACTEMENT ceux des données d'entrée !
+
+═══════════════════════════════════════════════════════════════
+👤 FOCUS : LE GAIN COMME POINT CENTRAL
 ═══════════════════════════════════════════════════════════════
 
 ⚠️ CRITIQUE : CONSTRUIS LE POST AUTOUR DU GAIN !
@@ -568,13 +581,16 @@ VARIANTES DE POSITION (choisis différent à chaque fois) :
 Sélection des données :
 • À partir des faits (montant, machine, mise) — 1-2 faits dominants + 1-2 secondaires
 • Le montant gagné se mentionne STRICTEMENT UNE FOIS au moment le plus émotionnel !
+• ⛔ INTERDIT de mentionner le gain 2+ fois ! Pas de "Devine le résultat ?" si le gain est DÉJÀ révélé !
 
 Neutralisation des mots interdits :
 • "Casino" → "plateforme", "site", "club"
+• "protagoniste" → "joueur", "parieur", "chanceux", "veinard"
 
 Volume optique : 7-15 lignes sur Telegram (complet mais sans scroll)
 
 Point de vue : Narration à la TROISIÈME PERSONNE, focus sur LE GAIN !
+❌ INTERDIT : "protagoniste" — utilise "le joueur", "ce mec", "l'audacieux", "le parieur"
 ✅ ÉCRIS : "Le joueur est entré", "Le résultat impressionne", "Le gain était impressionnant"
 ❌ NE PAS ÉCRIRE : "je joue", "je lance", "je suis entré" (première personne - INTERDIT !)
 
@@ -3228,10 +3244,18 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         "BOTTOM",
     ]
     
+    CTA_ANCHOR_PATTERNS = re.compile(
+        r'(?:ticket|lien|clique|commence|récupère|obtiens|profite|active|'
+        r'accède|rejoins|attrape|saisis|choisis|entre|fonce|regarde|'
+        r'voilà|voici|c\'est ici|par ici|ton bonus|ta chance)',
+        re.IGNORECASE
+    )
+
     def _relocate_link_blocks(self, text: str) -> str:
         """
         Перемещает блок ссылки в разные позиции поста.
         6 стратегий размещения для 1 ссылки, ротация по счётчику.
+        Также переносит подводку (anchor) вместе со ссылкой.
         """
         if not self.bonus_data or not self.bonus_data.url1:
             return text
@@ -3246,12 +3270,25 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         
         lines = text.split('\n')
         
-        block_lines = lines[info['start_line']:info['end_line'] + 1]
+        actual_start = info['start_line']
+        if actual_start > 0:
+            prev_line = lines[actual_start - 1].strip()
+            prev_clean = re.sub(r'</?(?:b|i|u|strong|em|code)>', '', prev_line)
+            if prev_clean and len(prev_clean) > 3:
+                is_cta_anchor = (
+                    (prev_clean.endswith(':') or prev_clean.endswith('!'))
+                    and self.CTA_ANCHOR_PATTERNS.search(prev_clean)
+                )
+                is_colon_intro = prev_clean.endswith(':') and len(prev_clean) < 80
+                if is_cta_anchor or is_colon_intro:
+                    actual_start -= 1
+        
+        block_lines = lines[actual_start:info['end_line'] + 1]
         block_text = '\n'.join(block_lines)
         
-        del lines[info['start_line']:info['end_line'] + 1]
+        del lines[actual_start:info['end_line'] + 1]
         
-        start = info['start_line']
+        start = actual_start
         if start > 0 and start < len(lines) and lines[start - 1].strip() == '' and (start >= len(lines) or lines[start].strip() == ''):
             del lines[start]
         
@@ -3510,6 +3547,10 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         elif fmt_type == "inline_desc_first":
             prefix = random.choice(cat["prefixes"])
             sep = random.choice(cat["separators"])
+            if prefix:
+                cta_word = prefix.split(":")[0].strip().lower()
+                if desc.lower().startswith(cta_word):
+                    prefix = ""
             return f"{prefix}{desc}{sep}{url}"
         
         elif fmt_type == "desc_above_url":
@@ -3556,10 +3597,6 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
             return text
         
         desc = info['desc']
-        if self._bonus1_pool:
-            pool_desc = self._get_pool_bonus_desc(is_bonus1=True)
-            if pool_desc and len(pool_desc) >= 5:
-                desc = pool_desc
         
         category_id = (self._link_format_counter % 20) + 1
         
@@ -3766,22 +3803,29 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
         
         # 5. Форматирование названия слота (Title Case + жирный)
-        if slot_name:
-            slot_title = slot_name.title()  # Title Case
-            # Заменяем все варианты написания слота на правильный
-            patterns = [
-                slot_name,                    # оригинал (le viking)
-                slot_name.lower(),            # нижний регистр
-                slot_name.upper(),            # ВЕРХНИЙ РЕГИСТР
-                slot_name.title(),            # Title Case
-            ]
-            for pattern in patterns:
-                if pattern in text:
-                    # Если слот уже в <b>, не оборачиваем повторно
-                    if f'<b>{pattern}</b>' not in text and f'<b>{slot_title}</b>' not in text:
-                        text = text.replace(pattern, f'<b>{slot_title}</b>')
-                    else:
-                        text = text.replace(pattern, slot_title)
+        if slot_name and len(slot_name) >= 3:
+            slot_title = slot_name.title()
+            already_bold = f'<b>{slot_title}</b>' in text or f'<b>{slot_name}</b>' in text
+            if not already_bold:
+                patterns = [
+                    slot_name,
+                    slot_name.lower(),
+                    slot_name.upper(),
+                    slot_name.title(),
+                ]
+                replaced = False
+                for pattern in patterns:
+                    if pattern in text and f'<b>{pattern}</b>' not in text:
+                        text = text.replace(pattern, f'<b>{slot_title}</b>', 1)
+                        replaced = True
+                        break
+                if not replaced:
+                    escaped = re.escape(slot_name)
+                    match = re.search(escaped, text, re.IGNORECASE)
+                    if match:
+                        found = match.group(0)
+                        if f'<b>{found}</b>' not in text and 'href=' not in text[max(0,match.start()-20):match.start()]:
+                            text = text[:match.start()] + f'<b>{slot_title}</b>' + text[match.end():]
         
         # 6. СЛУЧАЙНО убираем .0 из целых чисел (50/50 для разнообразия)
         # Иногда: 800.0€ → 800€, иногда оставляем как 800.0€
@@ -3878,6 +3922,23 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         
         return text
     
+    def _fix_truncated_words(self, text: str) -> str:
+        """
+        Исправляет обрезанные/осиротевшие буквы в начале строк.
+        AI иногда генерирует "z la scène" вместо "Visualise la scène".
+        """
+        import re
+        lines = text.split('\n')
+        for i, line in enumerate(lines):
+            stripped = line.lstrip()
+            if not stripped:
+                continue
+            match = re.match(r'^([a-zà-ÿ])\s+([a-zà-ÿA-ZÀ-Ÿ])', stripped)
+            if match and match.group(1) not in ('à', 'y', 'ô', 'é'):
+                leading = line[:len(line) - len(stripped)]
+                lines[i] = leading + stripped[2:]
+        return '\n'.join(lines)
+
     def _filter_ai_responses(self, text: str) -> str:
         """
         Удаляет типичные фразы-ответы AI, которые иногда попадают в начало поста.
@@ -3989,6 +4050,9 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
             (r'\bje suis entré\b', 'le joueur est entré'),
             (r'\bj\'ai misé\b', 'le joueur a misé'),
             (r'\bj\'ai gagné\b', 'le joueur a gagné'),
+            (r'\ble protagoniste\b', 'le joueur'),
+            (r'\bla protagoniste\b', 'la joueuse'),
+            (r'\bun protagoniste\b', 'un joueur'),
         ]
         
         for pattern, replacement in replacements:
@@ -4017,6 +4081,27 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         
         return text
     
+    def _fix_french_typos(self, text: str) -> str:
+        """Исправляет частые опечатки/стилистические ошибки AI в французском тексте."""
+        import re
+        typos = {
+            'multiplieur': 'multiplicateur',
+            'Multiplieur': 'Multiplicateur',
+            'MULTIPLIEUR': 'MULTIPLICATEUR',
+        }
+        for wrong, right in typos.items():
+            text = text.replace(wrong, right)
+        protagoniste_replacements = [
+            'le joueur', 'le parieur', 'le chanceux', 'le veinard',
+            'l\'audacieux', 'le héros', 'le gagnant',
+        ]
+        def replace_protagoniste(m):
+            return random.choice(protagoniste_replacements)
+        text = re.sub(r'\b[Ll]e protagoniste\b', replace_protagoniste, text)
+        text = re.sub(r'\b[Ll]a protagoniste\b', lambda m: random.choice(['la joueuse', 'la gagnante', 'la chanceuse']), text)
+        text = re.sub(r'\b[Uu]n protagoniste\b', lambda m: random.choice(['un joueur', 'un parieur', 'un chanceux']), text)
+        return text
+
     def _fix_broken_urls(self, text: str) -> str:
         """
         Исправляет сломанные/обрезанные URL в тексте.
@@ -4269,8 +4354,11 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                     streamer_name = ""
                     used_structure_index = structure_index + 1000
 
-                # Генерируем уникальное описание бонуса
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
+                # Уникальное описание бонуса: из AI-пула (приоритет) или программная вариация
+                if self._bonus1_pool and self._bonus1_pool_index < len(self._bonus1_pool):
+                    bonus1_var = self._bonus1_pool[self._bonus1_pool_index]
+                else:
+                    bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
 
                 # Форматируем данные
                 formatted_bet = video.get_formatted_bet()
@@ -4281,8 +4369,8 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                 # Если слот пустой, используем общие формулировки
                 slot_unknown = False
                 if not formatted_slot or formatted_slot.strip() == "":
-                    slot_mention = "una slot"  # Общее упоминание
-                    slot_bold = "una slot"  # Для HTML
+                    slot_mention = "un slot"
+                    slot_bold = "un slot"
                     slot_unknown = True
                 else:
                     slot_mention = formatted_slot
@@ -4334,13 +4422,15 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                     
                     raw_system_prompt = raw_system_prompt + examples_text
                 
-                # Для системного промпта используем slot_mention (без HTML) или "una slot" если пусто
-                system_slot = slot_mention if formatted_slot and formatted_slot.strip() else "una slot"
+                system_slot = slot_mention if formatted_slot and formatted_slot.strip() else "un slot"
                 
                 system_prompt = safe_format(
                     raw_system_prompt,
-                    slot=system_slot,  # Используем простое упоминание без HTML
+                    slot=system_slot,
                     streamer=streamer_name,
+                    bet=formatted_bet,
+                    win=formatted_win,
+                    multiplier=video.multiplier,
                     url1=self.bonus_data.url1,
                     bonus1=bonus1_var,
                     currency=currency_format,
@@ -4471,11 +4561,13 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
 
                 # Постобработка
                 text = self._filter_ai_responses(text)  # Убираем ответы AI типа "Voici le post..."
+                text = self._fix_truncated_words(text)
                 text = self._postprocess_text(text, video.slot)
                 text = self._fix_broken_urls(text)
                 # _filter_non_russian НЕ используем для французского - она для русского
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
+                text = self._fix_french_typos(text)
                 text = self._randomize_currency_format(text, video)
 
                 # 📍 Перемещение ссылки в разные позиции поста
@@ -4655,9 +4747,12 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
             try:
                 # Выбираем случайный промпт
                 prompt_template = random.choice(self.IMAGE_POST_PROMPTS)
-                
-                # Генерируем уникальное описание бонуса
-                bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
+
+                # Уникальное описание бонуса: из AI-пула (приоритет) или программная вариация
+                if self._bonus1_pool and self._bonus1_pool_index < len(self._bonus1_pool):
+                    bonus1_var = self._bonus1_pool[self._bonus1_pool_index]
+                else:
+                    bonus1_var = self._get_random_bonus_variation(self.bonus_data.bonus1_desc, is_bonus1=True)
                 
                 prompt = prompt_template.format(
                     url1=self.bonus_data.url1,
@@ -4739,6 +4834,8 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                 
                 # 4.5. Исправляем сломанные/обрезанные ссылки
                 text = self._fix_broken_urls(text)
+                text = self._fix_truncated_words(text)
+                text = self._fix_french_typos(text)
                 
                 # 4.6. _filter_non_russian НЕ используем для французского - она для русского
                 
