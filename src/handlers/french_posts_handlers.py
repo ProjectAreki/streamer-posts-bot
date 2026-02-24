@@ -782,19 +782,22 @@ def register_french_handlers(bot_instance):
             return
     
         try:
+            from src.caption_parser import CaptionParser
             if len(parts) == 2:
                 slot = ""
-                bet = int(parts[0].strip().replace(' ', '').replace(',', ''))
-                win = int(parts[1].strip().replace(' ', '').replace(',', ''))
+                bet = int(CaptionParser._parse_number(parts[0].strip()))
+                win = int(CaptionParser._parse_number(parts[1].strip()))
             elif len(parts) == 3:
                 slot = parts[0].strip()
-                bet = int(parts[1].strip().replace(' ', '').replace(',', ''))
-                win = int(parts[2].strip().replace(' ', '').replace(',', ''))
+                bet = int(CaptionParser._parse_number(parts[1].strip()))
+                win = int(CaptionParser._parse_number(parts[2].strip()))
             else:
                 slot = parts[-3].strip()
-                bet = int(parts[-2].strip().replace(' ', '').replace(',', ''))
-                win = int(parts[-1].strip().replace(' ', '').replace(',', ''))
+                bet = int(CaptionParser._parse_number(parts[-2].strip()))
+                win = int(CaptionParser._parse_number(parts[-1].strip()))
         
+            if win < bet and win > 0 and bet > 0:
+                win, bet = bet, win
             multiplier = round(win / bet, 1) if bet > 0 else 0
         except ValueError:
             await message.answer("❌ Ставка и выигрыш должны быть числами!")
@@ -1119,24 +1122,27 @@ def register_french_handlers(bot_instance):
             return
     
         try:
+            from src.caption_parser import CaptionParser
             if len(parts) == 2:
                 # Без слота и стримера: Ставка | Выигрыш
                 streamer = ""
                 slot = ""  # Без слота
-                bet = int(parts[0].strip().replace(' ', '').replace(',', '').replace('.', ''))
-                win = int(parts[1].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                bet = int(CaptionParser._parse_number(parts[0].strip()))
+                win = int(CaptionParser._parse_number(parts[1].strip()))
             elif len(parts) == 3:
                 # Без стримера: Слот | Ставка | Выигрыш
                 streamer = ""
                 slot = parts[0].strip()
-                bet = int(parts[1].strip().replace(' ', '').replace(',', '').replace('.', ''))
-                win = int(parts[2].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                bet = int(CaptionParser._parse_number(parts[1].strip()))
+                win = int(CaptionParser._parse_number(parts[2].strip()))
             else:
                 # 4+ значений: первое игнорируется, Слот | Ставка | Выигрыш из последних трёх
                 slot = parts[-3].strip()
-                bet = int(parts[-2].strip().replace(' ', '').replace(',', '').replace('.', ''))
-                win = int(parts[-1].strip().replace(' ', '').replace(',', '').replace('.', ''))
+                bet = int(CaptionParser._parse_number(parts[-2].strip()))
+                win = int(CaptionParser._parse_number(parts[-1].strip()))
         
+            if win < bet and win > 0 and bet > 0:
+                win, bet = bet, win
             multiplier = round(win / bet, 1) if bet > 0 else 0
         except ValueError:
             await message.answer(
