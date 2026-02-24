@@ -3827,12 +3827,10 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                         if f'<b>{found}</b>' not in text and 'href=' not in text[max(0,match.start()-20):match.start()]:
                             text = text[:match.start()] + f'<b>{slot_title}</b>' + text[match.end():]
         
-        # 6. СЛУЧАЙНО убираем .0 из целых чисел (50/50 для разнообразия)
-        # Иногда: 800.0€ → 800€, иногда оставляем как 800.0€
-        if random.choice([True, False]):
-            text = re.sub(r'(\d)\.0([€\s,])', r'\1\2', text)
-            text = re.sub(r'(\d)\.0</code>', r'\1</code>', text)
-            text = re.sub(r'(\d)\.0</b>', r'\1</b>', text)
+        # 6. Убираем .0 из целых чисел: 800.0€ → 800€
+        text = re.sub(r'(\d)\.0([€\s,\)])', r'\1\2', text)
+        text = re.sub(r'(\d)\.0</code>', r'\1</code>', text)
+        text = re.sub(r'(\d)\.0</b>', r'\1</b>', text)
         
         # 7. Замена литеральных \n на реальные переносы строк
         text = text.replace('\\n', '\n')
@@ -4039,17 +4037,32 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         text = text.replace('¡', '')
         text = text.replace('¿', '')
         
-        # Заменяем шаблонные фразы (французские аналоги)
+        # Заменяем шаблонные фразы + первое лицо → третье
         replacements = [
             (r'l\'écran a explosé', 'le résultat a impressionné'),
             (r'des frissons partout', 'ça impressionne'),
             (r'frissons dans tout le corps', 'ça impressionne'),
             (r'tasse de café', 'petite somme'),
+            # Первое лицо → третье лицо (КРИТИЧНО)
             (r'\bje joue\b', 'le joueur joue'),
             (r'\bje tourne\b', 'le joueur tourne'),
             (r'\bje suis entré\b', 'le joueur est entré'),
             (r'\bj\'ai misé\b', 'le joueur a misé'),
             (r'\bj\'ai gagné\b', 'le joueur a gagné'),
+            (r'\bj\'ai testé\b', 'c\'est vérifié'),
+            (r'\bj\'ai trouvé\b', 'voici'),
+            (r'\bj\'ai vu\b', 'on a vu'),
+            (r'\bj\'en reste\b', 'on en reste'),
+            (r'\bje reste\b', 'on reste'),
+            (r'\bMoi,?\s+j\'aurais\b', 'On aurait'),
+            (r'\bmoi,?\s+j\'aurais\b', 'on aurait'),
+            (r'\bje n\'aurais\b', 'on n\'aurait'),
+            (r'\bj\'aurais\b', 'on aurait'),
+            (r'\bje suis\b', 'c\'est'),
+            (r'\bj\'en ai\b', 'on en a'),
+            (r'\bmon cœur\b', 'le cœur'),
+            (r'\bMon cœur\b', 'Le cœur'),
+            # Protagoniste
             (r'\ble protagoniste\b', 'le joueur'),
             (r'\bla protagoniste\b', 'la joueuse'),
             (r'\bun protagoniste\b', 'un joueur'),
@@ -4088,6 +4101,7 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
             'multiplieur': 'multiplicateur',
             'Multiplieur': 'Multiplicateur',
             'MULTIPLIEUR': 'MULTIPLICATEUR',
+            'malinement': 'astucieusement',
         }
         for wrong, right in typos.items():
             text = text.replace(wrong, right)
@@ -4100,7 +4114,92 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         text = re.sub(r'\b[Ll]e protagoniste\b', replace_protagoniste, text)
         text = re.sub(r'\b[Ll]a protagoniste\b', lambda m: random.choice(['la joueuse', 'la gagnante', 'la chanceuse']), text)
         text = re.sub(r'\b[Uu]n protagoniste\b', lambda m: random.choice(['un joueur', 'un parieur', 'un chanceux']), text)
+
+        # Всегда убираем .0 из множителей: x1724.0 → x1724, x320.0 → x320
+        text = re.sub(r'(x\d+)\.0\b', r'\1', text)
+        text = re.sub(r'(x\d+)\.0([<\s,\)])', r'\1\2', text)
+
+        # Убираем осиротевшее двоеточие в начале строки: ": текст" → "текст"
+        text = re.sub(r'(?m)^:\s+', '', text)
+
         return text
+
+    def _fix_stat_block_rounding(self, text: str, video) -> str:
+        """
+        Исправляет округлённые ставки в стат-блоках.
+        AI часто пишет 'Entrée : 7 EUR' вместо 'Entrée : 7.20 EUR'
+        или 'De 1 euro' вместо 'De 0.60 euro'.
+        """
+        import re
+        if not video or video.bet == int(video.bet):
+            return text
+
+        exact_bet = video.get_formatted_bet()
+        # AI может округлить и вниз (floor) и вверх (round)
+        rounded_variants = list(set([
+            str(int(video.bet)),
+            str(round(video.bet)),
+            str(int(video.bet) + 1),
+        ]))
+        # Не заменяем если округлённый вариант совпадает с точным
+        rounded_variants = [r for r in rounded_variants if r != exact_bet and r != exact_bet.rstrip('0').rstrip('.')]
+
+        for rounded_bet in rounded_variants:
+            stat_patterns = [
+                (rf'(Entrée\s*:\s*){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(Mise\s*:\s*){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(Pari\s*:\s*){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(risqué\s+){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(A risqué\s+){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(mise de\s+){rounded_bet}(\s*(?:€|EUR|euro))', rf'\g<1>{exact_bet}\2'),
+                (rf'(De\s+){rounded_bet}(\s*(?:€|EUR|euro)\s*(?:à|→))', rf'\g<1>{exact_bet}\2'),
+                (rf'(💸\s*){rounded_bet}(€|(?:\s*(?:EUR|euro)))', rf'\g<1>{exact_bet}\2'),
+            ]
+            for pattern, replacement in stat_patterns:
+                text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+        return text
+
+    def _deduplicate_win_mentions(self, text: str, video) -> str:
+        """
+        Убирает дублирующие стат-строки если сумма выигрыша уже упоминается 3+ раз.
+        Удаляет финальные строки вида 'Gain — 607 EUR avec une mise de 7 EUR' или 'Gain ? 716€ !'
+        """
+        import re
+        if not video:
+            return text
+
+        win_int = int(video.win) if video.win == int(video.win) else video.win
+        win_str = str(win_int)
+        win_formatted = video.get_formatted_win()
+
+        count = 0
+        for variant in [win_str, win_formatted, win_formatted.replace(' ', '\u00a0')]:
+            count += text.count(variant)
+        count = min(count, text.count(win_str) + text.count(win_formatted))
+
+        if count < 3:
+            return text
+
+        lines = text.split('\n')
+        to_remove = []
+        for i in range(len(lines) - 1, max(len(lines) - 6, -1), -1):
+            line = lines[i].strip()
+            if not line:
+                continue
+            clean = re.sub(r'</?(?:b|i|u|code|strong|em)>', '', line)
+            if re.search(rf'(?:Gain|Résultat|Profit|Sur le compte)\s*[:\—\-\?]?\s*{re.escape(win_str)}', clean, re.IGNORECASE):
+                if any(kw in clean.lower() for kw in ['http', 'href=', 'cutt.ly', 'tours gratuit', 'bonus', '500']):
+                    continue
+                to_remove.append(i)
+                break
+
+        for idx in sorted(to_remove, reverse=True):
+            del lines[idx]
+
+        result = '\n'.join(lines)
+        result = re.sub(r'\n{3,}', '\n\n', result)
+        return result.strip()
 
     def _fix_broken_urls(self, text: str) -> str:
         """
@@ -4568,6 +4667,7 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
                 text = self._fix_french_typos(text)
+                text = self._fix_stat_block_rounding(text, video)
                 text = self._randomize_currency_format(text, video)
 
                 # 📍 Перемещение ссылки в разные позиции поста
@@ -4577,7 +4677,10 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
 
                 # 🎨 HTML-стиль описания бонуса (для категорий 1-12 без пре-стиля)
                 text = self._apply_bonus_desc_formatting(text)
-                
+
+                # 🔄 Дедупликация: убираем лишние упоминания выигрыша (3+ раз)
+                text = self._deduplicate_win_mentions(text, video)
+
                 # Мягкая обрезка воды если пост длиннее целевого (как в русском)
                 if len(text) > 700:
                     print(f"   ✂️ Пост длинноват ({len(text)}), мягко сокращаем воду...")
