@@ -20,8 +20,10 @@ import re
 
 try:
     from openai import AsyncOpenAI
+    import httpx
 except ImportError:
     AsyncOpenAI = None
+    httpx = None
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -2249,17 +2251,20 @@ MISE EN FORME (CRITIQUE ! UTILISE TOUS LES TAGS !) :
         # self.api_key оставляем как "активный" ключ текущего режима (для совместимости)
         self.api_key = self.openrouter_api_key if use_openrouter else self.openai_api_key
 
+        _http_timeout = httpx.Timeout(connect=30.0, read=120.0, write=30.0, pool=30.0) if httpx else None
+
         if use_openrouter:
-            # Используем OpenRouter
             if AsyncOpenAI and self.openrouter_api_key:
-                self.client = AsyncOpenAI(
-                    api_key=self.openrouter_api_key,
-                    base_url=OPENROUTER_BASE_URL
-                )
+                kwargs = dict(api_key=self.openrouter_api_key, base_url=OPENROUTER_BASE_URL)
+                if _http_timeout:
+                    kwargs["timeout"] = _http_timeout
+                self.client = AsyncOpenAI(**kwargs)
         else:
-            # Используем OpenAI напрямую
             if AsyncOpenAI and self.openai_api_key:
-                self.client = AsyncOpenAI(api_key=self.openai_api_key)
+                kwargs = dict(api_key=self.openai_api_key)
+                if _http_timeout:
+                    kwargs["timeout"] = _http_timeout
+                self.client = AsyncOpenAI(**kwargs)
 
         self.bonus_data: Optional[BonusData] = None
         self._generated_posts: List[str] = []  # Для проверки уникальности

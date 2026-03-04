@@ -2231,19 +2231,16 @@ def register_streamer_handlers(bot_instance):
                 await message.answer("✅ Нет дублей для перегенерации!")
                 await _show_posts_preview_after_check(message, state, result)
                 return
-        
-            # Собираем индексы постов для перегенерации (берём второй из пары)
+
             posts_to_regenerate = set()
             for dup in duplicates:
-                # Перегенерируем второй пост из пары (post2)
-                posts_to_regenerate.add(dup['post2'] - 1)  # -1 т.к. индексы с 0
-        
+                posts_to_regenerate.add(dup['post2'] - 1)
+
             posts_to_regenerate = sorted(posts_to_regenerate)
-        
-            # Получаем модель для перегенерации из state
+
             regenerate_model_id = data.get('regenerate_model_id', 'openai/gpt-4o-mini')
             regenerate_model_name = data.get('regenerate_model_name', 'GPT-4o Mini')
-        
+
             status_msg = await message.answer(
                 f"🔄 <b>Перегенерация {len(posts_to_regenerate)} постов...</b>\n\n"
                 f"🤖 Модель: {regenerate_model_name}\n"
@@ -2251,49 +2248,53 @@ def register_streamer_handlers(bot_instance):
                 f"⏳ Это займёт некоторое время...",
                 parse_mode="HTML"
             )
-        
+
             try:
                 from src.ai_post_generator import AIPostGenerator, VideoData, OPENROUTER_MODELS
-            
+
                 generated_posts = data.get('generated_posts', [])
                 videos = data.get('videos', [])
-            
-                # Получаем настройки генератора
                 openrouter_key = os.getenv("OPENROUTER_API_KEY", "")
-                openai_key = os.getenv("OPENAI_API_KEY", "")
-            
-                # Бонусы
+
                 url1 = data.get('url1', '')
                 bonus1 = data.get('bonus1', '')
                 url2 = data.get('url2', '')
                 bonus2 = data.get('bonus2', '')
-            
+
+                generator = AIPostGenerator(
+                    openrouter_api_key=openrouter_key,
+                    model=regenerate_model_id,
+                    use_openrouter=True
+                )
+                try:
+                    generator.load_existing_posts_from_file("data/my_posts.json")
+                except Exception:
+                    pass
+                generator.set_bonus_data(url1=url1, bonus1=bonus1, url2=url2, bonus2=bonus2)
+
                 regenerated_count = 0
-            
+                failed_posts = []
+
                 for idx in posts_to_regenerate:
                     if idx >= len(generated_posts):
                         continue
-                
+
                     post_data = generated_posts[idx]
-                
-                    # Находим соответствующее видео
+                    logger.info(f"🔄 Перегенерация поста #{idx+1} ({post_data.get('slot', '?')})...")
+
                     video_info = None
                     for v in videos:
                         if v.get('slot') == post_data.get('slot'):
                             video_info = v
                             break
-                
+
                     if not video_info:
-                        # Используем данные из поста
                         video_info = {
                             'streamer': post_data.get('streamer', ''),
                             'slot': post_data.get('slot', 'Слот'),
-                            'bet': 100,
-                            'win': 10000,
-                            'currency': 'RUB'
+                            'bet': 100, 'win': 10000, 'currency': 'RUB'
                         }
-                
-                    # Создаём VideoData
+
                     video_data = VideoData(
                         streamer=video_info.get('streamer', ''),
                         slot=video_info.get('slot', 'Слот'),
@@ -2301,34 +2302,16 @@ def register_streamer_handlers(bot_instance):
                         win=video_info.get('win', 10000),
                         currency=video_info.get('currency', 'RUB')
                     )
-                
-                    # Создаём генератор с выбранной моделью
-                    generator = AIPostGenerator(
-                        openrouter_api_key=openrouter_key,
-                        model=regenerate_model_id,
-                        use_openrouter=True
-                    )
-                    # Загрузка существующих постов
+
                     try:
-                        generator.load_existing_posts_from_file("data/my_posts.json")
-                    except Exception:
-                        pass
-                    generator.set_bonus_data(
-                        url1=url1,
-                        bonus1=bonus1,
-                        url2=url2,
-                        bonus2=bonus2
-                    )
-                
-                    # Генерируем новый пост
-                    try:
-                        new_post = await generator.generate_video_post(video_data, idx)
-                    
-                        # Обновляем пост в списке
+                        new_post = await asyncio.wait_for(
+                            generator.generate_video_post(video_data, idx),
+                            timeout=300
+                        )
                         generated_posts[idx]['text'] = new_post.text
                         regenerated_count += 1
-                    
-                        # Обновляем статус
+                        logger.info(f"✅ Пост #{idx+1} перегенерирован (длина: {len(new_post.text)})")
+
                         await status_msg.edit_text(
                             f"🔄 <b>Перегенерация {len(posts_to_regenerate)} постов...</b>\n\n"
                             f"🤖 Модель: {regenerate_model_name}\n"
@@ -2336,31 +2319,38 @@ def register_streamer_handlers(bot_instance):
                             f"⏳ Осталось: {len(posts_to_regenerate) - regenerated_count}",
                             parse_mode="HTML"
                         )
+                    except asyncio.TimeoutError:
+                        logger.error(f"⏰ Таймаут перегенерации поста #{idx+1} (300с)")
+                        failed_posts.append(idx + 1)
                     except Exception as e:
-                        logger.error(f"Ошибка перегенерации поста #{idx+1}: {e}")
-            
-                # Сохраняем обновлённые посты
+                        logger.error(f"❌ Ошибка перегенерации поста #{idx+1}: {e}")
+                        failed_posts.append(idx + 1)
+
                 await state.update_data(generated_posts=generated_posts)
-            
-                # Обновляем результат проверки
+
                 result['duplicates'] = []
                 result['is_unique'] = True
                 result['summary'] = f"✅ Перегенерировано {regenerated_count} постов"
                 await state.update_data(uniqueness_result=result)
-            
+
+                fail_info = f"\n⚠️ Не удалось: посты {', '.join(f'#{p}' for p in failed_posts)}" if failed_posts else ""
                 await status_msg.edit_text(
                     f"✅ <b>Перегенерация завершена!</b>\n\n"
                     f"🔄 Перегенерировано: {regenerated_count} постов\n"
-                    f"📝 Всего постов: {len(generated_posts)}",
+                    f"📝 Всего постов: {len(generated_posts)}{fail_info}",
                     parse_mode="HTML"
                 )
-            
+
             except Exception as e:
-                await status_msg.edit_text(
-                    f"❌ <b>Ошибка перегенерации:</b>\n{str(e)[:200]}",
-                    parse_mode="HTML"
-                )
-        
+                logger.error(f"❌ Критическая ошибка перегенерации: {e}", exc_info=True)
+                try:
+                    await status_msg.edit_text(
+                        f"❌ <b>Ошибка перегенерации:</b>\n{str(e)[:200]}",
+                        parse_mode="HTML"
+                    )
+                except Exception:
+                    pass
+
             await _show_posts_preview_after_check(message, state, result)
             return
     
