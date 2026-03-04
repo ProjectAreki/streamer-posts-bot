@@ -2641,6 +2641,73 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         
         return True
     
+    @staticmethod
+    def _is_too_similar_to_pool(candidate: str, pool: List[str], threshold: float = 0.40) -> bool:
+        """
+        Проверяет что candidate не слишком похож на уже принятые описания в pool.
+        
+        Три метрики:
+        1. Jaccard >= threshold по стеммированным словам
+        2. Containment >= 0.6 (60%+ слов короткого текста есть в длинном)
+        3. Совпадение первых 2 контентных слов (одинаковое начало)
+        """
+        import re
+        
+        stop_words = {
+            'и', 'в', 'на', 'с', 'к', 'по', 'для', 'от', 'из', 'а', 'но', 'не',
+            'что', 'это', 'как', 'до', 'за', 'или', 'ещё', 'еще', 'уже', 'тоже',
+            'при', 'ты', 'вы', 'мы', 'он', 'она', 'они', 'все', 'свой', 'своё',
+            'бонус', 'бонуса', 'бонусом', 'бонуску', 'бонуска',
+            'процент', 'процентов', 'процентный', 'столько',
+            'bonus', 'bono', 'giri', 'tours', 'gratis', 'gratuiti', 'gratuits',
+            'the', 'and', 'for', 'with', 'del', 'con', 'por', 'para', 'les', 'des', 'une',
+        }
+        
+        def stem_ru(word: str) -> str:
+            for suffix in ['ений', 'ного', 'ному', 'ными', 'ения', 'ению',
+                          'ами', 'ому', 'ого', 'ной', 'ную', 'ным', 'ных', 'ное',
+                          'ить', 'ать', 'ять', 'ешь', 'ете',
+                          'ов', 'ей', 'ам', 'ом', 'ем', 'ую', 'ый', 'ий', 'ой',
+                          'ые', 'ие', 'ая', 'яя', 'ых', 'их',
+                          'а', 'о', 'у', 'е', 'ы', 'и', 'я', 'ь', 'й']:
+                if len(word) > len(suffix) + 2 and word.endswith(suffix):
+                    return word[:-len(suffix)]
+            return word
+        
+        def normalize(text: str) -> list:
+            words = re.findall(r'[а-яёa-zéèêëàâäùûüôöîïçñ]{3,}', text.lower())
+            return [stem_ru(w) for w in words if w not in stop_words]
+        
+        cand_stems = normalize(candidate)
+        if len(cand_stems) < 2:
+            return False
+        cand_set = set(cand_stems)
+        
+        for existing in pool:
+            exist_stems = normalize(existing)
+            if len(exist_stems) < 2:
+                continue
+            exist_set = set(exist_stems)
+            
+            intersection = cand_set & exist_set
+            union = cand_set | exist_set
+            
+            # 1. Jaccard similarity
+            if union and len(intersection) / len(union) >= threshold:
+                return True
+            
+            # 2. Containment: 50%+ слов короткого текста содержится в длинном
+            smaller = min(len(cand_set), len(exist_set))
+            if smaller > 0 and len(intersection) / smaller >= 0.5:
+                return True
+            
+            # 3. Одинаковое начало (первые 2 контентных слова)
+            if len(cand_stems) >= 2 and len(exist_stems) >= 2:
+                if cand_stems[:2] == exist_stems[:2]:
+                    return True
+        
+        return False
+
     async def generate_bonus_descriptions_pool(self, count: int = 80):
         """
         Генерирует пул уникальных описаний бонусов через AI.
@@ -2745,21 +2812,28 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 
                 valid = []
                 invalid_count = 0
+                duplicate_count = 0
                 for d in descriptions:
                     if not isinstance(d, str) or len(d.strip()) < 5:
                         invalid_count += 1
                         continue
                     d = d.strip()
-                    if self._validate_bonus_desc(d, original_desc):
-                        valid.append(d)
-                    else:
+                    if not self._validate_bonus_desc(d, original_desc):
                         invalid_count += 1
+                        continue
+                    if self._is_too_similar_to_pool(d, valid):
+                        duplicate_count += 1
+                        continue
+                    valid.append(d)
                 
-                print(f"      ✅ Валидных: {len(valid)}, отброшено: {invalid_count}")
+                print(f"      ✅ Валидных: {len(valid)}, отброшено: {invalid_count}, дубли: {duplicate_count}")
                 
-                while len(valid) < count:
+                fallback_attempts = 0
+                while len(valid) < count and fallback_attempts < count * 3:
                     fallback = self._get_random_bonus_variation(original_desc, is_bonus1=is_bonus1)
-                    valid.append(fallback)
+                    fallback_attempts += 1
+                    if not self._is_too_similar_to_pool(fallback, valid):
+                        valid.append(fallback)
                 
                 import random
                 random.shuffle(valid)
@@ -5633,6 +5707,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
 
 Тебе даны {count} постов. Твоя задача — найти ПОХОЖИЕ посты.
 
+⚠️ ВАЖНО: Строки с URL-ссылками и описания бонусов/акций уже УДАЛЕНЫ из текстов.
+Сравнивай ТОЛЬКО основной авторский текст (про выигрыши, стримеров, слоты).
+
 КРИТЕРИИ ПОХОЖЕСТИ (если хотя бы 1 совпадает — это дубль):
 1. Одинаковое начало (первые 5-10 слов совпадают или очень похожи по смыслу)
 2. Одинаковая структура (оба начинаются с вопроса / оба с восклицания / оба с цифры)
@@ -5643,7 +5720,6 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
    - "КНОПКА №1", "КНОПКА №2" или похожие маркеры
    - Одинаковые разделители (—•—🍉🔥🍓—•—, ◈◈◈, ~~~)
    - Одинаковые обозначения ссылок ("👇 первая 👇", "👇 вторая 👇")
-   - Повторяющаяся структура размещения ссылок (обе вначале/обе в конце/обе между абзацами)
 
 ПОСТЫ ДЛЯ АНАЛИЗА:
 {posts_json}
@@ -5677,6 +5753,49 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
 - Учитывай посты для ОДНОГО слота — они чаще похожи
 - similarity — процент похожести (50-100)
 - Отвечай ТОЛЬКО JSON, без пояснений"""
+
+    @staticmethod
+    def _strip_link_blocks_for_comparison(text: str) -> str:
+        """
+        Удаляет строки с URL и прилегающие описания бонусов для проверки уникальности.
+        Оставляет только основной авторский текст (про выигрыши, стримеров, слоты).
+        """
+        import re
+        lines = text.split('\n')
+        cleaned = []
+        skip_next_empty = False
+        
+        for line in lines:
+            stripped = line.strip()
+            # Пропускаем строки с URL
+            if re.search(r'https?://\S+', stripped):
+                skip_next_empty = True
+                continue
+            # Пропускаем пустые строки после URL-блоков
+            if skip_next_empty and not stripped:
+                skip_next_empty = False
+                continue
+            skip_next_empty = False
+            # Пропускаем строки-разделители (——, ═══, ◈◈◈, ~~~)
+            if re.match(r'^[\s—═◈~•\-─━▸▹→←↓↑⬇⬆👇👆🔗🔹🔥🎁🎰💰💵·]+$', stripped):
+                continue
+            # Пропускаем markdown-ссылки [текст](url)
+            if re.match(r'^\[.+\]\(https?://.+\)$', stripped):
+                continue
+            # Пропускаем короткие строки с типичными CTA-фразами для бонусов
+            lower = stripped.lower()
+            bonus_cta = ['забрать', 'бонус', 'депозит', 'пополнен', 'фриспин', 'вращени', 
+                        'спин', 'промокод', 'регистрац', 'лёгкий вход', 'полный пакет',
+                        'bonus', 'free spin', 'deposit', 'tour', 'gir']
+            if any(cta in lower for cta in bonus_cta) and len(stripped) < 120:
+                if re.search(r'https?://|cutt\.ly|bit\.ly|t\.me', lower):
+                    continue
+            cleaned.append(line)
+        
+        result = '\n'.join(cleaned).strip()
+        # Убираем множественные пустые строки
+        result = re.sub(r'\n{3,}', '\n\n', result)
+        return result
 
     async def check_posts_uniqueness(
         self, 
@@ -5713,14 +5832,16 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         if not model_info:
             model_info = self.UNIQUENESS_CHECK_MODELS["flash"]
         
-        # Формируем данные для проверки (обрезаем до 400 символов на пост)
+        # Формируем данные для проверки
+        # Убираем строки с URL и описания бонусов — они повторяются by design
         posts_data = []
         for i, post in enumerate(posts):
             slot = slots[i] if i < len(slots) else "Неизвестно"
+            cleaned = self._strip_link_blocks_for_comparison(post)
             posts_data.append({
                 "id": i + 1,
                 "slot": slot,
-                "text": post[:400] + "..." if len(post) > 400 else post
+                "text": cleaned[:400] + "..." if len(cleaned) > 400 else cleaned
             })
         
         # Формируем промпт

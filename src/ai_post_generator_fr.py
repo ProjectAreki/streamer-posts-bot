@@ -3026,6 +3026,73 @@ MISE EN FORME (CRITIQUE ! UTILISE TOUS LES TAGS !) :
         
         return True
     
+    @staticmethod
+    def _is_too_similar_to_pool(candidate: str, pool: List[str], threshold: float = 0.40) -> bool:
+        """
+        Проверяет что candidate не слишком похож на уже принятые описания в pool.
+        
+        Три метрики:
+        1. Jaccard >= threshold по стеммированным словам
+        2. Containment >= 0.5 (50%+ слов короткого текста есть в длинном)
+        3. Совпадение первых 2 контентных слов (одинаковое начало)
+        """
+        import re
+        
+        stop_words = {
+            'и', 'в', 'на', 'с', 'к', 'по', 'для', 'от', 'из', 'а', 'но', 'не',
+            'что', 'это', 'как', 'до', 'за', 'или', 'ещё', 'еще', 'уже', 'тоже',
+            'при', 'ты', 'вы', 'мы', 'он', 'она', 'они', 'все', 'свой', 'своё',
+            'бонус', 'бонуса', 'бонусом', 'бонуску', 'бонуска',
+            'процент', 'процентов', 'процентный', 'столько',
+            'bonus', 'bono', 'giri', 'tours', 'gratis', 'gratuiti', 'gratuits',
+            'the', 'and', 'for', 'with', 'del', 'con', 'por', 'para', 'les', 'des', 'une',
+        }
+        
+        def stem_ru(word: str) -> str:
+            for suffix in ['ений', 'ного', 'ному', 'ными', 'ения', 'ению',
+                          'ами', 'ому', 'ого', 'ной', 'ную', 'ным', 'ных', 'ное',
+                          'ить', 'ать', 'ять', 'ешь', 'ете',
+                          'ов', 'ей', 'ам', 'ом', 'ем', 'ую', 'ый', 'ий', 'ой',
+                          'ые', 'ие', 'ая', 'яя', 'ых', 'их',
+                          'а', 'о', 'у', 'е', 'ы', 'и', 'я', 'ь', 'й']:
+                if len(word) > len(suffix) + 2 and word.endswith(suffix):
+                    return word[:-len(suffix)]
+            return word
+        
+        def normalize(text: str) -> list:
+            words = re.findall(r'[а-яёa-zéèêëàâäùûüôöîïçñ]{3,}', text.lower())
+            return [stem_ru(w) for w in words if w not in stop_words]
+        
+        cand_stems = normalize(candidate)
+        if len(cand_stems) < 2:
+            return False
+        cand_set = set(cand_stems)
+        
+        for existing in pool:
+            exist_stems = normalize(existing)
+            if len(exist_stems) < 2:
+                continue
+            exist_set = set(exist_stems)
+            
+            intersection = cand_set & exist_set
+            union = cand_set | exist_set
+            
+            # 1. Jaccard similarity
+            if union and len(intersection) / len(union) >= threshold:
+                return True
+            
+            # 2. Containment: 50%+ слов короткого текста содержится в длинном
+            smaller = min(len(cand_set), len(exist_set))
+            if smaller > 0 and len(intersection) / smaller >= 0.5:
+                return True
+            
+            # 3. Одинаковое начало (первые 2 контентных слова)
+            if len(cand_stems) >= 2 and len(exist_stems) >= 2:
+                if cand_stems[:2] == exist_stems[:2]:
+                    return True
+        
+        return False
+
     async def generate_bonus_descriptions_pool(self, count: int = 80):
         """
         Génère un pool de descriptions de bonus uniques via AI.
@@ -3121,21 +3188,28 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
                 
                 valid = []
                 invalid_count = 0
+                duplicate_count = 0
                 for d in descriptions:
                     if not isinstance(d, str) or len(d.strip()) < 5:
                         invalid_count += 1
                         continue
                     d = d.strip()
-                    if self._validate_bonus_desc(d, original_desc):
-                        valid.append(d)
-                    else:
+                    if not self._validate_bonus_desc(d, original_desc):
                         invalid_count += 1
+                        continue
+                    if self._is_too_similar_to_pool(d, valid):
+                        duplicate_count += 1
+                        continue
+                    valid.append(d)
                 
-                print(f"      ✅ Валидных: {len(valid)}, отброшено: {invalid_count}")
+                print(f"      ✅ Валидных: {len(valid)}, отброшено: {invalid_count}, дубли: {duplicate_count}")
                 
-                while len(valid) < count:
+                fallback_attempts = 0
+                while len(valid) < count and fallback_attempts < count * 3:
                     fallback = self._get_random_bonus_variation(original_desc, is_bonus1=is_bonus1)
-                    valid.append(fallback)
+                    fallback_attempts += 1
+                    if not self._is_too_similar_to_pool(fallback, valid):
+                        valid.append(fallback)
                 
                 import random
                 random.shuffle(valid)
@@ -5150,6 +5224,9 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
     
     UNIQUENESS_CHECK_PROMPT = """Tu es un expert en vérification de l'unicité du contenu pour Telegram.
 
+⚠️ IMPORTANT : Les lignes avec des URLs et les descriptions de bonus/promotions ont déjà été SUPPRIMÉES des textes.
+Compare UNIQUEMENT le texte principal de l'auteur.
+
 On te donne {count} posts. Ta mission est de trouver les posts SIMILAIRES.
 
 CRITÈRES DE SIMILARITÉ (si au moins 1 correspond - c'est un doublon) :
@@ -5197,6 +5274,43 @@ IMPORTANT :
 - similarity - pourcentage de similarité (50-100)
 - Réponds UNIQUEMENT en JSON, sans explications"""
 
+    @staticmethod
+    def _strip_link_blocks_for_comparison(text: str) -> str:
+        """
+        Удаляет строки с URL и прилегающие описания бонусов для проверки уникальности.
+        Оставляет только основной авторский текст.
+        """
+        import re
+        lines = text.split('\n')
+        cleaned = []
+        skip_next_empty = False
+        
+        for line in lines:
+            stripped = line.strip()
+            if re.search(r'https?://\S+', stripped):
+                skip_next_empty = True
+                continue
+            if skip_next_empty and not stripped:
+                skip_next_empty = False
+                continue
+            skip_next_empty = False
+            if re.match(r'^[\s—═◈~•\-─━▸▹→←↓↑⬇⬆👇👆🔗🔹🔥🎁🎰💰💵·]+$', stripped):
+                continue
+            if re.match(r'^\[.+\]\(https?://.+\)$', stripped):
+                continue
+            lower = stripped.lower()
+            bonus_cta = ['забрать', 'бонус', 'депозит', 'пополнен', 'фриспин', 'вращени', 
+                        'спин', 'промокод', 'регистрац', 'лёгкий вход', 'полный пакет',
+                        'bonus', 'free spin', 'deposit', 'tour', 'gir']
+            if any(cta in lower for cta in bonus_cta) and len(stripped) < 120:
+                if re.search(r'https?://|cutt\.ly|bit\.ly|t\.me', lower):
+                    continue
+            cleaned.append(line)
+        
+        result = '\n'.join(cleaned).strip()
+        result = re.sub(r'\n{3,}', '\n\n', result)
+        return result
+
     async def check_posts_uniqueness(
         self, 
         posts: List[str], 
@@ -5236,10 +5350,11 @@ IMPORTANT :
         posts_data = []
         for i, post in enumerate(posts):
             slot = slots[i] if i < len(slots) else "Неизвестно"
+            cleaned = self._strip_link_blocks_for_comparison(post)
             posts_data.append({
                 "id": i + 1,
                 "slot": slot,
-                "text": post[:400] + "..." if len(post) > 400 else post
+                "text": cleaned[:400] + "..." if len(cleaned) > 400 else cleaned
             })
         
         # Формируем промпт
