@@ -574,6 +574,19 @@ class AIImagePostGenerator:
     
     def _postprocess_text(self, text: str) -> str:
         """Постобработка текста поста"""
+        import re
+
+        # Удаление AI-преамбул
+        ai_preamble_patterns = [
+            r'^(?:вот\s+)?(?:мой\s+)?вариант\s+поста\s*[:\.!\-—–]\s*\n*',
+            r'^вот\s+(?:готовый\s+)?(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:here\s*(?:is|\'s)\s+)?(?:the\s+|my\s+)?(?:post|text)\s*[:\.!\-—]\s*\n*',
+            r'^конечно[,!]?\s*(?:вот\s+)?(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+        ]
+        for p in ai_preamble_patterns:
+            text = re.sub(p, '', text, count=1, flags=re.IGNORECASE | re.MULTILINE)
+        text = text.lstrip('\n')
+
         # Убираем лишние маркеры
         markers_to_remove = [
             "```html", "```", "---", "===",

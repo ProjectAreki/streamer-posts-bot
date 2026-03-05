@@ -3854,14 +3854,22 @@ FORMAT : Tableau JSON de chaînes. UNIQUEMENT du JSON, sans commentaires."""
         - Форматирование названия слота
         """
         import re
-        
-        # 0. Очистка сломанного HTML от AI
-        # Убираем дублированные/сломанные href конструкции
-        # Пример: <a href="url">"">text → <a href="url">text
+
+        # 0a. Удаление AI-преамбул
+        ai_preamble_patterns = [
+            r'^(?:voici\s+)?(?:ma\s+)?(?:version|variante)\s+du\s+(?:post|texte)\s*[:\.!\-—–]\s*\n*',
+            r'^voici\s+(?:le\s+)?(?:post|texte)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:here\s*(?:is|\'s)\s+)?(?:the\s+|my\s+)?(?:post|text|variant)\s*[:\.!\-—]\s*\n*',
+            r'^(?:вот\s+)?(?:мой\s+)?вариант\s+поста\s*[:\.!\-—–]\s*\n*',
+            r'^(?:bien\s+s[ûu]r[,!]?\s*)?voici\s+(?:le\s+)?(?:post|texte)\s*[:\.!\-—–]\s*\n*',
+        ]
+        for p in ai_preamble_patterns:
+            text = re.sub(p, '', text, count=1, flags=re.IGNORECASE | re.MULTILINE)
+        text = text.lstrip('\n')
+
+        # 0b. Очистка сломанного HTML от AI
         text = re.sub(r'(<a\s+href="[^"]*">)\s*"[^"]*">', r'\1', text)
-        # Убираем HTML-entities в ссылках: &quot;&gt; → ничего
         text = re.sub(r'&quot;\s*&gt;', '', text)
-        # Убираем двойные закрывающие теги ссылок
         text = re.sub(r'</a>\s*</a>', '</a>', text)
         
         # 1. Замена бэктиков на <code>

@@ -2695,12 +2695,26 @@ REGLAS HTML:
     def _postprocess_text(self, text: str, slot_name: str = "") -> str:
         """
         Постобработка сгенерированного текста:
+        - Удаление AI-преамбул
         - Замена бэктиков на HTML <code>
         - Замена Markdown на HTML
         - Форматирование названия слота
         """
         import re
-        
+
+        # 0. Удаление AI-преамбул
+        ai_preamble_patterns = [
+            r'^(?:aqu[ií]\s+)?(?:est[áa]\s+)?(?:mi\s+)?(?:versi[oó]n|variante)\s+del\s+(?:post|texto)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:aqu[ií]\s+)?(?:tienes?\s+)?(?:el\s+)?(?:post|texto)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:here\s*(?:is|\'s)\s+)?(?:the\s+|my\s+)?(?:post|text|variant)\s*[:\.!\-—]\s*\n*',
+            r'^(?:вот\s+)?(?:мой\s+)?вариант\s+поста\s*[:\.!\-—–]\s*\n*',
+            r'^(?:por\s+supuesto[,!]?\s*)?(?:aqu[ií]\s+)?(?:est[áa]\s+)?(?:el\s+)?(?:post|texto)\s*[:\.!\-—–]\s*\n*',
+            r'^claro[,!]?\s*(?:aqu[ií]\s+)?(?:est[áa]\s+)?(?:el\s+)?(?:post|texto)\s*[:\.!\-—–]\s*\n*',
+        ]
+        for p in ai_preamble_patterns:
+            text = re.sub(p, '', text, count=1, flags=re.IGNORECASE | re.MULTILINE)
+        text = text.lstrip('\n')
+
         # 1. Замена бэктиков на <code>
         # `текст` → <code>текст</code>
         text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)

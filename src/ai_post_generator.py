@@ -4427,12 +4427,26 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
     def _postprocess_text(self, text: str, slot_name: str = "") -> str:
         """
         Постобработка сгенерированного текста:
+        - Удаление AI-преамбул
         - Замена бэктиков на HTML <code>
         - Замена Markdown на HTML
         - Форматирование названия слота
         """
         import re
-        
+
+        # 0. Удаление AI-преамбул ("Вот мой вариант поста:", "Here is the post:", и т.д.)
+        ai_preamble_patterns = [
+            r'^(?:вот\s+)?(?:мой\s+)?вариант\s+поста\s*[:\.!\-—–]\s*\n*',
+            r'^вот\s+(?:готовый\s+)?(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:готовый\s+)?(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:here\s*(?:is|\'s)\s+)?(?:the\s+|my\s+)?(?:post|text|variant)\s*[:\.!\-—]\s*\n*',
+            r'^конечно[,!]?\s*(?:вот\s+)?(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+            r'^(?:пожалуйста[,!]?\s*)?(?:вот\s+)?(?:ваш|твой)\s+(?:пост|текст)\s*[:\.!\-—–]\s*\n*',
+        ]
+        for p in ai_preamble_patterns:
+            text = re.sub(p, '', text, count=1, flags=re.IGNORECASE | re.MULTILINE)
+        text = text.lstrip('\n')
+
         # 1. Замена бэктиков на <code>
         # `текст` → <code>текст</code>
         text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
