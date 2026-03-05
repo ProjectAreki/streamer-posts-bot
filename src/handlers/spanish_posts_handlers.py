@@ -10,11 +10,18 @@ Para usar, llama register_spanish_handlers(bot_instance) desde _register_handler
 
 import os
 import asyncio
+import time as _time
+import datetime as _dt
 from aiogram import types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, MessageEntity
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import StateFilter
 from telethon.errors import FloodWaitError
+
+
+def _utf16_len(text: str) -> int:
+    """Длина строки в UTF-16 code units (для offset/length в MessageEntity)."""
+    return len(text.encode('utf-16-le')) // 2
 
 from src.states import SpanishPostsStates
 
@@ -45,6 +52,17 @@ def register_spanish_handlers(bot_instance):
     # Хелпер для показа каналов
     async def show_channels(message, state):
         return await bot_instance.show_user_channels(message, state)
+
+    async def _draft_progress(chat_id: int, text: str, fallback_msg=None):
+        """Стриминг прогресса через sendMessageDraft (Bot API 9.3+)."""
+        try:
+            await bot.send_message_draft(chat_id=chat_id, draft_id=1, text=text)
+        except Exception:
+            if fallback_msg:
+                try:
+                    await fallback_msg.edit_text(text, parse_mode="HTML")
+                except Exception:
+                    pass
 
     # ============================================
     # ОБРАБОТЧИКИ СЦЕНАРИЯ "100 ПОСТОВ СТРИМЕРОВ"
@@ -93,9 +111,9 @@ def register_spanish_handlers(bot_instance):
 
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="🚀 Начать настройку")],
+                [KeyboardButton(text="🚀 Начать настройку", style="success")],
                 [KeyboardButton(text="📖 Как именовать файлы")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -142,7 +160,7 @@ def register_spanish_handlers(bot_instance):
             "(например: https://example.com/bonus1)",
             parse_mode="HTML",
             reply_markup=ReplyKeyboardMarkup(
-                keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                keyboard=[[KeyboardButton(text="❌ Отмена", style="danger")]],
                 resize_keyboard=True
             )
         )
@@ -207,7 +225,7 @@ def register_spanish_handlers(bot_instance):
             keyboard=[
                 [KeyboardButton(text="📡 Взять из канала")],
                 [KeyboardButton(text="📤 Загрузить вручную")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -233,7 +251,7 @@ def register_spanish_handlers(bot_instance):
                 keyboard=[
                     [KeyboardButton(text="📋 Мои каналы"), KeyboardButton(text="🔗 Ссылка на пост")],
                     [KeyboardButton(text="📝 Ввести вручную"), KeyboardButton(text="🔄 Обновить мои каналы")],
-                    [KeyboardButton(text="❌ Отмена")]
+                    [KeyboardButton(text="❌ Отмена", style="danger")]
                 ],
                 resize_keyboard=True
             )
@@ -275,7 +293,7 @@ def register_spanish_handlers(bot_instance):
             await message.answer(
                 "📝 Введите @username или ID канала:",
                 reply_markup=ReplyKeyboardMarkup(
-                    keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                    keyboard=[[KeyboardButton(text="❌ Отмена", style="danger")]],
                     resize_keyboard=True
                 )
             )
@@ -292,7 +310,7 @@ def register_spanish_handlers(bot_instance):
                 "<i>Бот начнёт обработку с этого поста</i>",
                 parse_mode="HTML",
                 reply_markup=ReplyKeyboardMarkup(
-                    keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                    keyboard=[[KeyboardButton(text="❌ Отмена", style="danger")]],
                     resize_keyboard=True
                 )
             )
@@ -372,7 +390,7 @@ def register_spanish_handlers(bot_instance):
                     keyboard=[
                         [KeyboardButton(text="🔼 Сначала старые")],
                         [KeyboardButton(text="🔽 Сначала новые")],
-                        [KeyboardButton(text="❌ Отмена")]
+                        [KeyboardButton(text="❌ Отмена", style="danger")]
                     ],
                     resize_keyboard=True
                 )
@@ -488,7 +506,7 @@ def register_spanish_handlers(bot_instance):
                 keyboard=[
                     [KeyboardButton(text="🔽 Вниз (к старым)")],
                     [KeyboardButton(text="🔼 Вверх (к новым)")],
-                    [KeyboardButton(text="❌ Отмена")]
+                    [KeyboardButton(text="❌ Отмена", style="danger")]
                 ],
                 resize_keyboard=True
             )
@@ -542,7 +560,7 @@ def register_spanish_handlers(bot_instance):
             reply_markup=ReplyKeyboardMarkup(
                 keyboard=[
                     [KeyboardButton(text="50"), KeyboardButton(text="80"), KeyboardButton(text="100")],
-                    [KeyboardButton(text="❌ Отмена")]
+                    [KeyboardButton(text="❌ Отмена", style="danger")]
                 ],
                 resize_keyboard=True
             )
@@ -724,8 +742,8 @@ def register_spanish_handlers(bot_instance):
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text="⏭ Пропустить это видео")],
-                [KeyboardButton(text="✅ Все видео готовы")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="✅ Все видео готовы", style="success")],
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -867,7 +885,7 @@ def register_spanish_handlers(bot_instance):
             keyboard=[
                 [KeyboardButton(text="📋 Мои каналы")],
                 [KeyboardButton(text="📝 Ввести канал вручную")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -889,8 +907,8 @@ def register_spanish_handlers(bot_instance):
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="✅ Видео готовы")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="✅ Видео готовы", style="success")],
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -927,9 +945,9 @@ def register_spanish_handlers(bot_instance):
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="✅ Картинки готовы")],
+                [KeyboardButton(text="✅ Картинки готовы", style="success")],
                 [KeyboardButton(text="⏭ Пропустить картинки")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -953,7 +971,7 @@ def register_spanish_handlers(bot_instance):
             "<i>Можно использовать тот же канал что и для видео</i>",
             parse_mode="HTML",
             reply_markup=ReplyKeyboardMarkup(
-                keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                keyboard=[[KeyboardButton(text="❌ Отмена", style="danger")]],
                 resize_keyboard=True
             )
         )
@@ -1200,8 +1218,8 @@ def register_spanish_handlers(bot_instance):
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="✅ Видео готовы")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="✅ Видео готовы", style="success")],
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -1244,7 +1262,7 @@ def register_spanish_handlers(bot_instance):
             keyboard=[
                 [KeyboardButton(text="📋 Мои каналы")],
                 [KeyboardButton(text="📝 Ввести канал вручную")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -1322,7 +1340,7 @@ def register_spanish_handlers(bot_instance):
             [InlineKeyboardButton(text="🎵 Claude Sonnet 4.5 — ~0.8₽", callback_data="ai_model:claude-sonnet-4.5:openrouter"),
              InlineKeyboardButton(text="🏔️ Mistral Large — ~0.8₽", callback_data="ai_model:mistral-large:openrouter")],
             [InlineKeyboardButton(text="🔮 Claude Opus 4.5 — ~2.8₽ [TOP]", callback_data="ai_model:claude-opus-4.5:openrouter")],
-            [InlineKeyboardButton(text="❌ Отмена", callback_data="ai_model:cancel")]
+            [InlineKeyboardButton(text="❌ Отмена", callback_data="ai_model:cancel", style="danger")]
         ])
     
         await message.answer(
@@ -1603,19 +1621,14 @@ def register_spanish_handlers(bot_instance):
                 # Выбираем модель по индексу (циклически)
                 rot_model_key, rot_provider, rot_name = rotation_models_list[i % len(rotation_models_list)]
             
-                try:
-                    await status_msg.edit_text(
-                        f"🤖 <b>AI генерирует уникальные посты...</b>\n\n"
-                        f"📹 Видео: {len(videos)}\n"
-                        f"📝 Всего: {total_posts}\n"
-                        f"{rotation_label} <b>РОТАЦИЯ</b>\n\n"
-                        f"⏳ Прогресс: {i}/{total_posts}\n"
-                        f"🧠 Текущая: <b>{rot_name}</b>\n"
-                        f"{'█' * (i * 20 // total_posts)}{'░' * (20 - i * 20 // total_posts)}",
-                        parse_mode="HTML"
-                    )
-                except Exception:
-                    pass
+                pct = i * 100 // total_posts if total_posts else 0
+                bar = '█' * (i * 20 // total_posts) + '░' * (20 - i * 20 // total_posts) if total_posts else ''
+                draft_text = (
+                    f"🤖 РОТАЦИЯ — {i}/{total_posts} ({pct}%)\n"
+                    f"{bar}\n\n"
+                    f"🧠 {rot_name}"
+                )
+                await _draft_progress(callback.message.chat.id, draft_text, status_msg)
             
                 # Создаём генератор для этой модели
                 rot_generator = create_generator(rot_model_key, rot_provider)
@@ -1675,21 +1688,17 @@ def register_spanish_handlers(bot_instance):
             )
         
             # Callback для обновления прогресса
+            _chat_id = callback.message.chat.id
             async def progress_callback(current, total):
-                try:
-                    await status_msg.edit_text(
-                        f"🤖 <b>AI генерирует уникальные посты...</b>\n\n"
-                        f"📹 Видео: {len(videos)}\n"
-                        f"🖼 Картинки: {len(images)}\n"
-                        f"📝 Всего: {total}\n"
-                        f"🧠 Модель: <b>{model_display_name}</b>\n"
-                        f"🔌 Провайдер: {provider.upper()}\n\n"
-                        f"⏳ Прогресс: {current}/{total}\n"
-                        f"{'█' * (current * 20 // total)}{'░' * (20 - current * 20 // total)}",
-                        parse_mode="HTML"
-                    )
-                except Exception:
-                    pass
+                pct = current * 100 // total if total else 0
+                bar = '█' * (current * 20 // total) + '░' * (20 - current * 20 // total) if total else ''
+                text = (
+                    f"🤖 AI генерирует посты...\n\n"
+                    f"⏳ {current}/{total} ({pct}%)\n"
+                    f"{bar}\n\n"
+                    f"🧠 {model_display_name} | {provider.upper()}"
+                )
+                await _draft_progress(_chat_id, text, status_msg)
         
             try:
                 ai_posts = await generator.generate_all_posts(
@@ -1845,7 +1854,7 @@ def register_spanish_handlers(bot_instance):
                 [KeyboardButton(text="🔄 Гибридная (~0.1₽)"), KeyboardButton(text="⭐ Отличная (~2₽)")],
                 [KeyboardButton(text="💎 Лучшая (~5₽)")],
                 [KeyboardButton(text="⏭ Пропустить проверку")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -1915,10 +1924,10 @@ def register_spanish_handlers(bot_instance):
     
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text="✅ Начать публикацию")],
+                [KeyboardButton(text="✅ Начать публикацию", style="success")],
                 [KeyboardButton(text="👁 Ещё превью")],
-                [KeyboardButton(text="🔄 Перегенерировать все")],
-                [KeyboardButton(text="❌ Отмена")]
+                [KeyboardButton(text="🔄 Перегенерировать все", style="primary")],
+                [KeyboardButton(text="❌ Отмена", style="danger")]
             ],
             resize_keyboard=True
         )
@@ -1938,6 +1947,25 @@ def register_spanish_handlers(bot_instance):
     <i>Нажми «👁 Ещё превью» чтобы посмотреть посты</i>
     """
             await message.answer(fallback_summary, reply_markup=keyboard, parse_mode="HTML")
+
+        # date_time entity: время окончания публикации в часовом поясе пользователя
+        try:
+            est_seconds = len(generated_posts) * 3
+            est_finish = int(_time.time()) + est_seconds
+            est_dt = _dt.datetime.fromtimestamp(est_finish)
+            placeholder = est_dt.strftime("%H:%M")
+            prefix = "⏱ Публикация завершится ~в "
+            time_msg = prefix + placeholder
+            entity = MessageEntity(
+                type="date_time",
+                offset=_utf16_len(prefix),
+                length=_utf16_len(placeholder),
+                unix_time=est_finish,
+                date_time_format="HH:mm"
+            )
+            await message.answer(time_msg, entities=[entity])
+        except Exception:
+            pass
 
     @dp.message(SpanishPostsStates.waiting_for_uniqueness_check)
     async def streamer_posts_uniqueness_check_handler(message: types.Message, state: FSMContext):
@@ -2095,10 +2123,10 @@ def register_spanish_handlers(bot_instance):
             
                 keyboard = ReplyKeyboardMarkup(
                     keyboard=[
-                        [KeyboardButton(text="🔄 Перегенерировать дубли")],
-                        [KeyboardButton(text="✅ Опубликовать как есть")],
+                        [KeyboardButton(text="🔄 Перегенерировать дубли", style="primary")],
+                        [KeyboardButton(text="✅ Опубликовать как есть", style="success")],
                         [KeyboardButton(text="👁 Показать дубли детально")],
-                        [KeyboardButton(text="❌ Отмена")]
+                        [KeyboardButton(text="❌ Отмена", style="danger")]
                     ],
                     resize_keyboard=True
                 )
@@ -2316,7 +2344,7 @@ def register_spanish_handlers(bot_instance):
                 InlineKeyboardButton(text=f"1/{total}", callback_data="preview_info"),
                 InlineKeyboardButton(text="▶️ Вперёд", callback_data="preview_next")
             ],
-            [InlineKeyboardButton(text="❌ Закрыть", callback_data="preview_close")]
+            [InlineKeyboardButton(text="❌ Закрыть", callback_data="preview_close", style="danger")]
         ])
     
         await message.answer(
@@ -2358,7 +2386,7 @@ def register_spanish_handlers(bot_instance):
                 InlineKeyboardButton(text=f"{current_idx + 1}/{total}", callback_data="preview_info"),
                 InlineKeyboardButton(text="▶️ Вперёд", callback_data="preview_next")
             ],
-            [InlineKeyboardButton(text="❌ Закрыть", callback_data="preview_close")]
+            [InlineKeyboardButton(text="❌ Закрыть", callback_data="preview_close", style="danger")]
         ])
     
         try:
@@ -2398,7 +2426,7 @@ def register_spanish_handlers(bot_instance):
                 keyboard_buttons.append([KeyboardButton(text=f"📢 {name}")])
         
             keyboard_buttons.append([KeyboardButton(text="📝 Ввести вручную")])
-            keyboard_buttons.append([KeyboardButton(text="❌ Отмена")])
+            keyboard_buttons.append([KeyboardButton(text="❌ Отмена", style="danger")])
         
             keyboard = ReplyKeyboardMarkup(keyboard=keyboard_buttons, resize_keyboard=True)
             await message.answer("📺 Выберите канал для публикации:", reply_markup=keyboard)
@@ -2422,7 +2450,7 @@ def register_spanish_handlers(bot_instance):
             await message.answer(
                 "Введите @username или ID канала:",
                 reply_markup=ReplyKeyboardMarkup(
-                    keyboard=[[KeyboardButton(text="❌ Отмена")]],
+                    keyboard=[[KeyboardButton(text="❌ Отмена", style="danger")]],
                     resize_keyboard=True
                 )
             )
@@ -2492,7 +2520,7 @@ def register_spanish_handlers(bot_instance):
                     [KeyboardButton(text="📡 Картинки из канала")],
                     [KeyboardButton(text="📤 Загрузить картинки")],
                     [KeyboardButton(text="⏭ Без картинок")],
-                    [KeyboardButton(text="❌ Отмена")]
+                    [KeyboardButton(text="❌ Отмена", style="danger")]
                 ],
                 resize_keyboard=True
             )
@@ -2554,16 +2582,12 @@ def register_spanish_handlers(bot_instance):
             for v in videos
         ]
     
+        _regen_chat_id = message.chat.id
         async def progress_callback(current, total):
-            try:
-                await status_msg.edit_text(
-                    f"🔄 <b>AI перегенерирует посты...</b>\n\n"
-                    f"⏳ Прогресс: {current}/{total}\n"
-                    f"{'█' * (current * 20 // total)}{'░' * (20 - current * 20 // total)}",
-                    parse_mode="HTML"
-                )
-            except Exception:
-                pass
+            pct = current * 100 // total if total else 0
+            bar = '█' * (current * 20 // total) + '░' * (20 - current * 20 // total) if total else ''
+            text = f"🔄 Перегенерация {current}/{total} ({pct}%)\n{bar}"
+            await _draft_progress(_regen_chat_id, text, status_msg)
     
         try:
             ai_posts = await generator.generate_all_posts(
@@ -2677,7 +2701,7 @@ def register_spanish_handlers(bot_instance):
     
         # Inline кнопка "Стоп"
         stop_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🛑 Остановить публикацию", callback_data="stop_streamer_publishing")]
+            [InlineKeyboardButton(text="🛑 Остановить публикацию", callback_data="stop_streamer_publishing", style="danger")]
         ])
     
         status_msg = await message.answer(
