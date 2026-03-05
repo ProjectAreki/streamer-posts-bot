@@ -4787,6 +4787,50 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         text = re.sub(r'\n +', '\n', text)
         
         return text
+
+    def _fix_gender_agreement(self, text: str) -> str:
+        """Исправляет род глаголов при женском роде подлежащего.
+        'двадцатка вырос' → 'двадцатка выросла'."""
+        import re
+
+        fem_nouns = (
+            r'(?:двадцатк[аи]|пятёрк[аи]|пятерк[аи]|десятк[аи]|сотк[аи]|'
+            r'тысяч[аи]|соточк[аи]|пятёрочк[аи]|десяточк[аи]|двадцаточк[аи]|'
+            r'ставк[аи]|сумм[аы]|выплат[аы]|прибыль|удач[аи]|фортун[аы]|'
+            r'механик[аи]|полтинничек|монетк[аи]|копейк[аи])'
+        )
+
+        verb_map = {
+            'вырос': 'выросла', 'стал': 'стала',
+            'превратился': 'превратилась', 'оказался': 'оказалась',
+            'взлетел': 'взлетела', 'прилетел': 'прилетела',
+            'улетел': 'улетела', 'упал': 'упала',
+            'пришёл': 'пришла', 'пришел': 'пришла',
+            'попал': 'попала', 'сработал': 'сработала',
+            'принёс': 'принесла', 'принес': 'принесла',
+            'дал': 'дала', 'показал': 'показала',
+            'привёл': 'привела', 'привел': 'привела',
+            'решил': 'решила', 'помог': 'помогла',
+            'залетел': 'залетела', 'долетел': 'долетела',
+            'разогнался': 'разогналась', 'ушёл': 'ушла',
+            'ушел': 'ушла', 'пробил': 'пробила',
+            'разросся': 'разрослась', 'вернулся': 'вернулась',
+        }
+
+        def _match_case(orig: str, replacement: str) -> str:
+            if orig.isupper():
+                return replacement.upper()
+            if orig[0].isupper():
+                return replacement[0].upper() + replacement[1:]
+            return replacement
+
+        for masc, fem in verb_map.items():
+            pattern = rf'(\b{fem_nouns})((?:\s+\S+){{0,3}})\s+({masc})\b'
+            def replacer(m, f=fem):
+                return m.group(1) + m.group(2) + ' ' + _match_case(m.group(3), f)
+            text = re.sub(pattern, replacer, text, flags=re.IGNORECASE)
+
+        return text
     
     def _fix_broken_urls(self, text: str) -> str:
         """
@@ -5241,6 +5285,7 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 text = self._filter_non_russian(text)
                 text = self._remove_chat_mentions(text)
                 text = self._remove_template_phrases(text)
+                text = self._fix_gender_agreement(text)
                 text = self._randomize_currency_format(text, video)
 
                 # 📍 Перемещение ссылок по тексту (10 стратегий позиционирования)
@@ -5570,6 +5615,9 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 
                 # 4.7. Удаляем упоминания чата
                 text = self._remove_chat_mentions(text)
+
+                # 4.7b. Согласование рода глаголов
+                text = self._fix_gender_agreement(text)
                 
                 # 4.8. Проверяем слово "казино"
                 if "казино" in text.lower():
