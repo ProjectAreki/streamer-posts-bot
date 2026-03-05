@@ -3982,6 +3982,22 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         "BOTTOM_BOTTOM",    # Обе в конце (традиционный CTA)
     ]
     
+    @staticmethod
+    def _is_cta_line(line: str) -> bool:
+        """Определяет, является ли строка CTA-подводкой к ссылке."""
+        s = line.strip()
+        if not s or len(s) > 80 or 'http' in s:
+            return False
+        if s.endswith(':'):
+            return True
+        import re
+        return bool(re.search(
+            r'(?:набор для старта|забирай|держи|лови|жми|бери|переходи|'
+            r'твой бонус|ваш бонус|вот что|для тебя|для вас|'
+            r'не упусти|хватай|успей|старт здесь|начни)',
+            s, re.IGNORECASE
+        ))
+
     def _relocate_link_blocks(self, text: str) -> str:
         """
         Перемещает блоки ссылок в разные позиции поста.
@@ -4003,10 +4019,21 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             return text
         
         lines = text.split('\n')
+
+        def _expand_start_for_cta(start: int) -> int:
+            """Расширить start_line вверх, если перед блоком стоит CTA-подводка."""
+            if start > 0 and self._is_cta_line(lines[start - 1]):
+                return start - 1
+            if start > 1 and lines[start - 1].strip() == '' and self._is_cta_line(lines[start - 2]):
+                return start - 2
+            return start
+
+        s1 = _expand_start_for_cta(info1['start_line'])
+        s2 = _expand_start_for_cta(info2['start_line'])
         
         blocks_to_remove = sorted(
-            [(info1['start_line'], info1['end_line'], url1),
-             (info2['start_line'], info2['end_line'], url2)],
+            [(s1, info1['end_line'], url1),
+             (s2, info2['end_line'], url2)],
             key=lambda x: x[0], reverse=True
         )
         
@@ -4105,8 +4132,25 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         
         print(f"   📍 Размещение ссылок: стратегия #{strategy_idx + 1} ({strategy})")
         sys.stdout.flush()
+
+        # Очистка осиротевших CTA-подводок (подводка без ссылки в ±2 строках)
+        result = self._remove_orphaned_ctas(result, url1, url2)
         
         return result
+
+    def _remove_orphaned_ctas(self, text: str, url1: str, url2: str) -> str:
+        """Удаляет CTA-подводки, рядом с которыми нет ссылки."""
+        result_lines = text.split('\n')
+        orphaned = []
+        for i, line in enumerate(result_lines):
+            if not self._is_cta_line(line):
+                continue
+            nearby = '\n'.join(result_lines[max(0, i - 2):i + 3])
+            if url1 not in nearby and url2 not in nearby:
+                orphaned.append(i)
+        for idx in reversed(orphaned):
+            del result_lines[idx]
+        return '\n'.join(result_lines)
     
     def _reformat_link_blocks(self, text: str) -> str:
         """
