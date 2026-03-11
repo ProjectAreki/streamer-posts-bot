@@ -5572,10 +5572,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
 
         for regen in range(1, max_regens + 1):
             try:
-                # Выбираем случайный промпт
                 prompt_template = random.choice(self.IMAGE_POST_PROMPTS)
-                
-                # Передаём оригиналы бонусов — AI перефразирует, пул подставится в _reformat_link_blocks
+                if self.uncensored:
+                    prompt_template = self._patch_prompt_uncensored(prompt_template)
+
                 bonus1_var = self.bonus_data.bonus1_desc
                 bonus2_var = self.bonus_data.bonus2_desc
                 

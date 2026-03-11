@@ -1367,12 +1367,8 @@ def register_streamer_handlers(bot_instance):
             await callback.answer(f"{mode} — выбери модель для генерации", show_alert=False)
         except Exception:
             pass
-        # Перерисовываем клавиатуру
-        await streamer_posts_images_done.__wrapped__(callback.message, state) if hasattr(streamer_posts_images_done, '__wrapped__') else None
-        # Обновляем кнопки
-        uncensored = new_val
-        censor_label = "🔓 БЕЗ ЦЕНЗУРЫ ✓" if uncensored else "🛡 С цензурой ✓"
-        toggle_label = "🛡 Включить цензуру" if uncensored else "🔓 Без цензуры"
+        censor_label = "🔓 БЕЗ ЦЕНЗУРЫ ✓" if new_val else "🛡 С цензурой ✓"
+        toggle_label = "🛡 Включить цензуру" if new_val else "🔓 Без цензуры"
         kb = callback.message.reply_markup
         if kb and kb.inline_keyboard:
             kb.inline_keyboard[0] = [
@@ -1380,7 +1376,6 @@ def register_streamer_handlers(bot_instance):
                 InlineKeyboardButton(text=toggle_label, callback_data="toggle_censorship")
             ]
             try:
-                mode_text = "\n\n🔓 <b>Режим: БЕЗ ЦЕНЗУРЫ</b> — казино, заносы, слоты без ограничений" if uncensored else ""
                 await callback.message.edit_reply_markup(reply_markup=kb)
             except Exception:
                 pass
