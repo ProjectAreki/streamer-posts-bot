@@ -2819,10 +2819,14 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 invalid_count = 0
                 duplicate_count = 0
                 for d in descriptions:
-                    if not isinstance(d, str) or len(d.strip()) < 5:
+                    if not isinstance(d, str):
                         invalid_count += 1
                         continue
                     d = d.strip()
+                    word_count = len(d.split())
+                    if len(d) < 30 or word_count < 6:
+                        invalid_count += 1
+                        continue
                     if not self._validate_bonus_desc(d, original_desc):
                         invalid_count += 1
                         continue
@@ -3095,19 +3099,37 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             # Объединяем части
             if len(parts) >= 2:
                 connectors = [
-                    " + ", " и ", " плюс ", ", а также ", " — ", " & ",
-                    " вместе с ", " в комплекте с ", " бонусом ",
+                    " + ", " и ", " плюс ", ", а также ", " — ",
+                    " вместе с ", " в комплекте с ",
                     ", плюс ", " + ещё ", " да ещё ",
-                    " | ", " ➕ ", " // ",
                 ]
                 random.shuffle(parts)
                 k = 2 if len(parts) == 2 else random.choice([2, 3])
                 chosen = parts[:k]
-                variation = random.choice(connectors).join(chosen)
+                facts = random.choice(connectors).join(chosen)
             elif len(parts) == 1:
-                variation = parts[0]
+                facts = parts[0]
             else:
-                variation = original
+                facts = original
+
+            wrappers = [
+                f"Забирай {facts} — мощный старт обеспечен",
+                f"{facts} ждут тебя — не упусти выгодный момент",
+                f"Твой стартовый набор: {facts}",
+                f"Получи {facts} и начни с преимуществом",
+                f"{facts} — отличный повод зайти и проверить удачу",
+                f"На старте получаешь {facts}, дальше дело за тобой",
+                f"Бонус для тебя: {facts}. Выгодный вход гарантирован",
+                f"Хватай {facts} — такие условия не каждый день",
+                f"{facts} уже на тебя оформлены, осталось забрать",
+                f"Приятный бонус: {facts}. Самое время воспользоваться",
+                f"Прямо сейчас доступно: {facts}",
+                f"Тебе приготовили {facts} — грех не воспользоваться",
+                f"{facts} — щедрый подарок для уверенного старта",
+                f"Лови {facts}, пока предложение в силе",
+                f"Условия на входе: {facts}. Серьёзная заявка",
+            ]
+            variation = random.choice(wrappers)
             
             # Проверяем уникальность
             if variation not in used_list:
