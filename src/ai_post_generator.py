@@ -2342,7 +2342,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
         api_key: str = None, 
         model: str = "gpt-4o-mini",
         openrouter_api_key: str = None,
-        use_openrouter: bool = False
+        use_openrouter: bool = False,
+        uncensored: bool = False
     ):
         """
         Инициализация генератора.
@@ -2352,8 +2353,10 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             model: Модель для генерации (OpenAI или OpenRouter)
             openrouter_api_key: OpenRouter API ключ
             use_openrouter: Использовать OpenRouter вместо OpenAI
+            uncensored: Режим без цензуры (казино, заносы, слоты — без ограничений)
         """
         self.model = model
+        self.uncensored = uncensored
         self.client = None
         self.use_openrouter = use_openrouter
 
@@ -2497,10 +2500,41 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
             self.SYSTEM_PROMPT_6
         ]
         
-        # Строгая круговая ротация
-        # Пост 1 -> промпт 0, Пост 2 -> промпт 1, ..., Пост 7 -> промпт 0
         prompt_index = (self._prompt_counter - 1) % 6
-        return all_prompts[prompt_index]
+        prompt = all_prompts[prompt_index]
+
+        if self.uncensored:
+            prompt = self._patch_prompt_uncensored(prompt)
+
+        return prompt
+
+    @staticmethod
+    def _patch_prompt_uncensored(prompt: str) -> str:
+        """Заменяет блоки цензуры в промпте на свободный гемблинг-режим."""
+        import re
+        censorship_patterns = [
+            r'Нейтрализация стоп-слов:.*?(?=\n\n|\n[А-ЯA-Z❌✅⚠🔗]|$)',
+            r'Лексика:\s*Забудь слова[^.]*\.[^\n]*',
+            r'Запрещенка:\s*«Казино»[^.]*\.[^\n]*',
+            r'Лексика:\s*Замена стоп-слов[^.]*\.[^\n]*',
+            r'Нейтрализация стоп-слов:[^\n]*(?:\n[^\n]*«[^»]*»[^\n]*)*',
+            r'❌\s*СТОП-СЛОВА:[^\n]*\n✅\s*ЗАМЕНЫ:[^\n]*',
+            r'❌\s*Запрещено:\s*казино[^\n]*',
+            r'-\s*БЕЗ слова\s*"казино"[^\n]*',
+        ]
+        uncensored_block = (
+            "🔥 ГЕМБЛИНГ-ЛЕКСИКА — ИСПОЛЬЗУЙ СВОБОДНО!\n"
+            "✅ Казино, заносы, слоты, ставки, азарт, лудка, спины — пиши без ограничений!\n"
+            "✅ Пиши агрессивно, как настоящий гемблинг-блогер: «Занёс в казино!», «Слот выдал!»\n"
+            "✅ Используй: казино, занос, заносить, слот, лудка, крутить, катка, барабаны, джекпот"
+        )
+        for pat in censorship_patterns:
+            prompt = re.sub(pat, uncensored_block, prompt, count=1, flags=re.DOTALL)
+        # Убираем дублирующиеся блоки замены (если несколько паттернов сработали)
+        parts = prompt.split(uncensored_block)
+        if len(parts) > 2:
+            prompt = parts[0] + uncensored_block + uncensored_block.join(parts[1:]).replace(uncensored_block, '', len(parts) - 2)
+        return prompt
     
     def set_bonus_data(self, url1: str, bonus1: str, url2: str, bonus2: str):
         """Устанавливает данные о бонусах"""
@@ -5118,11 +5152,12 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                     streamer_name = ""
                     used_structure_index = structure_index + 1000
 
-                # Передаём оригиналы бонусов — AI перефразирует, пул подставится в _reformat_link_blocks
+                if self.uncensored:
+                    prompt_template = self._patch_prompt_uncensored(prompt_template)
+
                 bonus1_var = self.bonus_data.bonus1_desc
                 bonus2_var = self.bonus_data.bonus2_desc
 
-                # Форматируем данные
                 formatted_bet = video.get_formatted_bet()
                 formatted_win = video.get_formatted_win()
                 formatted_slot = video.get_formatted_slot()
@@ -5641,8 +5676,8 @@ https://example.com — бонус до 30к ₽ чтобы старт был с
                 # 4.7b. Согласование рода глаголов
                 text = self._fix_gender_agreement(text)
                 
-                # 4.8. Проверяем слово "казино"
-                if "казино" in text.lower():
+                # 4.8. Проверяем слово "казино" (пропуск в uncensored-режиме)
+                if not self.uncensored and "казино" in text.lower():
                     print(f"   ⚠️ Image пост содержит слово 'казино', регенерируем...")
                     sys.stdout.flush()
                     continue

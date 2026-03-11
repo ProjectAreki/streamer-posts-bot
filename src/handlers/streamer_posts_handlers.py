@@ -1305,10 +1305,15 @@ def register_streamer_handlers(bot_instance):
     
         # Переходим к выбору AI модели
         await state.set_state(StreamerPostsStates.choosing_ai_model)
+
+        # Режим цензуры (по умолчанию: с цензурой)
+        uncensored = data.get('uncensored', False)
+        censor_label = "🔓 БЕЗ ЦЕНЗУРЫ ✓" if uncensored else "🛡 С цензурой ✓"
+        toggle_label = "🛡 Включить цензуру" if uncensored else "🔓 Без цензуры"
     
-        # Создаём клавиатуру с моделями и ценами
         model_keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            # Рекомендуемые ротации (A/B/C)
+            [InlineKeyboardButton(text=censor_label, callback_data="noop"),
+             InlineKeyboardButton(text=toggle_label, callback_data="toggle_censorship")],
             [InlineKeyboardButton(text="🅰️ Оптимальная (~$1 за 80)", callback_data="ai_model:rotation:optimal")],
             [InlineKeyboardButton(text="🅱️ Макс. качество (~$1.50 за 80)", callback_data="ai_model:rotation:quality")],
             [InlineKeyboardButton(text="🅲 Минимум затрат (~$0.25 за 80)", callback_data="ai_model:rotation:budget")],
@@ -1351,13 +1356,49 @@ def register_streamer_handlers(bot_instance):
             reply_markup=model_keyboard
         )
 
+    @dp.callback_query(lambda c: c.data == "toggle_censorship", StateFilter(StreamerPostsStates.choosing_ai_model))
+    async def toggle_censorship_handler(callback: types.CallbackQuery, state: FSMContext):
+        """Переключение режима цензуры"""
+        data = await state.get_data()
+        new_val = not data.get('uncensored', False)
+        await state.update_data(uncensored=new_val)
+        mode = "🔓 Без цензуры" if new_val else "🛡 С цензурой"
+        try:
+            await callback.answer(f"{mode} — выбери модель для генерации", show_alert=False)
+        except Exception:
+            pass
+        # Перерисовываем клавиатуру
+        await streamer_posts_images_done.__wrapped__(callback.message, state) if hasattr(streamer_posts_images_done, '__wrapped__') else None
+        # Обновляем кнопки
+        uncensored = new_val
+        censor_label = "🔓 БЕЗ ЦЕНЗУРЫ ✓" if uncensored else "🛡 С цензурой ✓"
+        toggle_label = "🛡 Включить цензуру" if uncensored else "🔓 Без цензуры"
+        kb = callback.message.reply_markup
+        if kb and kb.inline_keyboard:
+            kb.inline_keyboard[0] = [
+                InlineKeyboardButton(text=censor_label, callback_data="noop"),
+                InlineKeyboardButton(text=toggle_label, callback_data="toggle_censorship")
+            ]
+            try:
+                mode_text = "\n\n🔓 <b>Режим: БЕЗ ЦЕНЗУРЫ</b> — казино, заносы, слоты без ограничений" if uncensored else ""
+                await callback.message.edit_reply_markup(reply_markup=kb)
+            except Exception:
+                pass
+
+    @dp.callback_query(lambda c: c.data == "noop", StateFilter(StreamerPostsStates.choosing_ai_model))
+    async def noop_handler(callback: types.CallbackQuery, state: FSMContext):
+        try:
+            await callback.answer()
+        except Exception:
+            pass
+
     @dp.callback_query(lambda c: c.data.startswith("ai_model:"), StateFilter(StreamerPostsStates.choosing_ai_model))
     async def streamer_posts_model_selected(callback: types.CallbackQuery, state: FSMContext):
         """Обработка выбора AI модели"""
         try:
             await callback.answer()
         except Exception:
-            pass  # Игнорируем сетевые ошибки при answer
+            pass
     
         parts = callback.data.split(":")
         if parts[1] == "cancel":
@@ -1544,7 +1585,8 @@ def register_streamer_handlers(bot_instance):
             )
             return
     
-        # Функция для создания генератора по модели
+        is_uncensored = data.get('uncensored', False)
+
         def create_generator(m_key, m_provider):
             if m_provider == "openrouter":
                 model_info = OPENROUTER_MODELS.get(m_key)
@@ -1552,16 +1594,15 @@ def register_streamer_handlers(bot_instance):
                     gen = AIPostGenerator(
                         openrouter_api_key=openrouter_key,
                         model=model_info['id'],
-                        use_openrouter=True
+                        use_openrouter=True,
+                        uncensored=is_uncensored
                     )
-                    # Загрузка существующих постов
                     try:
                         gen.load_existing_posts_from_file("data/my_posts.json")
                     except Exception:
                         pass
                     return gen
-            gen = AIPostGenerator(api_key=openai_key, model=m_key)
-            # Загрузка существующих постов
+            gen = AIPostGenerator(api_key=openai_key, model=m_key, uncensored=is_uncensored)
             try:
                 gen.load_existing_posts_from_file("data/my_posts.json")
             except Exception:
@@ -1589,12 +1630,12 @@ def register_streamer_handlers(bot_instance):
                 generator = AIPostGenerator(
                     openrouter_api_key=openrouter_key,
                     model=model_id,
-                    use_openrouter=True
+                    use_openrouter=True,
+                    uncensored=is_uncensored
                 )
             else:
-                generator = AIPostGenerator(api_key=openai_key, model=model_key)
+                generator = AIPostGenerator(api_key=openai_key, model=model_key, uncensored=is_uncensored)
     
-        # Загрузка существующих постов для обучения AI
         try:
             generator.load_existing_posts_from_file("data/my_posts.json")
             logger.info("✅ Загружено существующих постов для обучения AI")
@@ -2293,7 +2334,8 @@ def register_streamer_handlers(bot_instance):
                 generator = AIPostGenerator(
                     openrouter_api_key=openrouter_key,
                     model=regenerate_model_id,
-                    use_openrouter=True
+                    use_openrouter=True,
+                    uncensored=data.get('uncensored', False)
                 )
                 try:
                     generator.load_existing_posts_from_file("data/my_posts.json")
@@ -2628,8 +2670,7 @@ def register_streamer_handlers(bot_instance):
         api_key = config_manager.openai_api_key
         model = data.get('ai_model_used') or config_manager.default_model or "gpt-4o-mini"
     
-        generator = AIPostGenerator(api_key=api_key, model=model)
-        # Загрузка существующих постов
+        generator = AIPostGenerator(api_key=api_key, model=model, uncensored=data.get('uncensored', False))
         try:
             generator.load_existing_posts_from_file("data/my_posts.json")
         except Exception:
